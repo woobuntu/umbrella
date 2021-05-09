@@ -4,18 +4,26 @@ import { TreeView, TreeItem } from "@material-ui/lab";
 import { ExpandMore, ChevronRight } from "@material-ui/icons";
 import { navigation_menu } from "../dummy";
 
-const NavigationDrawer = () => {
+interface PropsFunction {
+  closeDrawer: () => void;
+}
+
+const NavigationDrawer = ({ closeDrawer }: PropsFunction) => {
   return (
-    <Drawer variant="temporary" anchor="left" open>
+    <Drawer variant="temporary" anchor="left" onClose={closeDrawer} open>
       <TreeView
         defaultExpanded={navigation_menu.map(({ nodeId }) => nodeId)}
         defaultCollapseIcon={<ExpandMore />}
         defaultExpandIcon={<ChevronRight />}
       >
         {navigation_menu.map(({ nodeId, label, children }) => (
-          <TreeItem nodeId={nodeId} label={label}>
+          <TreeItem key={nodeId} nodeId={nodeId} label={label}>
             {children.map(({ nodeId: childNodeId, label: childLabel }) => (
-              <TreeItem nodeId={childNodeId} label={childLabel} />
+              <TreeItem
+                key={childNodeId}
+                nodeId={childNodeId}
+                label={childLabel}
+              />
             ))}
           </TreeItem>
         ))}
