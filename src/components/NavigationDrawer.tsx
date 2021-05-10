@@ -9,15 +9,15 @@ interface propsFunction {
   closeDrawer: () => void;
 }
 
-interface pushToParams {
-  category: string;
-  destination: string;
-}
+// interface pushToParams {
+//   category: string;
+//   destination: string;
+// }
 
 const NavigationDrawer = ({ closeDrawer }: propsFunction) => {
   const history = useHistory();
-  const pushTo = ({ category, destination }: pushToParams) => {
-    history.push(`/${category}/${destination}`);
+  const pushTo = (destination: string) => {
+    history.push(`/${destination}`);
     closeDrawer();
   };
   return (
@@ -27,17 +27,15 @@ const NavigationDrawer = ({ closeDrawer }: propsFunction) => {
         defaultCollapseIcon={<ExpandMore />}
         defaultExpandIcon={<ChevronRight />}
       >
-        {navigation_menu.map(({ nodeId, label, children, link }) => (
+        {navigation_menu.map(({ nodeId, label, children }) => (
           <TreeItem key={nodeId} nodeId={nodeId} label={label}>
             {children.map(
-              ({ nodeId: childNodeId, label: childLabel, link: childLink }) => (
+              ({ nodeId: childNodeId, label: childLabel, link }) => (
                 <TreeItem
                   key={childNodeId}
                   nodeId={childNodeId}
                   label={childLabel}
-                  onClick={() =>
-                    pushTo({ category: link, destination: childLink })
-                  }
+                  onClick={() => pushTo(link)}
                 />
               )
             )}

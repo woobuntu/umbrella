@@ -2,16 +2,20 @@ import React from "react";
 import { AppBar } from "./components";
 import { CssBaseline } from "@material-ui/core";
 import { Switch, Route } from "react-router-dom";
-import { Home } from "./pages";
+import { Home, Profile } from "./pages";
 
 function App() {
   return (
     <div>
       <CssBaseline />
       <AppBar />
+      {/* 추후 하나의 컴포넌트로 추출? */}
       <Switch>
         <Route exact path="/">
           <Home />
+        </Route>
+        <Route path="/profile">
+          <Profile />
         </Route>
       </Switch>
     </div>
