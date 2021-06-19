@@ -2,7 +2,7 @@ import React from "react";
 import { AppBar } from "./components";
 import { CssBaseline } from "@material-ui/core";
 import { Switch, Route } from "react-router-dom";
-import { Home, Profile } from "./pages";
+import { Home, Profile, Introduction } from "./pages";
 
 function App() {
   return (
@@ -16,6 +16,9 @@ function App() {
         </Route>
         <Route path="/profile">
           <Profile />
+        </Route>
+        <Route path="/introduction">
+          <Introduction />
         </Route>
       </Switch>
     </div>
