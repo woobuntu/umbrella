@@ -2,7 +2,8 @@ import React from "react";
 import { AppBar } from "./components";
 import { CssBaseline } from "@material-ui/core";
 import { Switch, Route } from "react-router-dom";
-import { Home, Profile, Introduction, History } from "./pages";
+import { Home, Profile, Introduction, History, BulletinBoard } from "./pages";
+import { notice } from "./dummy";
 
 function App() {
   return (
@@ -22,6 +23,9 @@ function App() {
         </Route>
         <Route path="/history">
           <History />
+        </Route>
+        <Route path="/notifications">
+          <BulletinBoard data={notice} />
         </Route>
       </Switch>
     </div>
