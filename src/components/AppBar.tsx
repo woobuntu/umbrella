@@ -6,9 +6,10 @@ import {
   Typography,
   Link,
 } from "@material-ui/core";
-import { Menu as MenuIcon } from "@material-ui/icons";
+import { Menu as MenuIcon, NavigateNext } from "@material-ui/icons";
 import NavigationDrawer from "./NavigationDrawer";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
+import { navigation_menu } from "../dummy";
 
 const AppBar = () => {
   const [isSearching, setIsSearching] = useState(false);
@@ -18,6 +19,22 @@ const AppBar = () => {
 
   const history = useHistory();
   const pushToHome = () => history.push("/");
+
+  const location = useLocation();
+
+  const showBreadCrumbs = () => {
+    const matched = navigation_menu
+      .flatMap(({ children }) => children)
+      .find(({ link }) => `/${link}` === location.pathname);
+    if (matched) {
+      return (
+        <>
+          <NavigateNext />
+          <Typography variant="h6">{matched.label}</Typography>
+        </>
+      );
+    }
+  };
 
   return (
     <MaterialAppBar position="static">
@@ -35,8 +52,14 @@ const AppBar = () => {
             함께쓰는우산
           </Link>
         </Typography>
+        {showBreadCrumbs()}
       </Toolbar>
-      {isSearching && <NavigationDrawer closeDrawer={closeDrawer} />}
+      {isSearching && (
+        <NavigationDrawer
+          closeDrawer={closeDrawer}
+          navigationTree={navigation_menu}
+        />
+      )}
     </MaterialAppBar>
   );
 };
