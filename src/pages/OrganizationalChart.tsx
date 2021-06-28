@@ -1,6 +1,9 @@
 import React from "react";
 import { TreeView, TreeItem } from "@material-ui/lab";
 import { organizational_chart } from "../dummy";
+import { BiTask, BiGroup } from "react-icons/bi";
+import { FcDepartment } from "react-icons/fc";
+import { GrUserAdmin } from "react-icons/gr";
 
 interface TreeItemInterface {
   id: string;
@@ -22,8 +25,21 @@ const extractDefaultExpanded = (tree: TreeItemInterface[]) => {
   return listOfIds;
 };
 
+const determineIcon = (type: string) => {
+  switch (type) {
+    case "group":
+      return <BiGroup />;
+    case "executive":
+      return <GrUserAdmin />;
+    case "department":
+      return <FcDepartment />;
+    case "task":
+      return <BiTask />;
+  }
+};
+
 const recursiveExpand = ({ id, name, type, children }: TreeItemInterface) => (
-  <TreeItem key={id} nodeId={id} label={name}>
+  <TreeItem key={id} nodeId={id} label={name} icon={determineIcon(type)}>
     {children?.map(recursiveExpand)}
   </TreeItem>
 );
