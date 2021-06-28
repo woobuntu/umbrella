@@ -24,6 +24,8 @@ const useStyles = makeStyles({
 });
 
 const BulletinBoard = ({ data }: TableData) => {
+  data = data.reverse();
+
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
