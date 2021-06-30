@@ -1,5 +1,5 @@
 import React from "react";
-import { AppBar } from "./components";
+import { AppBar, StickyFooter } from "./components";
 import { CssBaseline } from "@material-ui/core";
 import { Switch, Route } from "react-router-dom";
 import {
@@ -42,6 +42,7 @@ function App() {
           <ContactUs />
         </Route>
       </Switch>
+      <StickyFooter />
     </div>
   );
 }

@@ -9,9 +9,12 @@ declare global {
 
 const contentString = [
   '<div class="iw_inner">',
-  "   <h3>함께쓰는우산</h3>",
-  "   <p>경기 의왕시 갈미2로 30 401호</p>",
+  "   <h3>장애인복지법인 함께쓰는우산</h3>",
+  "   <p>경기 의왕시 갈미2로 30(내손동 750) 미광프라자 401호</p>",
   "   <a href='https://m.map.naver.com/directions/?ename=함께쓰는우산&ex=126.9729814&ey=37.3790665' target='_blank'>네이버 지도로 길찾기</a><br />",
+  // 길찾기 아이콘 추가
+  "   <p>문의메일 : withus1030@naver.com</p>",
+  "   <p>고객센터 : 031-342-1030</p>",
   "</div>",
 ].join("");
 
