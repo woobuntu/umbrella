@@ -9,6 +9,7 @@ import {
   History,
   BulletinBoard,
   OrganizationalChart,
+  ContactUs,
 } from "./pages";
 import { notice } from "./dummy";
 
@@ -36,6 +37,9 @@ function App() {
         </Route>
         <Route path="/organization-chart">
           <OrganizationalChart />
+        </Route>
+        <Route path="/contact">
+          <ContactUs />
         </Route>
       </Switch>
     </div>

@@ -9,7 +9,7 @@ const Home = () => {
       <Carousel>
         {carousel_src.map((src, i) => (
           <Paper key={i}>
-            <img src={src} style={{ maxWidth: "100%" }} />
+            <img src={src} style={{ maxWidth: "100%" }} alt="캐러셀 이미지" />
           </Paper>
         ))}
       </Carousel>
