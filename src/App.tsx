@@ -5,13 +5,13 @@ import { Switch, Route } from "react-router-dom";
 import {
   Home,
   Profile,
-  Introduction,
   History,
   BulletinBoard,
   OrganizationalChart,
   ContactUs,
+  Album,
 } from "./pages";
-import { notice } from "./dummy";
+import { notice, introduction_images, catalog } from "./dummy";
 
 function App() {
   return (
@@ -27,7 +27,14 @@ function App() {
           <Profile />
         </Route>
         <Route path="/introduction">
-          <Introduction />
+          {/* <Introduction /> */}
+          <Album cards={introduction_images} />
+        </Route>
+        {/* <Route path="/performance">
+          <Album />
+        </Route> */}
+        <Route path="/mall">
+          <Album cards={catalog} />
         </Route>
         <Route path="/history">
           <History />

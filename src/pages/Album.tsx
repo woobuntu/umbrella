@@ -9,7 +9,6 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import Link from "@material-ui/core/Link";
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -43,16 +42,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+interface CardInterface {
+  image: string;
+  heading: string;
+  content?: string;
+  viewHandler?: () => void;
+  editHandler?: () => void;
+}
 
-export default function Album() {
+interface CardsInterface {
+  cards: CardInterface[];
+}
+
+export default function Album({ cards }: CardsInterface) {
   const classes = useStyles();
 
   return (
     <React.Fragment>
       <CssBaseline />
       <main>
-        <div className={classes.heroContent}>
+        {/* <div className={classes.heroContent}>
           <Container maxWidth="sm">
             <Typography
               component="h1"
@@ -88,38 +97,49 @@ export default function Album() {
               </Grid>
             </div>
           </Container>
-        </div>
+        </div> */}
         <Container className={classes.cardGrid} maxWidth="md">
           {/* End hero unit */}
           <Grid container spacing={4}>
-            {cards.map((card) => (
-              <Grid item key={card} xs={12} sm={6} md={4}>
-                <Card className={classes.card}>
-                  <CardMedia
-                    className={classes.cardMedia}
-                    image="https://source.unsplash.com/random"
-                    title="Image title"
-                  />
-                  <CardContent className={classes.cardContent}>
-                    <Typography gutterBottom variant="h5" component="h2">
-                      Heading
-                    </Typography>
-                    <Typography>
-                      This is a media card. You can use this section to describe
-                      the content.
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button size="small" color="primary">
-                      View
-                    </Button>
-                    <Button size="small" color="primary">
-                      Edit
-                    </Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
+            {cards.map(
+              ({
+                image,
+                heading,
+                content,
+                viewHandler,
+                editHandler,
+              }: CardInterface) => (
+                <Grid item key={heading} xs={12} sm={6} md={4}>
+                  <Card className={classes.card}>
+                    <CardMedia
+                      className={classes.cardMedia}
+                      image={image}
+                      title="Image title"
+                    />
+                    <CardContent className={classes.cardContent}>
+                      <Typography gutterBottom variant="h5" component="h2">
+                        {heading}
+                      </Typography>
+                      {content && <Typography>{content}</Typography>}
+                    </CardContent>
+                    {(viewHandler || editHandler) && (
+                      <CardActions>
+                        {viewHandler && (
+                          <Button size="small" color="primary">
+                            View
+                          </Button>
+                        )}
+                        {editHandler && (
+                          <Button size="small" color="primary">
+                            Edit
+                          </Button>
+                        )}
+                      </CardActions>
+                    )}
+                  </Card>
+                </Grid>
+              )
+            )}
           </Grid>
         </Container>
       </main>
