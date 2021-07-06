@@ -4,7 +4,7 @@ import kr.withus1030.server.entity.Meta;
 
 public interface MetaDAO {
 
-    public Meta findOnlyOne();
+    public Meta get();
 
-    public void save(Meta meta);
+    public void update(Meta meta);
 }
