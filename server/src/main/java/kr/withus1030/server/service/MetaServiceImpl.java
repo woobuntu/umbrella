@@ -3,9 +3,11 @@ package kr.withus1030.server.service;
 import kr.withus1030.server.dao.MetaDAO;
 import kr.withus1030.server.entity.Meta;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+@Service
 public class MetaServiceImpl implements MetaService {
 
     private MetaDAO metaDAO;
