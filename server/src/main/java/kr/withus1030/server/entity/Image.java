@@ -20,8 +20,7 @@ public class Image {
     public Image() {
     }
 
-    public Image(Long id, String name, String path) {
-        this.id = id;
+    public Image(String name, String path) {
         this.name = name;
         this.path = path;
     }

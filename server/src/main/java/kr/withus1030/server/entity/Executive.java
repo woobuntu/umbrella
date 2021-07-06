@@ -23,8 +23,7 @@ public class Executive {
     public Executive() {
     }
 
-    public Executive(int id, String name, String position, String greeting) {
-        this.id = id;
+    public Executive(String name, String position, String greeting) {
         this.name = name;
         this.position = position;
         this.greeting = greeting;

@@ -21,8 +21,7 @@ public class Performance {
     public Performance() {
     }
 
-    public Performance(Long id, String title, Date timestamp) {
-        this.id = id;
+    public Performance(String title, Date timestamp) {
         this.title = title;
         this.timestamp = timestamp;
     }
