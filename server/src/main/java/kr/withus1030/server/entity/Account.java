@@ -1,10 +1,12 @@
 package kr.withus1030.server.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name="account")
-public class Account {
+public class Account implements Serializable {
+// serializable을 implements하지 않을 시 Composite-id class must implement Serializable 에러 발생
 
     @Id
     @OneToOne(cascade = CascadeType.ALL)
