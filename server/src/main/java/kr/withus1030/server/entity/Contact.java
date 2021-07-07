@@ -1,5 +1,7 @@
 package kr.withus1030.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -12,6 +14,7 @@ public class Contact implements Serializable {
     @Id
     @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name="name")
+    @JsonBackReference
     private Meta meta;
 
     @Column(name="address")
