@@ -224,7 +224,7 @@ model ExecutiveHistory {
 model File {
   id                       Int                       @id @default(autoincrement())
   name                     String                    @db.VarChar(50)
-  path                     String                    @db.VarChar(255)
+  path                     String                    @db.Text
   type                     String                    @db.VarChar(20)
   catalogFileRelations     CatalogFileRelation[]
   executiveFileRelations   ExecutiveFileRelation[]
@@ -236,7 +236,7 @@ model File {
 model FileHistory {
   id     Int       @id @default(autoincrement())
   name   String    @db.VarChar(50)
-  path   String    @db.VarChar(255)
+  path   String    @db.Text
   type   String    @db.VarChar(20)
   fileId Int?
   from   DateTime  @default(now()) @db.Timestamp(0)
