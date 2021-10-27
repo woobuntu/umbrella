@@ -19,11 +19,11 @@ import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 
 import "assets/scss/material-kit-pro-react.scss?v=1.10.0";
-import App from "./App";
+import Layout from "./Layout";
 
 ReactDOM.render(
   <BrowserRouter>
-    <App />
+    <Layout />
   </BrowserRouter>,
   document.getElementById("root")
 );
