@@ -4,3 +4,4 @@ export { ContactResolver } from './contact.resolver';
 export { AccountResolver } from './account.resolver';
 export { HistoryResolver } from './history.resolver';
 export { ExecutiveResolver } from './executive.resolver';
+export { GnbResolver } from './gnb.resolver';

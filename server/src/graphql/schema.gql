@@ -46,9 +46,22 @@ type File {
   type: String!
 }
 
+type Gnb {
+  id: Float!
+  lnbs: [Lnb!]!
+  name: String!
+}
+
 type History {
   date: String!
   event: String!
+}
+
+type Lnb {
+  gnbId: Float!
+  id: Float!
+  name: String!
+  path: String!
 }
 
 type Meta {
@@ -66,6 +79,7 @@ type Query {
   account: Account!
   contact: Contact!
   executive(id: Int!): Executive!
+  gnbs: [Gnb!]!
   histories: [History!]!
   meta: Meta!
 }
