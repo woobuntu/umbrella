@@ -5,3 +5,6 @@ export { MetaFileRelationService } from './meta-file-relation.service';
 export { ContactService } from './contact.service';
 export { AccountService } from './account.service';
 export { HistoryService } from './history.service';
+export { ExecutiveService } from './executive.service';
+export { CareerService } from './career.service';
+export { ExecutiveFileRelationService } from './executive-file-relation.service';

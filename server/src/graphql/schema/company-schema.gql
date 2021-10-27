@@ -10,10 +10,33 @@ type Account {
   number: String!
 }
 
+type Career {
+  classification: String!
+  executiveId: Float!
+  id: Float!
+  record: String!
+}
+
 type Contact {
   address: String!
   mail: String!
   phone: String!
+}
+
+type Executive {
+  careers: [Career!]!
+  executiveFileRelations: [ExecutiveFileRelation!]!
+  greeting: String
+  id: Float!
+  name: String!
+  position: String!
+}
+
+type ExecutiveFileRelation {
+  executiveId: Float!
+  file: File!
+  fileId: Float!
+  id: Float!
 }
 
 type File {
@@ -42,6 +65,7 @@ type MetaFileRelation {
 type Query {
   account: Account!
   contact: Contact!
+  executive(id: Int!): Executive!
   histories: [History!]!
   meta: Meta!
 }

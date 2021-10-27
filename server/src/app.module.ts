@@ -8,14 +8,19 @@ import {
   ContactModule,
   AccountModule,
   HistoryModule,
+  ExecutiveFileRelationModule,
 } from './modules';
+import { ExecutiveModule } from './modules/executive.module';
 
 @Module({
   imports: [
     MetaModule,
+    MetaFileRelationModule,
     ContactModule,
     AccountModule,
     HistoryModule,
+    ExecutiveModule,
+    ExecutiveFileRelationModule,
     GraphQLModule.forRoot({
       include: [
         MetaModule,
@@ -23,6 +28,8 @@ import {
         ContactModule,
         AccountModule,
         HistoryModule,
+        ExecutiveModule,
+        ExecutiveFileRelationModule,
       ],
       // code first approach를 통해 schema 파일 생성
       autoSchemaFile: join(
