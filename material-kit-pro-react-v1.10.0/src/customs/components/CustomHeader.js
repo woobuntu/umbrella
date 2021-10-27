@@ -2,7 +2,7 @@ import React from "react";
 import { useQuery } from "@apollo/client";
 import Header from "components/Header/Header";
 import HeaderLinks from "components/Header/HeaderLinks";
-import { HEADER } from "../graphql";
+import { HEADER } from "../../graphql";
 
 export default function CustomHeader() {
   const { loading, error, data } = useQuery(HEADER);
@@ -18,7 +18,7 @@ export default function CustomHeader() {
   return (
     <Header
       color="transparent"
-      brand={name} // api call?
+      brand={name}
       links={<HeaderLinks dropdownHoverColor="info" gnbs={gnbs} />}
       fixed
       changeColorOnScroll={{
