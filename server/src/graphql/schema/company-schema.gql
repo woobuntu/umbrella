@@ -2,10 +2,22 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Meta {
+type File {
   id: Float!
   name: String!
+  path: String!
   type: String!
+}
+
+type Meta {
+  metaFileRelations: [MetaFileRelation!]!
+  name: String!
+  type: String!
+}
+
+type MetaFileRelation {
+  file: File!
+  fileId: Float!
 }
 
 type Query {

@@ -2,10 +2,12 @@ import { ObjectType } from '@nestjs/graphql';
 import { MetaFileRelation } from '../meta-file-relation';
 
 @ObjectType()
-export class Meta {
+export class File {
+  id: number;
+
   name: string;
 
-  type: string;
+  path: string;
 
-  metaFileRelations: MetaFileRelation[];
+  type: string;
 }
