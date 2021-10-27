@@ -4,3 +4,4 @@ export { FileService } from './file.service';
 export { MetaFileRelationService } from './meta-file-relation.service';
 export { ContactService } from './contact.service';
 export { AccountService } from './account.service';
+export { HistoryService } from './history.service';

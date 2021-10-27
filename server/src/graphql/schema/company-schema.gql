@@ -23,6 +23,11 @@ type File {
   type: String!
 }
 
+type History {
+  date: String!
+  event: String!
+}
+
 type Meta {
   metaFileRelations: [MetaFileRelation!]!
   name: String!
@@ -37,5 +42,6 @@ type MetaFileRelation {
 type Query {
   account: Account!
   contact: Contact!
+  histories: [History!]!
   meta: Meta!
 }
