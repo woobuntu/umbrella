@@ -2,6 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Contact {
+  address: String!
+  mail: String!
+  phone: String!
+}
+
 type File {
   id: Float!
   name: String!
@@ -21,5 +27,6 @@ type MetaFileRelation {
 }
 
 type Query {
+  contact: Contact!
   meta: Meta!
 }

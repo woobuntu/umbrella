@@ -2,13 +2,14 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 import { join } from 'path';
-import { MetaModule, MetaFileRelationModule } from './modules';
+import { MetaModule, MetaFileRelationModule, ContactModule } from './modules';
 
 @Module({
   imports: [
     MetaModule,
+    ContactModule,
     GraphQLModule.forRoot({
-      include: [MetaModule, MetaFileRelationModule],
+      include: [MetaModule, MetaFileRelationModule, ContactModule],
       // code first approach를 통해 schema 파일 생성
       autoSchemaFile: join(
         process.cwd(),
