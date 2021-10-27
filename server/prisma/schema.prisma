@@ -14,7 +14,7 @@ model Account {
   holder            String           @db.VarChar(20)
   consentGuidance   String?          @db.Text
   deductionGuidance String?          @db.Text
-  AccountHistory    AccountHistory[]
+  accountHistories  AccountHistory[]
 }
 
 model AccountHistory {
@@ -34,20 +34,20 @@ model AccountHistory {
 
 model Basket {
   id              Int             @id @default(autoincrement())
-  memberId        Int
+  userId          Int
   catalogId       Int
   amount          Int
   catalog         Catalog         @relation(fields: [catalogId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "basket_ibfk_2")
-  member          Member          @relation(fields: [memberId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "basket_ibfk_1")
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "basket_ibfk_1")
   basketHistories BasketHistory[]
 
   @@index([catalogId], map: "catalogId")
-  @@index([memberId], map: "memberId")
+  @@index([userId], map: "userId")
 }
 
 model BasketHistory {
   id        Int       @id @default(autoincrement())
-  memberId  Int
+  userId    Int
   catalogId Int
   amount    Int
   basketId  Int?
@@ -306,35 +306,6 @@ model LnbHistory {
   @@index([lnbId], map: "lnbId")
 }
 
-model Member {
-  id              Int             @id @default(autoincrement())
-  email           String          @unique(map: "email") @db.VarChar(255)
-  password        String?         @db.VarChar(255)
-  name            String?         @db.VarChar(10)
-  address         String?         @db.VarChar(255)
-  accessToken     String?         @unique(map: "accessToken") @db.VarChar(255)
-  refreshToken    String?         @db.VarChar(255)
-  baskets         Basket[]
-  memberHistories MemberHistory[]
-  purchases       Purchase[]
-}
-
-model MemberHistory {
-  id           Int       @id @default(autoincrement())
-  email        String    @db.VarChar(255)
-  password     String?   @db.VarChar(255)
-  name         String?   @db.VarChar(10)
-  address      String?   @db.VarChar(255)
-  accessToken  String?   @db.VarChar(255)
-  refreshToken String?   @db.VarChar(255)
-  memberId     Int?
-  from         DateTime  @default(now()) @db.Timestamp(0)
-  to           DateTime? @db.Timestamp(0)
-  member       Member?   @relation(fields: [memberId], references: [id], onUpdate: NoAction, map: "memberhistory_ibfk_1")
-
-  @@index([memberId], map: "memberId")
-}
-
 model Meta {
   id                Int                @id @default(1)
   name              String             @db.VarChar(10)
@@ -491,23 +462,23 @@ model PerformanceHistory {
 
 model Purchase {
   id                Int               @id @default(autoincrement())
-  memberId          Int
+  userId            Int
   catalogId         Int
   amount            Int
   totalPrice        Int
   timestamp         DateTime          @db.Timestamp(0)
   address           String            @db.VarChar(255)
   catalog           Catalog           @relation(fields: [catalogId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "purchase_ibfk_2")
-  member            Member            @relation(fields: [memberId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "purchase_ibfk_1")
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "purchase_ibfk_1")
   purchaseHistories PurchaseHistory[]
 
   @@index([catalogId], map: "catalogId")
-  @@index([memberId], map: "memberId")
+  @@index([userId], map: "userId")
 }
 
 model PurchaseHistory {
   id         Int       @id @default(autoincrement())
-  memberId   Int
+  userId     Int
   catalogId  Int
   amount     Int
   totalPrice Int
@@ -519,4 +490,31 @@ model PurchaseHistory {
   purchase   Purchase? @relation(fields: [purchaseId], references: [id], onUpdate: NoAction, map: "purchasehistory_ibfk_1")
 
   @@index([purchaseId], map: "purchaseId")
+}
+
+model User {
+  id            Int           @id @default(autoincrement())
+  email         String        @unique(map: "email") @db.VarChar(255)
+  name          String?       @db.VarChar(10)
+  address       String?       @db.VarChar(255)
+  accessToken   String        @unique(map: "accessToken") @db.VarChar(255)
+  refreshToken  String        @db.VarChar(255)
+  baskets       Basket[]
+  purchases     Purchase[]
+  userHistories UserHistory[]
+}
+
+model UserHistory {
+  id           Int       @id @default(autoincrement())
+  email        String    @db.VarChar(255)
+  name         String?   @db.VarChar(10)
+  address      String?   @db.VarChar(255)
+  accessToken  String    @db.VarChar(255)
+  refreshToken String    @db.VarChar(255)
+  userId       Int?
+  from         DateTime  @default(now()) @db.Timestamp(0)
+  to           DateTime? @db.Timestamp(0)
+  user         User?     @relation(fields: [userId], references: [id], onUpdate: NoAction, map: "userhistory_ibfk_1")
+
+  @@index([userId], map: "userId")
 }
