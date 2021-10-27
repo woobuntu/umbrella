@@ -2,6 +2,14 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Account {
+  bank: String!
+  consentGuidance: String
+  deductionGuidance: String
+  holder: String!
+  number: String!
+}
+
 type Contact {
   address: String!
   mail: String!
@@ -27,6 +35,7 @@ type MetaFileRelation {
 }
 
 type Query {
+  account: Account!
   contact: Contact!
   meta: Meta!
 }
