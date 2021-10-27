@@ -23,6 +23,14 @@ type Contact {
   phone: String!
 }
 
+input CreateUserInput {
+  accessToken: String!
+  address: String
+  email: String!
+  name: String
+  refreshToken: String!
+}
+
 type Executive {
   careers: [Career!]!
   executiveFileRelations: [ExecutiveFileRelation!]!
@@ -75,6 +83,10 @@ type MetaFileRelation {
   fileId: Float!
 }
 
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+}
+
 type Query {
   account: Account!
   contact: Contact!
@@ -82,4 +94,13 @@ type Query {
   gnbs: [Gnb!]!
   histories: [History!]!
   meta: Meta!
+}
+
+type User {
+  accessToken: String!
+  address: String
+  email: String!
+  id: Float!
+  name: String
+  refreshToken: String!
 }

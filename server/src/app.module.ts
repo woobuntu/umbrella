@@ -10,6 +10,7 @@ import {
   HistoryModule,
   ExecutiveFileRelationModule,
   GnbModule,
+  UserModule,
 } from './modules';
 import { ExecutiveModule } from './modules/executive.module';
 
@@ -23,6 +24,7 @@ import { ExecutiveModule } from './modules/executive.module';
     ExecutiveModule,
     ExecutiveFileRelationModule,
     GnbModule,
+    UserModule,
     GraphQLModule.forRoot({
       // code first approach를 통해 schema 파일 생성
       autoSchemaFile: join(process.cwd(), 'src/graphql/schema.gql'),
