@@ -17,13 +17,17 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
+import { ApolloProvider } from "@apollo/client";
 
 import "assets/scss/material-kit-pro-react.scss?v=1.10.0";
 import Layout from "./Layout";
+import { client } from "./graphql";
 
 ReactDOM.render(
   <BrowserRouter>
-    <Layout />
+    <ApolloProvider client={client}>
+      <Layout />
+    </ApolloProvider>
   </BrowserRouter>,
   document.getElementById("root")
 );
