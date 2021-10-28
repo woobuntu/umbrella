@@ -6,6 +6,10 @@ import GridContainer from "components/Grid/GridContainer";
 import GridItem from "components/Grid/GridItem";
 import { SectionBusiness } from "customs/components";
 import classNames from "classnames";
+import { useHistory, useLocation } from "react-router";
+import { useMutation } from "@apollo/client";
+import { GET_TOKEN } from "../graphql";
+import queryString from "query-string";
 
 const useStyles = makeStyles(homeStyle);
 
@@ -19,7 +23,37 @@ export default function Home() {
 
   const parallaxUrl =
     "https://woobuntu-umbrella.s3.ap-northeast-2.amazonaws.com/%E1%84%92%E1%85%A1%E1%86%B7%E1%84%81%E1%85%A6%E1%84%8A%E1%85%B3%E1%84%82%E1%85%B3%E1%86%AB%E1%84%8B%E1%85%AE%E1%84%89%E1%85%A1%E1%86%AB.jpg";
-  return (
+
+  let { search } = useLocation();
+  const history = useHistory();
+
+  const [getToken, { data, loading, error }] = useMutation(GET_TOKEN);
+
+  useEffect(() => {
+    if (search) {
+      const { code, state } = queryString.parse(search);
+      getToken({
+        variables: {
+          naverAuthPayload: {
+            code,
+            state,
+          },
+        },
+      }).then(
+        ({
+          data: {
+            naverSignIn: { accessToken },
+          },
+        }) => history.push("/")
+      );
+    }
+  }, [search]);
+
+  if (error) alert(error.message);
+
+  return loading ? (
+    <div>로딩중...</div>
+  ) : (
     <Fragment>
       <Parallax image={parallaxUrl} filter="dark">
         <div className={classes.container}>
