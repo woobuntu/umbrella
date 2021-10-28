@@ -1,14 +1,17 @@
 import React, { Fragment } from "react";
 import { Switch, Route } from "react-router-dom";
 import { CustomHeader, CustomFooter } from "./customs/components";
-import { Home } from "./pages";
+import { Home, SignIn } from "./pages";
 
 export default function Layout() {
   return (
     <Fragment>
       <CustomHeader />
       <Switch>
-        <Route to="/">
+        <Route path="/sign-in">
+          <SignIn />
+        </Route>
+        <Route path="/">
           <Home />
         </Route>
       </Switch>

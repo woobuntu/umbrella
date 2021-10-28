@@ -4,7 +4,7 @@ import {
   whiteColor,
   main,
   mainRaised,
-} from "../../assets/jss/material-kit-pro-react";
+} from "../../../assets/jss/material-kit-pro-react";
 
 const homeStyle = {
   container: {

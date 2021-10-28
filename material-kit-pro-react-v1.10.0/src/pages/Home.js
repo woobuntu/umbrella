@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect } from "react";
 import Parallax from "components/Parallax/Parallax";
-import { homeStyle } from "../customs/styles";
+import { homeStyle } from "../customs/assets/styles";
 import { makeStyles } from "@material-ui/styles";
 import GridContainer from "components/Grid/GridContainer";
 import GridItem from "components/Grid/GridItem";
@@ -11,10 +11,12 @@ const useStyles = makeStyles(homeStyle);
 
 export default function Home() {
   const classes = useStyles();
+
   useEffect(() => {
     window.scrollTo(0, 0);
     document.body.scrollTop = 0;
   });
+
   const parallaxUrl =
     "https://woobuntu-umbrella.s3.ap-northeast-2.amazonaws.com/%E1%84%92%E1%85%A1%E1%86%B7%E1%84%81%E1%85%A6%E1%84%8A%E1%85%B3%E1%84%82%E1%85%B3%E1%86%AB%E1%84%8B%E1%85%AE%E1%84%89%E1%85%A1%E1%86%AB.jpg";
   return (
