@@ -1,7 +1,7 @@
 import React from "react";
 import GridContainer from "components/Grid/GridContainer";
 import GridItem from "components/Grid/GridItem";
-import { sectionBusinessStyle } from "customs/styles";
+import { sectionBusinessStyle } from "customs/assets/styles";
 import { makeStyles } from "@material-ui/styles";
 import { ThumbUp, Business, PhotoLibrary } from "@material-ui/icons";
 import InfoArea from "components/InfoArea/InfoArea";

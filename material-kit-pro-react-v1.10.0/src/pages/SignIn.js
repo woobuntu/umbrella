@@ -5,7 +5,7 @@ import Card from "components/Card/Card";
 import CardHeader from "components/Card/CardHeader";
 import CardBody from "components/Card/CardBody";
 
-import { signInStyle } from "customs/styles";
+import { signInStyle } from "customs/assets/styles";
 import { makeStyles } from "@material-ui/core/styles";
 import { NaverButton, KakaoButton } from "customs/components";
 
