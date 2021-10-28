@@ -3,9 +3,9 @@ import { v4 } from "uuid";
 import naverButtonUrl from "../../customs/assets/img/naver_login_button.png";
 
 export default function NaverButton() {
-  const naverClientId = "gbanzvwb6EnLxcrgDyqx";
-  const redirectUri = encodeURI("http://localhost:3000");
-  const state = v4();
+  const naverClientId = encodeURIComponent("gbanzvwb6EnLxcrgDyqx");
+  const redirectUri = encodeURIComponent("http://localhost:3000");
+  const state = encodeURIComponent(v4());
   const naverLoginUrl =
     "https://nid.naver.com/oauth2.0/authorize" +
     "?response_type=code" +
