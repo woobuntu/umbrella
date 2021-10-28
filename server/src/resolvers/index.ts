@@ -5,4 +5,4 @@ export { AccountResolver } from './account.resolver';
 export { HistoryResolver } from './history.resolver';
 export { ExecutiveResolver } from './executive.resolver';
 export { GnbResolver } from './gnb.resolver';
-export { UserResolver } from './user.resolver';
+export { AuthResolver } from './auth.resolver';

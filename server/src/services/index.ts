@@ -12,3 +12,4 @@ export { GnbService } from './gnb.service';
 export { LnbService } from './lnb.service';
 export { UserService } from './user.service';
 export { NaverService } from './naver.service';
+export { AuthService } from './auth.service';

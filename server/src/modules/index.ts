@@ -5,4 +5,4 @@ export { AccountModule } from './account.module';
 export { HistoryModule } from './history.module';
 export { ExecutiveFileRelationModule } from './executive-file-relation.module';
 export { GnbModule } from './gnb.module';
-export { UserModule } from './user.module';
+export { AuthModule } from './auth.module';

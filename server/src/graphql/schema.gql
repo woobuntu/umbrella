@@ -2,6 +2,10 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AccessToken {
+  accessToken: String!
+}
+
 type Account {
   bank: String!
   consentGuidance: String
@@ -21,14 +25,6 @@ type Contact {
   address: String!
   mail: String!
   phone: String!
-}
-
-input CreateUserInput {
-  accessToken: String!
-  address: String
-  email: String!
-  name: String
-  refreshToken: String!
 }
 
 type Executive {
@@ -84,7 +80,12 @@ type MetaFileRelation {
 }
 
 type Mutation {
-  createUser(createUserInput: CreateUserInput!): User!
+  naverSignIn(naverAuthPayload: NaverAuthPayload!): AccessToken!
+}
+
+input NaverAuthPayload {
+  code: String!
+  state: String!
 }
 
 type Query {
@@ -94,13 +95,4 @@ type Query {
   gnbs: [Gnb!]!
   histories: [History!]!
   meta: Meta!
-}
-
-type User {
-  accessToken: String!
-  address: String
-  email: String!
-  id: Float!
-  name: String
-  refreshToken: String!
 }

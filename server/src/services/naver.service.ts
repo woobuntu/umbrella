@@ -15,8 +15,12 @@ export class NaverService {
     private httpService: HttpService,
     private configService: ConfigService,
   ) {
-    this.clientId = this.configService.get<string>('NAVER_CLIENT_ID');
-    this.clientSecret = this.configService.get<string>('NAVER_CLIENT_SECRET');
+    this.clientId = encodeURIComponent(
+      this.configService.get<string>('NAVER_CLIENT_ID'),
+    );
+    this.clientSecret = encodeURIComponent(
+      this.configService.get<string>('NAVER_CLIENT_SECRET'),
+    );
   }
 
   requestTokens({ code, state }: NaverAuthPayload): Observable<Tokens> {
