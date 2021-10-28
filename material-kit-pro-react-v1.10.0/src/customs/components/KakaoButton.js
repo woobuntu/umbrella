@@ -6,10 +6,8 @@ export default function KakaoButton() {
   const redirectUri = encodeURI("http://localhost:3000");
   const kakaoLoginUrl =
     "https://kauth.kakao.com/oauth/authorize" +
-    "?client_id=" +
-    kakakoClientId +
-    "&redirect_uri=" +
-    redirectUri +
+    `?client_id=${kakakoClientId}` +
+    `&redirect_uri=${redirectUri}` +
     "&response_type=code";
 
   return (

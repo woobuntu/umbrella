@@ -9,12 +9,10 @@ export default function NaverButton() {
   const naverLoginUrl =
     "https://nid.naver.com/oauth2.0/authorize" +
     "?response_type=code" +
-    "&client_id=" +
-    naverClientId +
-    "&redirect_uri=" +
-    redirectUri +
-    "&state=" +
-    state;
+    `&client_id=${naverClientId}` +
+    `&redirect_uri=${redirectUri}` +
+    `&state=${state}`;
+
   return (
     <div style={{ width: "50%", marginBottom: "1rem" }}>
       <a href={naverLoginUrl}>
