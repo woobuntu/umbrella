@@ -23,6 +23,7 @@ type Career {
 
 type Catalog {
   catalogFileRelations: [CatalogFileRelation!]!
+  catalogOptionRelations: [CatalogOptionRelation!]!
   id: Float!
   name: String!
   price: Float!
@@ -33,6 +34,13 @@ type CatalogFileRelation {
   file: File!
   fileId: Float!
   id: Float!
+}
+
+type CatalogOptionRelation {
+  catalogId: Float!
+  id: Float!
+  option: Option!
+  optionId: Float!
 }
 
 type Contact {
@@ -100,6 +108,11 @@ type Mutation {
 input NaverAuthPayload {
   code: String!
   state: String!
+}
+
+type Option {
+  id: Float!
+  name: String!
 }
 
 type Query {

@@ -15,3 +15,5 @@ export { NaverService } from './naver.service';
 export { AuthService } from './auth.service';
 export { CatalogService } from './catalog.service';
 export { CatalogFileRelationService } from './catalog-file-relation.service';
+export { CatalogOptionRelationService } from './catalog-option-relation.service';
+export { OptionService } from './option.service';

@@ -7,13 +7,18 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import { Catalog } from 'src/graphql/types/catalog';
-import { CatalogFileRelationService, CatalogService } from 'src/services';
+import {
+  CatalogFileRelationService,
+  CatalogOptionRelationService,
+  CatalogService,
+} from 'src/services';
 
 @Resolver((of) => Catalog)
 export class CatalogResolver {
   constructor(
     private catalogService: CatalogService,
     private catalogFileRelationService: CatalogFileRelationService,
+    private catalogOptionRelationService: CatalogOptionRelationService,
   ) {}
 
   @Query((returns) => Catalog)
@@ -31,6 +36,15 @@ export class CatalogResolver {
   @ResolveField()
   async catalogFileRelations(@Parent() catalog: Catalog) {
     return this.catalogFileRelationService.catalogFileRelations({
+      where: {
+        catalogId: catalog.id,
+      },
+    });
+  }
+
+  @ResolveField()
+  async catalogOptionRelations(@Parent() catalog: Catalog) {
+    return this.catalogOptionRelationService.catalogOptionRelations({
       where: {
         catalogId: catalog.id,
       },
