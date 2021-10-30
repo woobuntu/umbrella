@@ -13,3 +13,5 @@ export { LnbService } from './lnb.service';
 export { UserService } from './user.service';
 export { NaverService } from './naver.service';
 export { AuthService } from './auth.service';
+export { CatalogService } from './catalog.service';
+export { CatalogFileRelationService } from './catalog-file-relation.service';

@@ -21,6 +21,20 @@ type Career {
   record: String!
 }
 
+type Catalog {
+  catalogFileRelations: [CatalogFileRelation!]!
+  id: Float!
+  name: String!
+  price: Float!
+}
+
+type CatalogFileRelation {
+  catalogId: Float!
+  file: File!
+  fileId: Float!
+  id: Float!
+}
+
 type Contact {
   address: String!
   mail: String!
@@ -90,6 +104,7 @@ input NaverAuthPayload {
 
 type Query {
   account: Account!
+  catalogs: [Catalog!]!
   contact: Contact!
   executive(id: Int!): Executive!
   gnbs: [Gnb!]!

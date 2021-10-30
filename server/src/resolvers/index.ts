@@ -6,3 +6,5 @@ export { HistoryResolver } from './history.resolver';
 export { ExecutiveResolver } from './executive.resolver';
 export { GnbResolver } from './gnb.resolver';
 export { AuthResolver } from './auth.resolver';
+export { CatalogResolver } from './catalog.resolver';
+export { CatalogFileRelationResolver } from './catalog-file-relation.resolver';

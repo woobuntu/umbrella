@@ -6,3 +6,4 @@ export { HistoryModule } from './history.module';
 export { ExecutiveFileRelationModule } from './executive-file-relation.module';
 export { GnbModule } from './gnb.module';
 export { AuthModule } from './auth.module';
+export { CatalogModule } from './catalog.module';
