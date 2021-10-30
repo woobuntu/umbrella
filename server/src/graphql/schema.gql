@@ -104,6 +104,7 @@ input NaverAuthPayload {
 
 type Query {
   account: Account!
+  catalog(id: Int!): Catalog!
   catalogs: [Catalog!]!
   contact: Contact!
   executive(id: Int!): Executive!

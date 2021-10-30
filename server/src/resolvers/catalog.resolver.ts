@@ -1,4 +1,11 @@
-import { Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Int,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import { Catalog } from 'src/graphql/types/catalog';
 import { CatalogFileRelationService, CatalogService } from 'src/services';
 
@@ -8,6 +15,13 @@ export class CatalogResolver {
     private catalogService: CatalogService,
     private catalogFileRelationService: CatalogFileRelationService,
   ) {}
+
+  @Query((returns) => Catalog)
+  async catalog(@Args('id', { type: () => Int }) id: number) {
+    return this.catalogService.catalog({
+      id,
+    });
+  }
 
   @Query((returns) => [Catalog])
   async catalogs() {
