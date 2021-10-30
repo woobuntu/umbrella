@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { Switch, Route } from "react-router-dom";
 import { CustomHeader, CustomFooter } from "./customs/components";
-import { Home, SignIn } from "./pages";
+import { Home, SignIn, Mall } from "./pages";
 
 export default function Layout() {
   return (
@@ -10,6 +10,9 @@ export default function Layout() {
       <Switch>
         <Route path="/sign-in">
           <SignIn />
+        </Route>
+        <Route path="/mall">
+          <Mall />
         </Route>
         <Route path="/">
           <Home />
