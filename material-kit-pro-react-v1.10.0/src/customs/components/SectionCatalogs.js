@@ -10,6 +10,7 @@ import CardFooter from "components/Card/CardFooter";
 import { useQuery } from "@apollo/client";
 import { CATALOGS } from "../../graphql";
 import { Link } from "react-router-dom";
+import { convertPrice } from "customs/utils";
 
 const useStyles = makeStyles(sectionCatalogsStyle);
 
@@ -18,29 +19,18 @@ export default function SectionCatalogs() {
 
   const { loading, data, error } = useQuery(CATALOGS);
 
-  function formPrice(price) {
-    const stringPrice = price.toString();
-    let converted = "";
-    for (let i = stringPrice.length - 1; i >= 0; i--) {
-      const nth = stringPrice.length - i;
-      converted = stringPrice[i] + converted;
-      if (nth % 3 == 0 && i !== 0) {
-        converted = "," + converted;
-      }
-    }
-    return converted;
-  }
-
   if (error) alert(error.message);
 
-  return loading ? (
-    <div>로딩중...</div>
-  ) : (
+  if (loading) return <div>로딩중...</div>;
+
+  const { catalogs } = data;
+
+  return (
     <div className={classes.section}>
       <div className={classes.container}>
         <h2>상품 목록</h2>
         <GridContainer>
-          {data.catalogs.map(
+          {catalogs.map(
             ({
               id,
               name,
@@ -54,7 +44,7 @@ export default function SectionCatalogs() {
                 <GridItem md={4} sm={4} key={id}>
                   <Card product plain>
                     <CardHeader image plain>
-                      <Link to="#">
+                      <Link to={`/mall/${id}`}>
                         <img src={path} />
                       </Link>
                       <div
@@ -69,7 +59,7 @@ export default function SectionCatalogs() {
                     <CardFooter plain>
                       <div className={classes.priceContainer}>
                         <span className={classes.price}>
-                          ₩{formPrice(price)}
+                          ₩{convertPrice(price)}
                         </span>
                       </div>
                     </CardFooter>
