@@ -2,16 +2,16 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type AccessToken {
-  accessToken: String!
-}
-
 type Account {
   bank: String!
   consentGuidance: String
   deductionGuidance: String
   holder: String!
   number: String!
+}
+
+type AuthState {
+  isAuthenticated: Boolean!
 }
 
 type Career {
@@ -102,7 +102,7 @@ type MetaFileRelation {
 }
 
 type Mutation {
-  naverSignIn(naverAuthPayload: NaverAuthPayload!): AccessToken!
+  naverSignIn(naverAuthPayload: NaverAuthPayload!): AuthState!
 }
 
 input NaverAuthPayload {

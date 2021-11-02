@@ -1,6 +1,6 @@
 import { ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class AccessToken {
-  accessToken: string;
+export class AuthState {
+  isAuthenticated: boolean;
 }

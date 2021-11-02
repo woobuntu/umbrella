@@ -10,7 +10,7 @@ export class User {
 
   address?: string;
 
-  accessToken: string;
+  accessToken?: string;
 
-  refreshToken: string;
+  refreshToken?: string;
 }

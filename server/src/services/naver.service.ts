@@ -43,6 +43,8 @@ export class NaverService {
       })
       .pipe(
         map((response) => {
+          console.log(response.status);
+          console.log(response.data);
           if (response.data.error)
             throw new Error(response.data.error_description);
 
@@ -89,10 +91,10 @@ export class NaverService {
         headers: { Authorization: `Bearer ${accessToken}` },
       })
       .pipe(
-        map((response) => {
-          const { id, ...userInfo } = response.data.response;
-          return userInfo;
-        }),
+        map(({ data }) => ({
+          ...data.response,
+          id: `NAVER ${data.response.id}`,
+        })),
       );
   }
 }

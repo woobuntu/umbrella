@@ -39,6 +39,13 @@ import { ExecutiveModule } from './modules/executive.module';
       // graphql-playground 대신 apollo sandbox를 graphql ide로 사용
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault],
+      // https://docs.nestjs.com/security/cors#getting-started
+      cors: {
+        origin: 'http://localhost:3000',
+        credentials: true,
+      },
+      // https://stackoverflow.com/questions/63195571/unable-to-set-cookie-in-nestjs-graphql
+      context: ({ request, reply }) => ({ request, reply }),
     }),
   ],
 })

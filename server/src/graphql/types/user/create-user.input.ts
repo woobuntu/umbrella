@@ -8,7 +8,7 @@ export class CreateUserInput {
 
   address?: string;
 
-  accessToken: string;
+  accessToken?: string;
 
-  refreshToken: string;
+  refreshToken?: string;
 }

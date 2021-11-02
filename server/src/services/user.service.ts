@@ -16,11 +16,12 @@ export class UserService {
   }
 
   async createUser(data: Prisma.UserCreateInput): Promise<User> {
+    const { id, ...dataForNewUserHistory } = data;
     return this.prisma.user.create({
       data: {
         ...data,
         userHistories: {
-          create: [data],
+          create: [dataForNewUserHistory],
         },
       },
     });
@@ -34,7 +35,7 @@ export class UserService {
 
     const userLastHistory = await this.prisma.userHistory.findFirst({
       where: {
-        email: where.email,
+        userId: where.id,
         to: null,
       },
     });
