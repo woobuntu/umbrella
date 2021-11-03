@@ -1,11 +1,11 @@
 import { gql } from "@apollo/client";
 
-const GET_TOKEN = gql`
+const NAVER_SIGN_IN = gql`
   mutation Mutation($naverAuthPayload: NaverAuthPayload!) {
     naverSignIn(naverAuthPayload: $naverAuthPayload) {
-      accessToken
+      isAuthenticated
     }
   }
 `;
 
-export default GET_TOKEN;
+export default NAVER_SIGN_IN;

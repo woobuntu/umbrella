@@ -8,7 +8,7 @@ import { SectionBusiness } from "customs/components";
 import classNames from "classnames";
 import { useHistory, useLocation } from "react-router";
 import { useMutation } from "@apollo/client";
-import { GET_TOKEN } from "../graphql";
+import { NAVER_SIGN_IN, isAuthenticatedVar } from "../graphql";
 import queryString from "query-string";
 
 const useStyles = makeStyles(homeStyle);
@@ -27,12 +27,12 @@ export default function Home() {
   let { search } = useLocation();
   const history = useHistory();
 
-  const [getToken, { data, loading, error }] = useMutation(GET_TOKEN);
+  const [naverSignIn, { data, loading, error }] = useMutation(NAVER_SIGN_IN);
 
   useEffect(() => {
     if (search) {
       const { code, state } = queryString.parse(search);
-      getToken({
+      naverSignIn({
         variables: {
           naverAuthPayload: {
             code,
@@ -42,9 +42,12 @@ export default function Home() {
       }).then(
         ({
           data: {
-            naverSignIn: { accessToken },
+            naverSignIn: { isAuthenticated },
           },
-        }) => history.push("/")
+        }) => {
+          isAuthenticatedVar(isAuthenticated);
+          history.push("/");
+        }
       );
     }
   }, [search]);

@@ -4,7 +4,7 @@ import GridContainer from "components/Grid/GridContainer";
 import GridItem from "components/Grid/GridItem";
 import Button from "components/CustomButtons/Button.js";
 import ImageGallery from "react-image-gallery";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 import ShoppingCart from "@material-ui/icons/ShoppingCart";
 
@@ -61,9 +61,11 @@ export default function Product() {
         <div className={classes.container}>
           <GridContainer className={classes.titleRow}>
             <GridItem md={4} className={classes.mlAuto}>
-              <Button color="white" className={classes.floatRight}>
-                <ShoppingCart /> 0 items
-              </Button>
+              <Link to="/basket">
+                <Button color="white" className={classes.floatRight}>
+                  <ShoppingCart /> 0 items
+                </Button>
+              </Link>
             </GridItem>
           </GridContainer>
         </div>
@@ -141,9 +143,11 @@ export default function Product() {
                   </GridItem>
                 </GridContainer>
                 <GridContainer className={classes.pullRight}>
-                  <Button round color="rose">
-                    장바구니에 담기 &nbsp; <ShoppingCart />
-                  </Button>
+                  <Link to="/basket">
+                    <Button round color="rose">
+                      장바구니에 담기 &nbsp; <ShoppingCart />
+                    </Button>
+                  </Link>
                 </GridContainer>
               </GridItem>
             </GridContainer>
