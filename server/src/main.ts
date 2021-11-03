@@ -22,6 +22,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   const sessionSecret = configService.get('SESSION_SECRET');
+  const sessionDuration = configService.get<number>('SESSION_DURATION');
 
   app.register(fastifyCookie);
   app.register(fastifySession, {
@@ -34,6 +35,7 @@ async function bootstrap() {
       // https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#restrict_access_to_cookies
       secure: true,
       httpOnly: true,
+      expires: new Date(Date.now() + Number(sessionDuration)),
     },
   });
 

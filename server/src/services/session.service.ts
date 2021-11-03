@@ -34,7 +34,7 @@ export class SessionService {
   setExpires(params: { sessionId: string; sessionStore: any }) {
     const { sessionId, sessionStore } = params;
 
-    const sessionDuration = this.configService.get('SESSION_DURATION');
+    const sessionDuration = this.configService.get<number>('SESSION_DURATION');
 
     const destorySessionPromise = promisify(
       sessionStore.destroy.bind(sessionStore),

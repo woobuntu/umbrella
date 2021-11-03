@@ -4,6 +4,7 @@ import {
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { FastifyReply } from 'fastify';
 import { catchError, concatMap, map, Observable, of, tap } from 'rxjs';
@@ -40,6 +41,7 @@ export class SetCookieInterceptor implements NestInterceptor {
           .pipe(
             tap(() => {
               const reply: FastifyReply = ctx.getContext().reply;
+
               reply.setCookie('JSESSIONID', sessionId, cookie);
 
               this.sessionService.setExpires({
