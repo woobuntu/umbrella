@@ -41,7 +41,8 @@ import { ExecutiveModule } from './modules/executive.module';
       plugins: [ApolloServerPluginLandingPageLocalDefault],
       // https://docs.nestjs.com/security/cors#getting-started
       cors: {
-        origin: 'http://localhost:3000',
+        // origin: 'http://localhost:3000',
+        origin: true,
         credentials: true,
       },
       // https://stackoverflow.com/questions/63195571/unable-to-set-cookie-in-nestjs-graphql

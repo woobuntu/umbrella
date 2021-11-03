@@ -4,25 +4,15 @@ import {
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { FastifyReply } from 'fastify';
-import {
-  catchError,
-  concatMap,
-  from,
-  map,
-  Observable,
-  of,
-  tap,
-  timer,
-} from 'rxjs';
-import { promisify } from 'util';
+import { catchError, concatMap, map, Observable, of, tap } from 'rxjs';
+import { SessionService } from 'src/services';
 
 // https://stackoverflow.com/questions/63195571/unable-to-set-cookie-in-nestjs-graphql
 @Injectable()
-export class SetCookieInterceptors implements NestInterceptor {
-  constructor(private configService: ConfigService) {}
+export class SetCookieInterceptor implements NestInterceptor {
+  constructor(private sessionService: SessionService) {}
 
   intercept(
     context: ExecutionContext,
@@ -42,37 +32,24 @@ export class SetCookieInterceptors implements NestInterceptor {
         const { sessionId, cookie } = session;
         session.user = userInfoFromDB;
 
-        return from(
-          promisify(sessionStore.set.bind(sessionStore))(sessionId, session),
-        ).pipe(
-          tap(() => {
-            const reply: FastifyReply = ctx.getContext().reply;
-            reply.setCookie('JSESSIONID', sessionId, cookie);
+        return this.sessionService
+          .setSession({
+            session,
+            sessionStore,
+          })
+          .pipe(
+            tap(() => {
+              const reply: FastifyReply = ctx.getContext().reply;
+              reply.setCookie('JSESSIONID', sessionId, cookie);
 
-            const sessionDuration = this.configService.get('SESSION_DURATION');
-            timer(sessionDuration)
-              .pipe(
-                concatMap(() =>
-                  from(
-                    promisify(sessionStore.destroy.bind(sessionStore))(
-                      sessionId,
-                    ),
-                  ),
-                ),
-              )
-              .subscribe({
-                next: () =>
-                  console.log(
-                    `sessionId ${sessionId} is Destroyed!`,
-                    sessionStore,
-                  ),
-                error: (error) =>
-                  console.log('Session Destroy Error : ', error),
+              this.sessionService.setExpires({
+                sessionId,
+                sessionStore,
               });
-          }),
-          // 에러 없이 cookie와 세션 유효기간 설정했으면 true 반환
-          map(() => true),
-        );
+            }),
+            // 에러 없이 cookie와 세션 유효기간 설정했으면 true 반환
+            map(() => true),
+          );
       }),
       map((isAuthenticated) => ({
         isAuthenticated,

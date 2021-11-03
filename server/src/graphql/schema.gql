@@ -103,6 +103,7 @@ type MetaFileRelation {
 
 type Mutation {
   naverSignIn(naverAuthPayload: NaverAuthPayload!): AuthState!
+  signOut: AuthState!
 }
 
 input NaverAuthPayload {
