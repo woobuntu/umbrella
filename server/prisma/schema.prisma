@@ -462,28 +462,30 @@ model PerformanceHistory {
 
 model Purchase {
   id                Int               @id @default(autoincrement())
-  userId            String            @db.VarChar(255)
+  userId            String?           @db.VarChar(255)
   catalogId         Int
+  ordererId         Int
+  deliveryId        Int
   amount            Int
-  totalPrice        Int
-  timestamp         DateTime          @db.Timestamp(0)
-  address           String            @db.VarChar(255)
   catalog           Catalog           @relation(fields: [catalogId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "purchase_ibfk_2")
-  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "purchase_ibfk_1")
+  delivery          Delivery          @relation(fields: [deliveryId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "purchase_ibfk_4")
+  orderer           Orderer           @relation(fields: [ordererId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "purchase_ibfk_3")
+  user              User?             @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "purchase_ibfk_1")
   purchaseHistories PurchaseHistory[]
 
   @@index([catalogId], map: "catalogId")
+  @@index([deliveryId], map: "deliveryId")
+  @@index([ordererId], map: "ordererId")
   @@index([userId], map: "userId")
 }
 
 model PurchaseHistory {
   id         Int       @id @default(autoincrement())
-  userId     String    @db.VarChar(255)
+  userId     String?   @db.VarChar(255)
   catalogId  Int
+  ordererId  Int
+  deliveryId Int
   amount     Int
-  totalPrice Int
-  timestamp  DateTime  @db.Timestamp(0)
-  address    String    @db.VarChar(255)
   purchaseId Int?
   from       DateTime  @default(now()) @db.Timestamp(0)
   to         DateTime? @db.Timestamp(0)
@@ -496,6 +498,7 @@ model User {
   id            String        @id @db.VarChar(255)
   email         String        @db.VarChar(255)
   name          String?       @db.VarChar(10)
+  phone         String?       @db.VarChar(255)
   address       String?       @db.VarChar(255)
   accessToken   String?       @db.VarChar(255)
   refreshToken  String?       @db.VarChar(255)
@@ -508,6 +511,7 @@ model UserHistory {
   id           Int       @id @default(autoincrement())
   email        String    @db.VarChar(255)
   name         String?   @db.VarChar(10)
+  phone        String?   @db.VarChar(255)
   address      String?   @db.VarChar(255)
   accessToken  String?   @db.VarChar(255)
   refreshToken String?   @db.VarChar(255)
@@ -517,4 +521,54 @@ model UserHistory {
   user         User?     @relation(fields: [userId], references: [id], onUpdate: NoAction, map: "userhistory_ibfk_1")
 
   @@index([userId], map: "userId")
+}
+
+model Delivery {
+  id                Int               @id
+  name              String            @db.VarChar(255)
+  phone             String            @db.VarChar(255)
+  email             String            @db.VarChar(255)
+  address           String            @db.VarChar(255)
+  memo              String?           @db.VarChar(255)
+  deliveryHistories DeliveryHistory[]
+  purchases         Purchase[]
+}
+
+model DeliveryHistory {
+  id         Int       @id
+  name       String    @db.VarChar(255)
+  phone      String    @db.VarChar(255)
+  email      String    @db.VarChar(255)
+  address    String    @db.VarChar(255)
+  memo       String?   @db.VarChar(255)
+  deliveryId Int?
+  from       DateTime  @default(now()) @db.Timestamp(0)
+  to         DateTime? @db.Timestamp(0)
+  delivery   Delivery? @relation(fields: [deliveryId], references: [id], onUpdate: NoAction, map: "deliveryhistory_ibfk_1")
+
+  @@index([deliveryId], map: "deliveryId")
+}
+
+model Orderer {
+  id               Int              @id
+  name             String           @db.VarChar(255)
+  phone            String           @db.VarChar(255)
+  email            String           @db.VarChar(255)
+  address          String           @db.VarChar(255)
+  ordererHistories OrdererHistory[]
+  purchases        Purchase[]
+}
+
+model OrdererHistory {
+  id        Int       @id
+  name      String    @db.VarChar(255)
+  phone     String    @db.VarChar(255)
+  email     String    @db.VarChar(255)
+  address   String    @db.VarChar(255)
+  ordererId Int?
+  from      DateTime  @default(now()) @db.Timestamp(0)
+  to        DateTime? @db.Timestamp(0)
+  orderer   Orderer?  @relation(fields: [ordererId], references: [id], onUpdate: NoAction, map: "ordererhistory_ibfk_1")
+
+  @@index([ordererId], map: "ordererId")
 }
