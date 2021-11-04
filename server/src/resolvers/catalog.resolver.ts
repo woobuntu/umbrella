@@ -6,7 +6,7 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import { Catalog } from 'src/graphql/types/catalog';
+import { Catalog, FilterCatalogsInput } from 'src/graphql/types/catalog';
 import {
   CatalogFileRelationService,
   CatalogOptionRelationService,
@@ -29,8 +29,24 @@ export class CatalogResolver {
   }
 
   @Query((returns) => [Catalog])
-  async catalogs() {
-    return this.catalogService.catalogs();
+  async catalogs(
+    @Args('filterCatalogsInput', { nullable: true })
+    filterCatalogsInput: FilterCatalogsInput,
+  ) {
+    let payload;
+    if (filterCatalogsInput) {
+      const { ids } = filterCatalogsInput;
+      payload = {
+        where: {
+          id: {
+            in: ids,
+          },
+        },
+      };
+    } else {
+      payload = {};
+    }
+    return this.catalogService.catalogs(payload);
   }
 
   @ResolveField()

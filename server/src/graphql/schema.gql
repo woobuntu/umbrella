@@ -72,6 +72,10 @@ type File {
   type: String!
 }
 
+input FilterCatalogsInput {
+  ids: [Float!]!
+}
+
 type Gnb {
   id: Float!
   lnbs: [Lnb!]!
@@ -119,7 +123,7 @@ type Option {
 type Query {
   account: Account!
   catalog(id: Int!): Catalog!
-  catalogs: [Catalog!]!
+  catalogs(filterCatalogsInput: FilterCatalogsInput): [Catalog!]!
   contact: Contact!
   executive(id: Int!): Executive!
   gnbs: [Gnb!]!
