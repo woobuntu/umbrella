@@ -142,5 +142,6 @@ type Query {
   executive(id: Int!): Executive!
   gnbs: [Gnb!]!
   histories: [History!]!
+  isAuthenticated: AuthState!
   meta: Meta!
 }

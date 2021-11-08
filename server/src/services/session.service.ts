@@ -11,6 +11,17 @@ export class SessionService {
     this.timerHash = {};
   }
 
+  async getSession(params: {
+    sessionId: string;
+    sessionStore: any;
+  }): Promise<any> {
+    const { sessionId, sessionStore } = params;
+
+    const getSessionPromise = promisify(sessionStore.get.bind(sessionStore));
+
+    return getSessionPromise(sessionId);
+  }
+
   setSession(params: { session: any; sessionStore: any }): Observable<any> {
     const { session, sessionStore } = params;
     const { sessionId } = session;
@@ -58,7 +69,10 @@ export class SessionService {
     return subscription;
   }
 
-  destroySession(params: { sessionId: string; sessionStore: any }) {
+  destroySession(params: {
+    sessionId: string;
+    sessionStore: any;
+  }): Observable<any> {
     const { sessionId, sessionStore } = params;
 
     const destorySessionPromise = promisify(

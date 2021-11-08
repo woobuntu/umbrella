@@ -12,14 +12,12 @@ import { NaverAuthPayload } from 'src/types/user';
 import { UserService } from './user.service';
 import { NaverService } from './naver.service';
 import { User } from '.prisma/client';
-import { SessionService } from './session.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private naverService: NaverService,
     private userService: UserService,
-    private sessionService: SessionService,
   ) {}
 
   // 회원가입
