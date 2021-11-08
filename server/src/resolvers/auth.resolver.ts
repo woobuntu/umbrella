@@ -1,4 +1,4 @@
-import { UseInterceptors } from '@nestjs/common';
+import { Query, UseInterceptors } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { AuthState, User } from 'src/graphql/types/user';
 import { NaverAuthPayload } from 'src/graphql/types/user/naver-auth-payload.input';

@@ -14,6 +14,14 @@ type AuthState {
   isAuthenticated: Boolean!
 }
 
+type Basket {
+  amount: Float!
+  catalogOptionRelation: CatalogOptionRelation!
+  catalogOptionRelationId: Float!
+  id: Float!
+  userId: String!
+}
+
 type Career {
   classification: String!
   executiveId: Float!
@@ -47,6 +55,11 @@ type Contact {
   address: String!
   mail: String!
   phone: String!
+}
+
+input CreateBasketInput {
+  amount: Float!
+  catalogOptionRelationId: Float!
 }
 
 type Executive {
@@ -106,6 +119,7 @@ type MetaFileRelation {
 }
 
 type Mutation {
+  createBasket(createBasketInput: CreateBasketInput!): [Basket!]!
   naverSignIn(naverAuthPayload: NaverAuthPayload!): AuthState!
   signOut: AuthState!
 }

@@ -18,3 +18,4 @@ export { CatalogFileRelationService } from './catalog-file-relation.service';
 export { CatalogOptionRelationService } from './catalog-option-relation.service';
 export { OptionService } from './option.service';
 export { SessionService } from './session.service';
+export { BasketService } from './basket.service';

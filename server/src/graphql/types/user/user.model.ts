@@ -2,7 +2,7 @@ import { ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class User {
-  id: number;
+  id: string;
 
   email: string;
 
