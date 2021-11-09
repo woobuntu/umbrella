@@ -45,6 +45,7 @@ type CatalogFileRelation {
 }
 
 type CatalogOptionRelation {
+  catalog: Catalog!
   catalogId: Float!
   id: Float!
   option: Option!
@@ -119,7 +120,7 @@ type MetaFileRelation {
 }
 
 type Mutation {
-  createBasket(createBasketInput: CreateBasketInput!): [Basket!]!
+  createBasket(createBasketInput: CreateBasketInput!): Basket!
   naverSignIn(naverAuthPayload: NaverAuthPayload!): AuthState!
   signOut: AuthState!
 }
@@ -136,6 +137,7 @@ type Option {
 
 type Query {
   account: Account!
+  baskets: [Basket!]!
   catalog(id: Int!): Catalog!
   catalogs(filterCatalogsInput: FilterCatalogsInput): [Catalog!]!
   contact: Contact!
