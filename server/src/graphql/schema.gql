@@ -58,11 +58,6 @@ type Contact {
   phone: String!
 }
 
-input CreateBasketInput {
-  amount: Float!
-  catalogOptionRelationId: Float!
-}
-
 type Executive {
   careers: [Career!]!
   executiveFileRelations: [ExecutiveFileRelation!]!
@@ -120,9 +115,9 @@ type MetaFileRelation {
 }
 
 type Mutation {
-  createBasket(createBasketInput: CreateBasketInput!): Basket!
   naverSignIn(naverAuthPayload: NaverAuthPayload!): AuthState!
   signOut: AuthState!
+  upsertBasket(upsertBasketInput: UpsertBasketInput!): Basket!
 }
 
 input NaverAuthPayload {
@@ -146,4 +141,9 @@ type Query {
   histories: [History!]!
   isAuthenticated: AuthState!
   meta: Meta!
+}
+
+input UpsertBasketInput {
+  amount: Float!
+  catalogOptionRelationId: Float!
 }

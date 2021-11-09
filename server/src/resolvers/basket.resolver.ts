@@ -8,7 +8,7 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import { CurrentUser } from 'src/decorators';
-import { Basket, CreateBasketInput } from 'src/graphql/types/basket';
+import { Basket, UpsertBasketInput } from 'src/graphql/types/basket';
 import { User } from 'src/graphql/types/user';
 import { AuthGuard } from 'src/guards';
 import { BasketService, CatalogOptionRelationService } from 'src/services';
@@ -32,15 +32,30 @@ export class BasketResolver {
 
   @Mutation((returns) => Basket)
   @UseGuards(AuthGuard)
-  async createBasket(
-    @Args('createBasketInput')
-    createBasketInput: CreateBasketInput,
+  async upsertBasket(
+    @Args('upsertBasketInput') upsertBasketInput: UpsertBasketInput,
     @CurrentUser() user: User,
   ) {
-    return this.basketService.createBasket({
+    const { catalogOptionRelationId, amount } = upsertBasketInput;
+
+    const basket = await this.basketService.basket({
       userId: user.id,
-      ...createBasketInput,
+      catalogOptionRelationId,
     });
+
+    return basket
+      ? this.basketService.updateBasket({
+          where: {
+            id: basket.id,
+          },
+          data: {
+            amount,
+          },
+        })
+      : this.basketService.createBasket({
+          userId: user.id,
+          ...upsertBasketInput,
+        });
   }
 
   @ResolveField()
