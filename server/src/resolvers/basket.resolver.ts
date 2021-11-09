@@ -1,6 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import {
   Args,
+  Int,
   Mutation,
   Parent,
   Query,
@@ -56,6 +57,14 @@ export class BasketResolver {
           userId: user.id,
           ...upsertBasketInput,
         });
+  }
+
+  @Mutation((returns) => Basket)
+  @UseGuards(AuthGuard)
+  async deleteBasket(@Args('id', { type: () => Int }) id: number) {
+    return this.basketService.deleteBasket({
+      id,
+    });
   }
 
   @ResolveField()

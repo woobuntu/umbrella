@@ -74,4 +74,10 @@ export class BasketService {
       },
     });
   }
+
+  async deleteBasket(where: Prisma.BasketWhereUniqueInput): Promise<Basket> {
+    return this.prisma.basket.delete({
+      where,
+    });
+  }
 }

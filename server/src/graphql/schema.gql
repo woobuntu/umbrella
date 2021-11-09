@@ -115,6 +115,7 @@ type MetaFileRelation {
 }
 
 type Mutation {
+  deleteBasket(id: Int!): Basket!
   naverSignIn(naverAuthPayload: NaverAuthPayload!): AuthState!
   signOut: AuthState!
   upsertBasket(upsertBasketInput: UpsertBasketInput!): Basket!
