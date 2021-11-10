@@ -43,8 +43,6 @@ export class NaverService {
       })
       .pipe(
         map((response) => {
-          console.log(response.status);
-          console.log(response.data);
           if (response.data.error)
             throw new Error(response.data.error_description);
 
