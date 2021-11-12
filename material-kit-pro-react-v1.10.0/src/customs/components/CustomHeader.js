@@ -2,41 +2,35 @@ import React from "react";
 import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
 import Header from "components/Header/Header";
 import HeaderLinks from "components/Header/HeaderLinks";
-import { HEADER, isAuthenticatedVar, SIGN_OUT } from "../../graphql";
+import { SIGN_OUT } from "../../graphql/mutation";
+import { HEADER } from "../../graphql/query";
+import { isAuthenticatedVar, isAuthLoadingVar } from "graphql/state";
+import { useHistory } from "react-router";
 
 export default function CustomHeader() {
-  const {
-    loading: headerLoading,
-    error: headerError,
-    data: headerData,
-  } = useQuery(HEADER);
-  const [
-    signOut,
-    { loading: signOutLoading, error: signOutError, data: signOutData },
-  ] = useMutation(SIGN_OUT);
-
-  const onSignOut = () => {
-    signOut().then(
-      ({
-        data: {
-          signOut: { isAuthenticated },
-        },
-      }) => {
-        isAuthenticatedVar(isAuthenticated);
-      }
-    );
-  };
+  const { loading, error, data } = useQuery(HEADER);
 
   const isAuthenticated = useReactiveVar(isAuthenticatedVar);
 
-  if (headerLoading || signOutLoading) return <p>Loading...</p>;
-  if (headerError) alert(headerError.message);
-  if (signOutError) alert(headerError.message);
+  const [signOut, { client }] = useMutation(SIGN_OUT);
+
+  let history = useHistory();
+
+  const onSignOut = () =>
+    signOut().then(() => {
+      client.resetStore();
+      history.push("/");
+    });
+
+  const isAuthLoading = useReactiveVar(isAuthLoadingVar);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) alert(error.message);
 
   const {
     meta: { name },
     gnbs,
-  } = headerData;
+  } = data;
 
   return (
     <Header
@@ -46,6 +40,7 @@ export default function CustomHeader() {
         <HeaderLinks
           dropdownHoverColor="info"
           gnbs={gnbs}
+          isAuthLoading={isAuthLoading}
           isAuthenticated={isAuthenticated}
           onSignOut={onSignOut}
         />

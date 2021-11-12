@@ -13,6 +13,7 @@ const PRODUCT = gql`
         }
       }
       catalogOptionRelations {
+        id
         option {
           id
           name

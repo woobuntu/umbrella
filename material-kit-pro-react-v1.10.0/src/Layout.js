@@ -1,9 +1,42 @@
-import React, { Fragment } from "react";
+import { useQuery } from "@apollo/client";
+import { IS_AUTHENTICATED } from "graphql/query";
+import { isAuthenticatedVar } from "graphql/state";
+import React, { Fragment, useEffect } from "react";
 import { Switch, Route } from "react-router-dom";
 import { CustomHeader, CustomFooter } from "./customs/components";
-import { Home, SignIn, Mall, Product } from "./pages";
+import {
+  Home,
+  SignIn,
+  Mall,
+  ProductForNonUser,
+  ProductForUser,
+  BasketForNonUser,
+  BasketForUser,
+  OrderForNonUser,
+} from "./pages";
 
 export default function Layout() {
+  const { loading, error, data, refetch } = useQuery(IS_AUTHENTICATED);
+
+  // useEffect(() => {
+  //   refetch().then(({data}) => console.log(data));
+  // }, []);
+  useEffect(() => {
+    if (data) {
+      const {
+        isAuthenticated: { isAuthenticated },
+      } = data;
+      isAuthenticatedVar(isAuthenticated);
+    }
+  }, [data]);
+
+  if (loading) return <div>로딩중...</div>;
+  if (error) console.error(error);
+
+  const {
+    isAuthenticated: { isAuthenticated },
+  } = data;
+
   return (
     <Fragment>
       <CustomHeader />
@@ -12,10 +45,16 @@ export default function Layout() {
           <SignIn />
         </Route>
         <Route path="/mall/:id">
-          <Product />
+          {isAuthenticated ? <ProductForUser /> : <ProductForNonUser />}
         </Route>
         <Route path="/mall">
           <Mall />
+        </Route>
+        <Route path="/basket">
+          {isAuthenticated ? <BasketForUser /> : <BasketForNonUser />}
+        </Route>
+        <Route path="/order">
+          <OrderForNonUser />
         </Route>
         <Route path="/">
           <Home />

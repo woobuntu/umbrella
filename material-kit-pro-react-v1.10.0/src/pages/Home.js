@@ -8,8 +8,11 @@ import { SectionBusiness } from "customs/components";
 import classNames from "classnames";
 import { useHistory, useLocation } from "react-router";
 import { useMutation } from "@apollo/client";
-import { NAVER_SIGN_IN, isAuthenticatedVar } from "../graphql";
+import { NAVER_SIGN_IN } from "../graphql/mutation";
 import queryString from "query-string";
+import { isLoginCompletedVar } from "graphql/state";
+import { isAuthLoadingVar } from "graphql/state";
+import { IS_AUTHENTICATED } from "graphql/query";
 
 const useStyles = makeStyles(homeStyle);
 
@@ -27,7 +30,11 @@ export default function Home() {
   let { search } = useLocation();
   const history = useHistory();
 
-  const [naverSignIn, { data, loading, error }] = useMutation(NAVER_SIGN_IN);
+  const [naverSignIn, { client, loading, error }] = useMutation(NAVER_SIGN_IN);
+
+  useEffect(() => {
+    isAuthLoadingVar(loading);
+  }, [loading]);
 
   useEffect(() => {
     if (search) {
@@ -39,16 +46,11 @@ export default function Home() {
             state,
           },
         },
-      }).then(
-        ({
-          data: {
-            naverSignIn: { isAuthenticated },
-          },
-        }) => {
-          isAuthenticatedVar(isAuthenticated);
-          history.push("/");
-        }
-      );
+        refetchQueries: [IS_AUTHENTICATED],
+      }).then(() => {
+        history.push("/");
+        // client.resetStore();
+      });
     }
   }, [search]);
 

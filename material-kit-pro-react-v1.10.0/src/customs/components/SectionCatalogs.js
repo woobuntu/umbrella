@@ -8,7 +8,7 @@ import CardHeader from "components/Card/CardHeader";
 import CardBody from "components/Card/CardBody";
 import CardFooter from "components/Card/CardFooter";
 import { useQuery } from "@apollo/client";
-import { CATALOGS } from "../../graphql";
+import { CATALOGS } from "../../graphql/query";
 import { Link } from "react-router-dom";
 import { convertPrice } from "customs/utils";
 
