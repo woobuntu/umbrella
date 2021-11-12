@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { concatMap, from, Observable, tap, timer } from 'rxjs';
+import { SessionConfig } from 'src/types/config';
 import { promisify } from 'util';
 
 @Injectable()
@@ -45,7 +46,7 @@ export class SessionService {
   setExpires(params: { sessionId: string; sessionStore: any }) {
     const { sessionId, sessionStore } = params;
 
-    const sessionDuration = this.configService.get<number>('SESSION_DURATION');
+    const sessionDuration = this.configService.get<number>('session.duration');
 
     const destorySessionPromise = promisify(
       sessionStore.destroy.bind(sessionStore),

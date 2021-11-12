@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { NaverAuthPayload, Tokens } from 'src/types/user';
 import { map, Observable } from 'rxjs';
 import { User } from '.prisma/client';
+import { NaverConfig } from 'src/types/config';
 
 @Injectable()
 export class NaverService {
@@ -15,15 +16,16 @@ export class NaverService {
     private httpService: HttpService,
     private configService: ConfigService,
   ) {
-    this.clientId = encodeURIComponent(
-      this.configService.get<string>('NAVER_CLIENT_ID'),
-    );
-    this.clientSecret = encodeURIComponent(
-      this.configService.get<string>('NAVER_CLIENT_SECRET'),
-    );
+    const { clientId, clientSecret } =
+      this.configService.get<NaverConfig>('naver');
+
+    this.clientId = encodeURIComponent(clientId);
+
+    this.clientSecret = encodeURIComponent(clientSecret);
   }
 
   requestTokens({ code, state }: NaverAuthPayload): Observable<Tokens> {
+    console.log(code, state);
     const redirectUri = 'http://localhost:3000/';
     const url =
       'https://nid.naver.com/oauth2.0/token' +

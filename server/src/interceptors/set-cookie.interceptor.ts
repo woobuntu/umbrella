@@ -9,6 +9,7 @@ import { GqlExecutionContext } from '@nestjs/graphql';
 import { FastifyReply } from 'fastify';
 import { catchError, concatMap, map, Observable, of, tap } from 'rxjs';
 import { SessionService } from 'src/services';
+import { SessionConfig } from 'src/types/config';
 
 // https://stackoverflow.com/questions/63195571/unable-to-set-cookie-in-nestjs-graphql
 @Injectable()
@@ -46,7 +47,7 @@ export class SetCookieInterceptor implements NestInterceptor {
               const reply: FastifyReply = ctx.getContext().reply;
 
               const sessionDuration =
-                this.configService.get<number>('SESSION_DURATION');
+                this.configService.get<SessionConfig>('session.duration');
 
               reply.setCookie('JSESSIONID', sessionId, {
                 ...cookie,
@@ -62,6 +63,7 @@ export class SetCookieInterceptor implements NestInterceptor {
             map(() => true),
           );
       }),
+      tap((v) => console.log(v)),
       map((isAuthenticated) => ({
         isAuthenticated,
       })),

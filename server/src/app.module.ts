@@ -16,11 +16,15 @@ import {
   BasketModule,
 } from './modules';
 import { ExecutiveModule } from './modules/executive.module';
+import { environmentConfig, naverConfig, sessionConfig } from './config';
 
 @Module({
   imports: [
+    // https://docs.nestjs.com/techniques/configuration#use-module-globally
     ConfigModule.forRoot({
       isGlobal: true,
+      // https://docs.nestjs.com/techniques/configuration#configuration-namespaces
+      load: [environmentConfig, naverConfig, sessionConfig],
     }),
     MetaModule,
     MetaFileRelationModule,

@@ -8,8 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
 import fastifyCookie from 'fastify-cookie';
 import fastifySession from '@fastify/session';
-import { readFile } from 'fs/promises';
-import { join } from 'path';
+import { EnvironmentConfig, SessionConfig } from './types/config';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -21,12 +20,12 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
 
-  const sessionSecret = configService.get('SESSION_SECRET');
+  const { secret } = configService.get<SessionConfig>('session');
 
   app.register(fastifyCookie);
   app.register(fastifySession, {
     cookieName: 'sessionId', // default로 sessionId지만, 명시적으로 하기 위함
-    secret: sessionSecret,
+    secret: secret,
     cookie: {
       // https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#define_where_cookies_are_sent
       domain: 'localhost',
@@ -37,7 +36,7 @@ async function bootstrap() {
     },
   });
 
-  const port = configService.get('PORT');
+  const { port } = configService.get<EnvironmentConfig>('environment');
 
   await app.listen(port, '0.0.0.0');
   // fastify는 기본적으로 localhost 127.0.0.1 interface에서만 수신이 가능하다.
