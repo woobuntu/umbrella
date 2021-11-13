@@ -4,8 +4,10 @@ import naverButtonUrl from "../../customs/assets/img/naver_login_button.png";
 
 export default function NaverButton() {
   const naverClientId = encodeURIComponent("gbanzvwb6EnLxcrgDyqx");
-  const redirectUri = encodeURIComponent("http://localhost:3000");
-  const state = encodeURIComponent(v4());
+  const redirectUri = encodeURIComponent(
+    "http://localhost:3000?platform=naver"
+  );
+  const state = encodeURIComponent(v4()); // 전역관리하여 인증에 사용
   const naverLoginUrl =
     "https://nid.naver.com/oauth2.0/authorize" +
     "?response_type=code" +
@@ -14,9 +16,19 @@ export default function NaverButton() {
     `&state=${state}`;
 
   return (
-    <div style={{ width: "50%", marginBottom: "1rem" }}>
+    <div
+      style={{
+        padding: 0,
+        marginBottom: "1rem",
+        width: "201.781px",
+        backgroundColor: "#03C75A",
+        display: "flex",
+        justifyContent: "center",
+        borderRadius: "0.5rem",
+      }}
+    >
       <a href={naverLoginUrl}>
-        <img src={naverButtonUrl} style={{ width: "100%" }} />
+        <img src={naverButtonUrl} style={{ height: "38px" }} />
       </a>
     </div>
   );

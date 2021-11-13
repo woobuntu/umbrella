@@ -171,6 +171,7 @@ export default function BasketForUser() {
         <ItemPrice key={id} price={price} />,
         <ItemAmount
           key={id}
+          amount={amount}
           onAdd={() => {
             upsertBasket({
               variables: {

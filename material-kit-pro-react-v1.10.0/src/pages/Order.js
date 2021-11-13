@@ -76,13 +76,37 @@ export default function Order({ cart, totalPrice }) {
                   width: "100%",
                 }}
               >
-                <Button color="white" round>
+                <Button
+                  color="white"
+                  round
+                  style={{
+                    backgroundColor: "#03C75A",
+                    color: "white",
+                    fontWeight: "bold",
+                  }}
+                >
                   네이버페이로 결제하기
                 </Button>
-                <Button color="white" round>
+                <Button
+                  color="white"
+                  round
+                  style={{
+                    backgroundColor: "#FEE500",
+                    color: "black",
+                    fontWeight: "bold",
+                  }}
+                >
                   카카오페이로 결제하기
                 </Button>
-                <Button color="white" round onClick={onTossClick}>
+                <Button
+                  color="white"
+                  round
+                  style={{
+                    backgroundColor: "#3182f6",
+                    color: "white",
+                    fontWeight: "bold",
+                  }}
+                >
                   토스로 결제하기
                 </Button>
               </div>

@@ -38,6 +38,7 @@ const makeBasketTableData = ({
       <ItemPrice key={id} price={price} />,
       <ItemAmount
         key={id}
+        amount={amount}
         onAdd={controlAmount({ productId: id, optionId })}
         onRemove={controlAmount({ productId: id, optionId })}
         onOk={(callback) => () => {

@@ -18,9 +18,6 @@ import {
 export default function Layout() {
   const { loading, error, data, refetch } = useQuery(IS_AUTHENTICATED);
 
-  // useEffect(() => {
-  //   refetch().then(({data}) => console.log(data));
-  // }, []);
   useEffect(() => {
     if (data) {
       const {
