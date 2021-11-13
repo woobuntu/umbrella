@@ -63,7 +63,6 @@ export class SetCookieInterceptor implements NestInterceptor {
             map(() => true),
           );
       }),
-      tap((v) => console.log(v)),
       map((isAuthenticated) => ({
         isAuthenticated,
       })),

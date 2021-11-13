@@ -116,14 +116,9 @@ type MetaFileRelation {
 
 type Mutation {
   deleteBasket(id: Int!): Basket!
-  naverSignIn(naverAuthPayload: NaverAuthPayload!): AuthState!
+  signIn(signInInput: SignInInput!): AuthState!
   signOut: AuthState!
   upsertBasket(upsertBasketInput: UpsertBasketInput!): Basket!
-}
-
-input NaverAuthPayload {
-  code: String!
-  state: String!
 }
 
 type Option {
@@ -142,6 +137,12 @@ type Query {
   histories: [History!]!
   isAuthenticated: AuthState!
   meta: Meta!
+}
+
+input SignInInput {
+  code: String!
+  platform: String!
+  state: String!
 }
 
 input UpsertBasketInput {

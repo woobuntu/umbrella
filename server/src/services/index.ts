@@ -19,3 +19,5 @@ export { CatalogOptionRelationService } from './catalog-option-relation.service'
 export { OptionService } from './option.service';
 export { SessionService } from './session.service';
 export { BasketService } from './basket.service';
+export { KakaoService } from './kakao.service';
+export { GoogleService } from './google.service';

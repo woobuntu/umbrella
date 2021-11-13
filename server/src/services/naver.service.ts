@@ -4,7 +4,7 @@ import { AxiosResponse } from 'axios';
 import { ConfigService } from '@nestjs/config';
 import { NaverAuthPayload, Tokens } from 'src/types/user';
 import { map, Observable } from 'rxjs';
-import { User } from '.prisma/client';
+import { Prisma } from '.prisma/client';
 import { NaverConfig } from 'src/types/config';
 
 @Injectable()
@@ -24,8 +24,7 @@ export class NaverService {
     this.clientSecret = encodeURIComponent(clientSecret);
   }
 
-  requestTokens({ code, state }: NaverAuthPayload): Observable<Tokens> {
-    console.log(code, state);
+  getTokens({ code, state }: NaverAuthPayload): Observable<Tokens> {
     const redirectUri = 'http://localhost:3000/';
     const url =
       'https://nid.naver.com/oauth2.0/token' +
@@ -47,16 +46,17 @@ export class NaverService {
         map((response) => {
           if (response.data.error)
             throw new Error(response.data.error_description);
-
+          // AccessToken 값은 일부 특수문자가 포함되어 있기 때문에 GET Parameter를 통하여 데이터를 전달하는 경우,
+          // AccessToken 값을 반드시 URL Encode 처리한 후에 전송하여야합니다.
           return {
-            accessToken: response.data.access_token,
-            refreshToken: response.data.refresh_token,
+            accessToken: encodeURIComponent(response.data.access_token),
+            refreshToken: encodeURIComponent(response.data.refresh_token),
           };
         }),
       );
   }
 
-  refreshTokens(refreshToken: string): Observable<Tokens> {
+  updateTokens(refreshToken: string): Observable<Tokens> {
     const url =
       'https://nid.naver.com/oauth2.0/token' +
       '?grant_type=refresh_token' +
@@ -66,13 +66,13 @@ export class NaverService {
 
     return this.httpService.get(url).pipe(
       map((response) => ({
-        accessToken: response.data.access_token,
-        refreshToken: response.data.refresh_token,
+        accessToken: encodeURIComponent(response.data.access_token),
+        refreshToken: encodeURIComponent(response.data.refresh_token),
       })),
     );
   }
 
-  removeTokens(accessToken: string): Observable<AxiosResponse> {
+  deleteTokens(accessToken: string): Observable<AxiosResponse> {
     const url =
       'https://nid.naver.com/oauth2.0/token' +
       '?grant_type=delete' +
@@ -84,7 +84,7 @@ export class NaverService {
     return this.httpService.get(url);
   }
 
-  validate(accessToken: string): Observable<User> {
+  getUserInfo(accessToken: string): Observable<Prisma.UserCreateInput> {
     const url = 'https://openapi.naver.com/v1/nid/me';
     return this.httpService
       .get(url, {
