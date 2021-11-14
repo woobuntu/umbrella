@@ -707,7 +707,7 @@
   dependencies:
     axios "0.23.0"
 
-"@nestjs/cli@^8.0.0":
+"@nestjs/cli@^8.1.4":
   version "8.1.4"
   resolved "https://registry.yarnpkg.com/@nestjs/cli/-/cli-8.1.4.tgz#8105c791eae3ead67e8ba7b4df2c0f45a445d0cd"
   integrity sha512-QXZ0fkybNEPUeP3wcWuFore8XVicrT76IYToHkc4PJ+kQ7/thQzpy5mqWGTalv83aNM5LKAjl5OTSBBrPiWrlg==
