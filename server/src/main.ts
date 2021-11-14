@@ -11,7 +11,7 @@ import fastifySession from '@fastify/session';
 import { EnvironmentConfig, SessionConfig } from './types/config';
 import fastifyStatic from 'fastify-static';
 import { join } from 'path';
-import fs from 'fs';
+import * as fs from 'fs';
 
 async function bootstrap() {
   const httpsOptions =
