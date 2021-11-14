@@ -1,0 +1,151 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Account {
+  bank: String!
+  consentGuidance: String
+  deductionGuidance: String
+  holder: String!
+  number: String!
+}
+
+type AuthState {
+  isAuthenticated: Boolean!
+}
+
+type Basket {
+  amount: Float!
+  catalogOptionRelation: CatalogOptionRelation!
+  catalogOptionRelationId: Float!
+  id: Float!
+  userId: String!
+}
+
+type Career {
+  classification: String!
+  executiveId: Float!
+  id: Float!
+  record: String!
+}
+
+type Catalog {
+  catalogFileRelations: [CatalogFileRelation!]!
+  catalogOptionRelations: [CatalogOptionRelation!]!
+  id: Float!
+  name: String!
+  price: Float!
+}
+
+type CatalogFileRelation {
+  catalogId: Float!
+  file: File!
+  fileId: Float!
+  id: Float!
+}
+
+type CatalogOptionRelation {
+  catalog: Catalog!
+  catalogId: Float!
+  id: Float!
+  option: Option!
+  optionId: Float!
+}
+
+type Contact {
+  address: String!
+  mail: String!
+  phone: String!
+}
+
+type Executive {
+  careers: [Career!]!
+  executiveFileRelations: [ExecutiveFileRelation!]!
+  greeting: String
+  id: Float!
+  name: String!
+  position: String!
+}
+
+type ExecutiveFileRelation {
+  executiveId: Float!
+  file: File!
+  fileId: Float!
+  id: Float!
+}
+
+type File {
+  id: Float!
+  name: String!
+  path: String!
+  type: String!
+}
+
+input FilterCatalogsInput {
+  ids: [Float!]!
+}
+
+type Gnb {
+  id: Float!
+  lnbs: [Lnb!]!
+  name: String!
+}
+
+type History {
+  date: String!
+  event: String!
+}
+
+type Lnb {
+  gnbId: Float!
+  id: Float!
+  name: String!
+  path: String!
+}
+
+type Meta {
+  metaFileRelations: [MetaFileRelation!]!
+  name: String!
+  type: String!
+}
+
+type MetaFileRelation {
+  file: File!
+  fileId: Float!
+}
+
+type Mutation {
+  deleteBasket(id: Int!): Basket!
+  signIn(signInInput: SignInInput!): AuthState!
+  signOut: AuthState!
+  upsertBasket(upsertBasketInput: UpsertBasketInput!): Basket!
+}
+
+type Option {
+  id: Float!
+  name: String!
+}
+
+type Query {
+  account: Account!
+  baskets: [Basket!]!
+  catalog(id: Int!): Catalog!
+  catalogs(filterCatalogsInput: FilterCatalogsInput): [Catalog!]!
+  contact: Contact!
+  executive(id: Int!): Executive!
+  gnbs: [Gnb!]!
+  histories: [History!]!
+  isAuthenticated: AuthState!
+  meta: Meta!
+}
+
+input SignInInput {
+  code: String!
+  platform: String!
+  state: String!
+}
+
+input UpsertBasketInput {
+  amount: Float!
+  catalogOptionRelationId: Float!
+}
