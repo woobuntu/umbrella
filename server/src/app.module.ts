@@ -50,6 +50,8 @@ import {
       // 스키마를 사전편찬순으로 정렬
       sortSchema: true,
       // graphql-playground 대신 apollo sandbox를 graphql ide로 사용
+      // 배포된 graphql server의 documentation을 apollo sandbox가 인지하지 못하는데,
+      // 쿼리는 정상적으로 동작하니 당황하지 말자
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault],
       // https://docs.nestjs.com/security/cors#getting-started
