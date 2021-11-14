@@ -11,12 +11,22 @@ import fastifySession from '@fastify/session';
 import { EnvironmentConfig, SessionConfig } from './types/config';
 import fastifyStatic from 'fastify-static';
 import { join } from 'path';
+import fs from 'fs';
 
 async function bootstrap() {
+  const httpsOptions =
+    process.env.NODE_ENV === 'development'
+      ? null
+      : {
+          key: fs.readFileSync(process.env.KEY),
+          cert: fs.readFileSync(process.env.CERT),
+        };
+
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter({
       logger: false,
+      https: httpsOptions,
     }),
   );
 
@@ -37,7 +47,6 @@ async function bootstrap() {
       httpOnly: true,
     },
   });
-
   app.register(fastifyStatic, {
     root: join(__dirname, '..', '.well-known'),
   });
