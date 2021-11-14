@@ -23,6 +23,11 @@ import "assets/scss/material-kit-pro-react.scss?v=1.10.0";
 import Layout from "./Layout";
 import { client } from "./graphql";
 
+import dotenv from "dotenv";
+dotenv.config({
+  path: "../.env.local",
+});
+
 ReactDOM.render(
   <BrowserRouter>
     <ApolloProvider client={client}>

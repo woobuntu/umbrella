@@ -3,7 +3,9 @@ import kakaoButtonUrl from "../../customs/assets/img/kakao_login_button.png";
 import { v4 } from "uuid";
 
 export default function KakaoButton() {
-  const kakakoClientId = encodeURIComponent("2cde7f3d11af1b03d63071887884c03f");
+  const kakakoClientId = encodeURIComponent(
+    process.env.REACT_APP_KAKAO_CLIENT_ID
+  );
   const redirectUri = encodeURIComponent(
     "http://localhost:3000?platform=kakao"
   );

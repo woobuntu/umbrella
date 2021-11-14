@@ -3,7 +3,9 @@ import { v4 } from "uuid";
 import naverButtonUrl from "../../customs/assets/img/naver_login_button.png";
 
 export default function NaverButton() {
-  const naverClientId = encodeURIComponent("gbanzvwb6EnLxcrgDyqx");
+  const naverClientId = encodeURIComponent(
+    process.env.REACT_APP_NAVER_CLIENT_ID
+  );
   const redirectUri = encodeURIComponent(
     "http://localhost:3000?platform=naver"
   );
