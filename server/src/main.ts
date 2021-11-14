@@ -9,6 +9,8 @@ import { AppModule } from './app.module';
 import fastifyCookie from 'fastify-cookie';
 import fastifySession from '@fastify/session';
 import { EnvironmentConfig, SessionConfig } from './types/config';
+import fastifyStatic from 'fastify-static';
+import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -34,6 +36,10 @@ async function bootstrap() {
       secure: true,
       httpOnly: true,
     },
+  });
+
+  app.register(fastifyStatic, {
+    root: join(__dirname, '..', '.well-known'),
   });
 
   const { port } = configService.get<EnvironmentConfig>('environment');
