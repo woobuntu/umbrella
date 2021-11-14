@@ -14,6 +14,7 @@ import {
   AuthModule,
   CatalogModule,
   BasketModule,
+  StaticModule,
 } from './modules';
 import { ExecutiveModule } from './modules/executive.module';
 import {
@@ -42,6 +43,7 @@ import {
     AuthModule,
     CatalogModule,
     BasketModule,
+    StaticModule,
     GraphQLModule.forRoot({
       // code first approach를 통해 schema 파일 생성
       autoSchemaFile: join(process.cwd(), 'src/graphql/schema.gql'),
