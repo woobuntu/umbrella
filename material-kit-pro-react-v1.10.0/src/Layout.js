@@ -1,6 +1,7 @@
 import { useQuery } from "@apollo/client";
 import { IS_AUTHENTICATED } from "graphql/query";
 import { isAuthenticatedVar } from "graphql/state";
+import { useChannelTalk } from "hooks";
 import React, { Fragment, useEffect } from "react";
 import { Switch, Route } from "react-router-dom";
 import { CustomHeader, CustomFooter } from "./customs/components";
@@ -16,6 +17,7 @@ import {
 } from "./pages";
 
 export default function Layout() {
+  useChannelTalk();
   const { loading, error, data, refetch } = useQuery(IS_AUTHENTICATED);
 
   useEffect(() => {
