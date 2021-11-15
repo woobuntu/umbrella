@@ -1,6 +1,6 @@
 import React from "react";
 import Footer from "components/Footer/Footer";
-import { customFooterStyle } from "customs/styles";
+import { customFooterStyle } from "customs/assets/styles";
 import { makeStyles } from "@material-ui/styles";
 
 const useStyles = makeStyles(customFooterStyle);

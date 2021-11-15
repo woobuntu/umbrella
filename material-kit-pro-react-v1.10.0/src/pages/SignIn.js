@@ -1,13 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import GridContainer from "components/Grid/GridContainer";
 import GridItem from "components/Grid/GridItem";
 import Card from "components/Card/Card";
 import CardHeader from "components/Card/CardHeader";
 import CardBody from "components/Card/CardBody";
 
-import { signInStyle } from "customs/styles";
+import { signInStyle } from "customs/assets/styles";
 import { makeStyles } from "@material-ui/core/styles";
 import { NaverButton, KakaoButton } from "customs/components";
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles(signInStyle);
 
@@ -20,6 +21,26 @@ export default function SignIn() {
     "https://woobuntu-umbrella.s3.ap-northeast-2.amazonaws.com/%E1%84%92%E1%85%A1%E1%86%B7%E1%84%81%E1%85%A6%E1%84%8A%E1%85%B3%E1%84%82%E1%85%B3%E1%86%AB%E1%84%8B%E1%85%AE%E1%84%89%E1%85%A1%E1%86%AB.jpg";
   const classes = useStyles();
 
+  let history = useHistory();
+  const googleButton = useRef();
+
+  useEffect(() => {
+    const {
+      google: {
+        accounts: {
+          id: { initialize, renderButton },
+        },
+      },
+    } = window;
+    initialize({
+      client_id:
+        "971891934929-i0u5uk4c0hskeoj78kus93bokjbtddkc.apps.googleusercontent.com",
+      callback: ({ credential }) => {
+        history.push(`/?platform=google&code=${credential}`);
+      },
+    });
+    renderButton(googleButton.current, { theme: "outline", size: "large" });
+  }, []);
   return (
     <div>
       <div
@@ -53,6 +74,7 @@ export default function SignIn() {
                     >
                       <NaverButton />
                       <KakaoButton />
+                      <div ref={googleButton} />
                     </div>
                   </CardBody>
                 </form>
