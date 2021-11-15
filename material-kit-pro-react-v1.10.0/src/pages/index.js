@@ -6,3 +6,4 @@ export { default as ProductForUser } from "./ProductForUser";
 export { default as BasketForNonUser } from "./BasketForNonUser";
 export { default as BasketForUser } from "./BasketForUser";
 export { default as OrderForNonUser } from "./OrderForNonUser";
+export { default as Profile } from "./Profile";

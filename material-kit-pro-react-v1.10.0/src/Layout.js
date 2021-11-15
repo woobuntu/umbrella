@@ -14,6 +14,7 @@ import {
   BasketForNonUser,
   BasketForUser,
   OrderForNonUser,
+  Profile,
 } from "./pages";
 
 export default function Layout() {
@@ -40,6 +41,9 @@ export default function Layout() {
     <Fragment>
       <CustomHeader />
       <Switch>
+        <Route path="/profiles">
+          <Profile />
+        </Route>
         <Route path="/sign-in">
           <SignIn />
         </Route>
