@@ -1,9 +1,6 @@
 import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
 
-const uri =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:5000/graphql"
-    : "https://api.withus1030.co.kr";
+const uri = process.env.REACT_APP_API_URL;
 
 // https://www.apollographql.com/docs/react/networking/authentication/#cookie
 const httpLink = createHttpLink({

@@ -7,7 +7,7 @@ export default function KakaoButton() {
     process.env.REACT_APP_KAKAO_CLIENT_ID
   );
   const redirectUri = encodeURIComponent(
-    "http://localhost:3000?platform=kakao"
+    process.env.REACT_APP_KAKAO_REDIRECT_URI
   );
   const state = encodeURIComponent(v4()); // 전역관리하여 인증에 사용
   const kakaoLoginUrl =

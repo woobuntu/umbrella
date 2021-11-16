@@ -7,7 +7,7 @@ export default function NaverButton() {
     process.env.REACT_APP_NAVER_CLIENT_ID
   );
   const redirectUri = encodeURIComponent(
-    "http://localhost:3000?platform=naver"
+    process.env.REACT_APP_NAVER_REDIRECT_URI
   );
   const state = encodeURIComponent(v4()); // 전역관리하여 인증에 사용
   const naverLoginUrl =
