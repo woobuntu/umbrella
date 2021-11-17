@@ -1,8 +1,7 @@
-import { UseGuards, UseInterceptors } from '@nestjs/common';
+import { UseInterceptors } from '@nestjs/common';
 import { Args, Mutation, Resolver, Query, Context } from '@nestjs/graphql';
 import { CurrentUser } from 'src/decorators';
 import { AuthState, SignInInput, User } from 'src/graphql/types/user';
-import { AuthGuard } from 'src/guards';
 import { SetCookieInterceptor, SignOutInterceptor } from 'src/interceptors';
 import { AuthService, SessionService } from 'src/services';
 
