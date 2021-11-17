@@ -28,7 +28,6 @@ export class AuthResolver {
     }
   }
 
-  @UseGuards(AuthGuard)
   @UseInterceptors(SignOutInterceptor)
   @Mutation((returns) => AuthState)
   signOut(@CurrentUser() user: User) {

@@ -15,8 +15,8 @@ export class KakaoService {
 
   getTokens(code: string): Observable<Tokens> {
     const url = 'https://kauth.kakao.com/oauth/token';
-    const { clientId } = this.configService.get<KakaoConfig>('kakao');
-    const redirectUri = 'http://localhost:3000?platform=kakao';
+    const { clientId, redirectUri } =
+      this.configService.get<KakaoConfig>('kakao');
 
     const dataString =
       'grant_type=authorization_code' +
