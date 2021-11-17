@@ -45,8 +45,6 @@ export class SetCookieInterceptor implements NestInterceptor {
           .pipe(
             tap(() => {
               const reply: FastifyReply = ctx.getContext().reply;
-              console.log(0, request);
-              console.log(1, session);
 
               const sessionDuration =
                 this.configService.get<SessionConfig>('session.duration');
