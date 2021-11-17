@@ -11,27 +11,29 @@ import { NaverConfig } from 'src/types/config';
 export class NaverService {
   clientId: string;
   clientSecret: string;
+  redirectUri: string;
 
   constructor(
     private httpService: HttpService,
     private configService: ConfigService,
   ) {
-    const { clientId, clientSecret } =
+    const { clientId, clientSecret, redirectUri } =
       this.configService.get<NaverConfig>('naver');
 
     this.clientId = encodeURIComponent(clientId);
 
     this.clientSecret = encodeURIComponent(clientSecret);
+
+    this.redirectUri = encodeURIComponent(redirectUri);
   }
 
   getTokens({ code, state }: NaverAuthPayload): Observable<Tokens> {
-    const redirectUri = 'http://localhost:3000/';
     const url =
       'https://nid.naver.com/oauth2.0/token' +
       '?grant_type=authorization_code' +
       `&client_id=${this.clientId}` +
       `&client_secret=${this.clientSecret}` +
-      `&redirect_uri=${redirectUri}` +
+      `&redirect_uri=${this.redirectUri}` +
       `&code=${code}` +
       `&state=${state}`;
 
