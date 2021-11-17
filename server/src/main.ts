@@ -34,13 +34,15 @@ async function bootstrap() {
 
   const { secret } = configService.get<SessionConfig>('session');
 
+  const { port, domain } = configService.get<EnvironmentConfig>('environment');
+
   app.register(fastifyCookie);
   app.register(fastifySession, {
     cookieName: 'sessionId', // default로 sessionId지만, 명시적으로 하기 위함
     secret: secret,
     cookie: {
       // https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#define_where_cookies_are_sent
-      domain: 'localhost',
+      domain,
       path: '/',
       // https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#restrict_access_to_cookies
       secure: true,
@@ -50,8 +52,6 @@ async function bootstrap() {
   app.register(fastifyStatic, {
     root: join(__dirname, '..', '.well-known'),
   });
-
-  const { port } = configService.get<EnvironmentConfig>('environment');
 
   await app.listen(port, '0.0.0.0');
   // fastify는 기본적으로 localhost 127.0.0.1 interface에서만 수신이 가능하다.
