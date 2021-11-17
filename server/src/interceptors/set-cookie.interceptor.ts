@@ -33,7 +33,13 @@ export class SetCookieInterceptor implements NestInterceptor {
         // naverSignIn mutation이 유저 정보를 반환하면 session setup
         const ctx = GqlExecutionContext.create(context);
         const { request } = ctx.getContext();
-        const { session, sessionStore } = request;
+        const {
+          session,
+          sessionStore,
+          raw: {
+            headers: { timestamp },
+          },
+        } = request;
         const { sessionId, cookie } = session;
         session.user = userInfoFromDB;
 
@@ -51,7 +57,7 @@ export class SetCookieInterceptor implements NestInterceptor {
 
               reply.setCookie('JSESSIONID', sessionId, {
                 ...cookie,
-                expires: new Date(Date.now() + Number(sessionDuration)),
+                expires: timestamp + sessionDuration,
               });
 
               this.sessionService.setExpires({
