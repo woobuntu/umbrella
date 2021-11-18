@@ -5,6 +5,7 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
+import { FastifyReply } from 'fastify';
 import { Observable, tap } from 'rxjs';
 import { SessionService } from 'src/services';
 
@@ -30,6 +31,15 @@ export class SignOutInterceptor implements NestInterceptor {
             sessionId: JSESSIONID,
             sessionStore,
           })
+          .pipe(
+            tap(() => {
+              const reply: FastifyReply = ctx.getContext().reply;
+
+              reply.setCookie('JSESSIONID', '', {
+                expires: new Date(),
+              });
+            }),
+          )
           .subscribe(() => console.log('signOutIntercepter - 2', sessionStore));
       }),
     );
