@@ -5,7 +5,7 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { concatMap, Observable, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { SessionService } from 'src/services';
 
 @Injectable()
@@ -23,12 +23,14 @@ export class SignOutInterceptor implements NestInterceptor {
           },
         } = ctx.getContext();
 
+        console.log('signOutIntercepter - 1', JSESSIONID, sessionStore);
+
         this.sessionService
           .destroySession({
             sessionId: JSESSIONID,
             sessionStore,
           })
-          .subscribe();
+          .subscribe(() => console.log('signOutIntercepter - 2', sessionStore));
       }),
     );
   }
