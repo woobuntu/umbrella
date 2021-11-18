@@ -50,10 +50,14 @@ export class AuthResolver {
       request: { sessionStore, cookies },
     } = context;
 
+    console.log('isAuthenticated - 1', sessionStore);
+
     const session = await this.sessionService.getSession({
       sessionId: cookies?.JSESSIONID,
       sessionStore,
     });
+
+    console.log('isAuthenticated - 2', session);
 
     return { isAuthenticated: session ? true : false };
   }

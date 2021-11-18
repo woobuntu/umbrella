@@ -43,6 +43,8 @@ export class SetCookieInterceptor implements NestInterceptor {
         const { sessionId, cookie } = session;
         session.user = userInfoFromDB;
 
+        console.log('setCookieInterceptor - 1', sessionId, sessionStore);
+
         return this.sessionService
           .setSession({
             session,
@@ -60,10 +62,14 @@ export class SetCookieInterceptor implements NestInterceptor {
                 expires: new Date(timestamp + sessionDuration),
               });
 
+              console.log('setCookieInterceptor - 2', sessionStore);
+
               this.sessionService.setExpires({
                 sessionId,
                 sessionStore,
               });
+
+              console.log('setCookieInterceptor - 3', sessionStore);
             }),
             // 에러 없이 cookie와 세션 유효기간 설정했으면 true 반환
             map(() => true),
