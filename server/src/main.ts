@@ -39,6 +39,8 @@ async function bootstrap() {
   app.register(fastifyCookie);
   app.register(fastifySession, {
     cookieName: 'sessionId', // default로 sessionId지만, 명시적으로 하기 위함
+    // https://github.com/SerayaEryn/fastify-session#saveuninitialized-optional
+    saveUninitialized: false,
     secret: secret,
     cookie: {
       // https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#define_where_cookies_are_sent
