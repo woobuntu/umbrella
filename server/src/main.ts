@@ -6,10 +6,9 @@ import {
 } from '@nestjs/platform-fastify';
 import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
-import fastifyCookie from 'fastify-cookie';
-import fastifySession from '@fastify/session';
-import { EnvironmentConfig, SessionConfig } from './types/config';
+import { EnvironmentConfig } from './types/config';
 import fastifyStatic from 'fastify-static';
+import fastifySecureSession from 'fastify-secure-session';
 import { join } from 'path';
 import * as fs from 'fs';
 
@@ -32,23 +31,17 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
 
-  const { secret } = configService.get<SessionConfig>('session');
-
   const { port, domain } = configService.get<EnvironmentConfig>('environment');
 
-  app.register(fastifyCookie);
-  app.register(fastifySession, {
-    cookieName: 'sessionId', // default로 sessionId지만, 명시적으로 하기 위함
-    // https://github.com/SerayaEryn/fastify-session#saveuninitialized-optional
-    saveUninitialized: false,
-    secret: secret,
+  app.register(fastifySecureSession, {
+    cookieName: 'JSESSIONID',
+    key: fs.readFileSync(join(__dirname, '../secret-key')),
     cookie: {
-      // https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#define_where_cookies_are_sent
-      domain,
       path: '/',
-      // https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#restrict_access_to_cookies
-      secure: true,
       httpOnly: true,
+      maxAge: 10000,
+      secure: true,
+      domain,
     },
   });
   app.register(fastifyStatic, {

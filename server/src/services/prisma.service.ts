@@ -37,12 +37,12 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
     // https://www.prisma.io/docs/concepts/components/prisma-client/working-with-prismaclient/logging#event-based-logging
     // PrismaClient에 LogLevel type이 정의되어 있음에도 'beforeExit'만 허용
     // 추후 prisma측에서 수정할 것으로 예상
-    if (nodeEnv === 'development')
-      this.$on<any>('query', (event: Prisma.QueryEvent) => {
-        console.log(`Query: ${event.query}`);
-        console.log(`Params: ${event.params}`);
-        console.log(`Duration: ${event.duration}ms\n`);
-      });
+    // if (nodeEnv === 'development')
+    //   this.$on<any>('query', (event: Prisma.QueryEvent) => {
+    //     console.log(`Query: ${event.query}`);
+    //     console.log(`Params: ${event.params}`);
+    //     console.log(`Duration: ${event.duration}ms\n`);
+    //   });
   }
 
   async enableShutdownHooks(app: INestApplication) {
