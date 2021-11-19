@@ -5,4 +5,5 @@ export interface EnvironmentConfig {
   nodeEnv: NodeEnv;
   clientUrl: string;
   domain: string;
+  expires: number;
 }

@@ -5,6 +5,14 @@ import { AuthState, SignInInput, User } from 'src/graphql/types/user';
 import { SetCookieInterceptor, SignOutInterceptor } from 'src/interceptors';
 import { AuthService } from 'src/services';
 
+interface ContextWithSession {
+  request: {
+    session: {
+      get: (param: 'user') => User | undefined;
+    };
+  };
+}
+
 @Resolver((of) => User)
 export class AuthResolver {
   constructor(private authService: AuthService) {}
@@ -27,6 +35,8 @@ export class AuthResolver {
   @UseInterceptors(SignOutInterceptor)
   @Mutation((returns) => AuthState)
   signOut(@CurrentUser() user: User) {
+    if (!user) return { isAuthenticated: false };
+
     const { id, accessToken } = user;
 
     const [platform] = id.split(' ');
@@ -42,11 +52,14 @@ export class AuthResolver {
   }
 
   @Query((returns) => AuthState)
-  async isAuthenticated(@Context() context) {
+  async isAuthenticated(
+    @Context()
+    context: ContextWithSession,
+  ) {
     const {
       request: { session },
     } = context;
-    console.log(session);
+
     return session.get('user')
       ? { isAuthenticated: true }
       : { isAuthenticated: false };

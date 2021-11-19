@@ -39,7 +39,6 @@ async function bootstrap() {
     cookie: {
       path: '/',
       httpOnly: true,
-      maxAge: 10000,
       secure: true,
       domain,
     },
