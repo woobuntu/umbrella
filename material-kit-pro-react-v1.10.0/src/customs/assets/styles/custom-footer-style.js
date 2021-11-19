@@ -18,6 +18,16 @@ const customFooterStyle = {
     margin: "0",
     float: "right",
   },
+  linksVertical: {
+    "& li": {
+      display: "block !important",
+      marginLeft: "-5px",
+      marginRight: "-5px",
+      "& a": {
+        padding: "5px !important",
+      },
+    },
+  },
 };
 
 export default customFooterStyle;
