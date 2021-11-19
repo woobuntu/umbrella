@@ -1,25 +1,8 @@
-import {
-  container,
-  main,
-  mainRaised,
-  title,
-} from "assets/jss/material-kit-pro-react.js";
+import { title } from "assets/jss/material-kit-pro-react.js";
 
 import imagesStyle from "assets/jss/material-kit-pro-react/imagesStyles.js";
 
-const profileParallaxStyle = {
-  parallax: {
-    height: "380px",
-    backgroundPosition: "top center",
-  },
-  container,
-  ...imagesStyle,
-  main: {
-    ...main,
-  },
-  mainRaised: {
-    ...mainRaised,
-  },
+const thumbnailStyle = {
   profile: {
     textAlign: "center",
     "& img": {
@@ -29,6 +12,7 @@ const profileParallaxStyle = {
       transform: "translate3d(0, -50%, 0)",
     },
   },
+  ...imagesStyle,
   name: {
     marginTop: "-80px",
   },
@@ -41,4 +25,4 @@ const profileParallaxStyle = {
   },
 };
 
-export default profileParallaxStyle;
+export default thumbnailStyle;
