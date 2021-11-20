@@ -138,6 +138,7 @@ type Query {
   histories: [History!]!
   isAuthenticated: AuthState!
   meta: Meta!
+  metaFileRelations(type: String!): [MetaFileRelation!]!
 }
 
 input SignInInput {
