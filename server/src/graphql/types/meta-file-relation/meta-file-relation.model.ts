@@ -6,4 +6,6 @@ export class MetaFileRelation {
   fileId: number;
 
   file: File;
+
+  type: string;
 }

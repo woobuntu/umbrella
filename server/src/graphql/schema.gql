@@ -112,6 +112,7 @@ type Meta {
 type MetaFileRelation {
   file: File!
   fileId: Float!
+  type: String!
 }
 
 type Mutation {
