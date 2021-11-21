@@ -3,6 +3,8 @@ import {
   mainRaised,
   container,
   grayColor,
+  title,
+  whiteColor,
 } from "assets/jss/material-kit-pro-react.js";
 
 import imagesStyles from "assets/jss/material-kit-pro-react/imagesStyles.js";
@@ -29,6 +31,13 @@ const introductionStyle = {
     },
   },
   ...imagesStyles,
+  title: {
+    ...title,
+    color: whiteColor,
+  },
+  textCenter: {
+    textAlign: "center",
+  },
 };
 
 export default introductionStyle;

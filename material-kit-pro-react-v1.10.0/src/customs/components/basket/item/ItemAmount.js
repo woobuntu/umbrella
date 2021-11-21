@@ -7,9 +7,10 @@ export default function ItemAmount({ amount, onAdd, onRemove, onOk }) {
   return (
     <span>
       {amount} <AmountControlButtons onAdd={onAdd} onRemove={onRemove} />
-      <Modal onOk={onOk}>
-        <p>해당 물품을 장바구니에서 제거하시겠습니까?</p>
-      </Modal>
+      <Modal
+        onOk={onOk}
+        content={<p>해당 물품을 장바구니에서 제거하시겠습니까?</p>}
+      />
     </span>
   );
 }

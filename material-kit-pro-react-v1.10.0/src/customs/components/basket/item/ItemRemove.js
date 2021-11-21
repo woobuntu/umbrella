@@ -7,9 +7,10 @@ export default function ItemRemove({ onButtonClick, onModalOk }) {
   return (
     <Fragment>
       <ItemRemoveButton onClick={onButtonClick} />
-      <Modal onOk={onModalOk}>
-        <p>해당 물품을 장바구니에서 제거하시겠습니까?</p>
-      </Modal>
+      <Modal
+        onOk={onModalOk}
+        content={<p>해당 물품을 장바구니에서 제거하시겠습니까?</p>}
+      />
     </Fragment>
   );
 }

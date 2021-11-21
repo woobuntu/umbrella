@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import GridContainer from "components/Grid/GridContainer";
 import { basketButtonStyle } from "customs/assets/styles/product";
 import { makeStyles } from "@material-ui/styles";
@@ -17,10 +17,14 @@ export default function BasketButton({ onAdd }) {
       <Button round color="rose" onClick={onAdd}>
         장바구니에 담기 &nbsp; <ShoppingCart />
       </Button>
-      <Modal>
-        <p>장바구니에 담았습니다.</p>
-        <p>장바구니로 이동하시겠습니까?</p>
-      </Modal>
+      <Modal
+        content={
+          <Fragment>
+            <p>장바구니에 담았습니다.</p>
+            <p>장바구니로 이동하시겠습니까?</p>
+          </Fragment>
+        }
+      />
     </GridContainer>
   );
 }
