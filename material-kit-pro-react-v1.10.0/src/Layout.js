@@ -16,6 +16,7 @@ import {
   OrderForNonUser,
   Profile,
   Introduction,
+  Document,
 } from "./pages";
 
 export default function Layout() {
@@ -62,6 +63,9 @@ export default function Layout() {
         </Route>
         <Route path="/introduction">
           <Introduction />
+        </Route>
+        <Route path="/document">
+          <Document />
         </Route>
         <Route path="/">
           <Home />

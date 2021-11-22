@@ -28,6 +28,13 @@ const customFooterStyle = {
       },
     },
   },
+  documentLink: {
+    color: "#3c4858",
+    "&:hover": {
+      color: "#3c4858",
+      textDecoration: "underline",
+    },
+  },
 };
 
 export default customFooterStyle;

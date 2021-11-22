@@ -8,3 +8,4 @@ export { default as BasketForUser } from "./BasketForUser";
 export { default as OrderForNonUser } from "./OrderForNonUser";
 export { default as Profile } from "./Profile";
 export { default as Introduction } from "./Introduction";
+export { default as Document } from "./Document";
