@@ -6,3 +6,5 @@ export { default as mallStyle } from "./mall-style";
 export { default as sectionCatalogsStyle } from "./section-catalogs-style";
 export { default as productStyle } from "./product-style";
 export { default as profileStyle } from "./profile-style";
+export { default as introductionStyle } from "./introduction-style";
+export { default as documentStyle } from "./document-style";

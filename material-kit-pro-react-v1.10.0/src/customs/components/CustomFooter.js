@@ -4,6 +4,7 @@ import { customFooterStyle } from "customs/assets/styles";
 import { makeStyles } from "@material-ui/styles";
 import GridContainer from "components/Grid/GridContainer";
 import GridItem from "components/Grid/GridItem";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles(customFooterStyle);
 
@@ -11,7 +12,6 @@ export default function CustomFooter() {
   const classes = useStyles();
   return (
     <Footer
-      // theme="dark"
       content={
         <div>
           <div className={classes.right}>
@@ -22,7 +22,41 @@ export default function CustomFooter() {
       }
     >
       <GridContainer>
-        <GridItem>
+        <GridItem xs={12} sm={4} md={4}>
+          <ul className={classes.linksVertical}>
+            <Link to="/document/guide" className={classes.documentLink}>
+              <li>
+                <h6>이용안내</h6>
+              </li>
+            </Link>
+            <Link
+              to="/document/terms-and-conditions"
+              className={classes.documentLink}
+            >
+              <li>
+                <h6>이용약관</h6>
+              </li>
+            </Link>
+            <Link
+              to="/document/privacy-policy"
+              className={classes.documentLink}
+            >
+              <li>
+                <h6>개인정보처리방침</h6>
+              </li>
+            </Link>
+            <li>
+              <h6
+                style={{
+                  textTransform: "none",
+                }}
+              >
+                개인정보관리책임자 : 이인우(boutime2017@gmail.com)
+              </h6>
+            </li>
+          </ul>
+        </GridItem>
+        <GridItem xs={12} sm={4} md={4}>
           <ul className={classes.linksVertical}>
             <li>
               <h6>사업자등록번호 : 636-82-00353</h6>
