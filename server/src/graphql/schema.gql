@@ -112,6 +112,7 @@ type Meta {
 type MetaFileRelation {
   file: File!
   fileId: Float!
+  type: String!
 }
 
 type Mutation {
@@ -137,6 +138,7 @@ type Query {
   histories: [History!]!
   isAuthenticated: AuthState!
   meta: Meta!
+  metaFileRelations(type: String!): [MetaFileRelation!]!
 }
 
 input SignInInput {
