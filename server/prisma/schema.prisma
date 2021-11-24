@@ -464,33 +464,33 @@ model PerformanceHistory {
 
 model Purchase {
   id                      Int                   @id @default(autoincrement())
-  userId                  String?               @db.VarChar(255)
+  userId                  String                @db.VarChar(255)
   catalogOptionRelationId Int
   ordererId               Int
   deliveryId              Int
-  amount                  Int
-  password                String?               @db.VarChar(255)
+  paymentId               Int
   catalogOptionRelation   CatalogOptionRelation @relation(fields: [catalogOptionRelationId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "purchase_ibfk_2")
   delivery                Delivery              @relation(fields: [deliveryId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "purchase_ibfk_4")
   orderer                 Orderer               @relation(fields: [ordererId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "purchase_ibfk_3")
-  user                    User?                 @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "purchase_ibfk_1")
+  payment                 Payment               @relation(fields: [paymentId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "purchase_ibfk_5")
+  user                    User                  @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "purchase_ibfk_1")
   purchaseHistories       PurchaseHistory[]
 
   @@index([catalogOptionRelationId], map: "catalogOptionRelationId")
   @@index([deliveryId], map: "deliveryId")
   @@index([ordererId], map: "ordererId")
+  @@index([paymentId], map: "paymentId")
   @@index([userId], map: "userId")
 }
 
 model PurchaseHistory {
   id                      Int       @id @default(autoincrement())
-  userId                  String?   @db.VarChar(255)
+  userId                  String    @db.VarChar(255)
   catalogOptionRelationId Int
   ordererId               Int
   deliveryId              Int
-  amount                  Int
-  password                String?   @db.VarChar(255)
   purchaseId              Int?
+  paymentId               Int
   from                    DateTime  @default(now()) @db.Timestamp(0)
   to                      DateTime? @db.Timestamp(0)
   purchase                Purchase? @relation(fields: [purchaseId], references: [id], onUpdate: NoAction, map: "purchasehistory_ibfk_1")
@@ -528,7 +528,7 @@ model UserHistory {
 }
 
 model Delivery {
-  id                Int               @id
+  id                Int               @id @default(autoincrement())
   name              String            @db.VarChar(255)
   phone             String            @db.VarChar(255)
   email             String            @db.VarChar(255)
@@ -539,7 +539,7 @@ model Delivery {
 }
 
 model DeliveryHistory {
-  id         Int       @id
+  id         Int       @id @default(autoincrement())
   name       String    @db.VarChar(255)
   phone      String    @db.VarChar(255)
   email      String    @db.VarChar(255)
@@ -554,7 +554,7 @@ model DeliveryHistory {
 }
 
 model Orderer {
-  id               Int              @id
+  id               Int              @id @default(autoincrement())
   name             String           @db.VarChar(255)
   phone            String           @db.VarChar(255)
   email            String           @db.VarChar(255)
@@ -564,7 +564,7 @@ model Orderer {
 }
 
 model OrdererHistory {
-  id        Int       @id
+  id        Int       @id @default(autoincrement())
   name      String    @db.VarChar(255)
   phone     String    @db.VarChar(255)
   email     String    @db.VarChar(255)
@@ -575,4 +575,30 @@ model OrdererHistory {
   orderer   Orderer?  @relation(fields: [ordererId], references: [id], onUpdate: NoAction, map: "ordererhistory_ibfk_1")
 
   @@index([ordererId], map: "ordererId")
+}
+
+model Payment {
+  id               Int              @id @default(autoincrement())
+  platform         String           @db.VarChar(20)
+  type             String           @db.VarChar(20)
+  amount           Int
+  orderId          String?          @db.VarChar(255)
+  paymentKey       String?          @db.VarChar(255)
+  paymentHistories PaymentHistory[]
+  purchases        Purchase[]
+}
+
+model PaymentHistory {
+  id         Int       @id @default(autoincrement())
+  platform   String    @db.VarChar(20)
+  type       String    @db.VarChar(20)
+  amount     Int
+  orderId    String?   @db.VarChar(255)
+  paymentKey String?   @db.VarChar(255)
+  paymentId  Int?
+  from       DateTime  @default(now()) @db.Timestamp(0)
+  to         DateTime? @db.Timestamp(0)
+  payment    Payment?  @relation(fields: [paymentId], references: [id], onUpdate: NoAction, map: "paymenthistory_ibfk_1")
+
+  @@index([paymentId], map: "paymentId")
 }
