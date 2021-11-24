@@ -12,6 +12,7 @@ type Account {
 
 type AuthState {
   isAuthenticated: Boolean!
+  redirectUrl: String
 }
 
 type Basket {
@@ -20,6 +21,11 @@ type Basket {
   catalogOptionRelationId: Float!
   id: Float!
   userId: String!
+}
+
+input BasketInfo {
+  amount: Float!
+  catalogOptionRelationId: Float!
 }
 
 type Career {
@@ -142,6 +148,7 @@ type Query {
 }
 
 input SignInInput {
+  basketInfo: BasketInfo
   code: String!
   platform: String!
   state: String!

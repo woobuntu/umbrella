@@ -1,4 +1,5 @@
 import { InputType } from '@nestjs/graphql';
+import { BasketInfo } from './basket-info.model';
 
 @InputType()
 export class SignInInput {
@@ -7,4 +8,6 @@ export class SignInInput {
   code: string;
 
   state: string;
+
+  basketInfo?: BasketInfo;
 }

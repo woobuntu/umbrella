@@ -1,9 +1,10 @@
 import { UseInterceptors } from '@nestjs/common';
 import { Args, Mutation, Resolver, Query, Context } from '@nestjs/graphql';
+import { map, Observable, tap } from 'rxjs';
 import { CurrentUser } from 'src/decorators';
 import { AuthState, SignInInput, User } from 'src/graphql/types/user';
 import { SetCookieInterceptor, SignOutInterceptor } from 'src/interceptors';
-import { AuthService } from 'src/services';
+import { AuthService, BasketService } from 'src/services';
 
 interface ContextWithSession {
   request: {
@@ -15,21 +16,66 @@ interface ContextWithSession {
 
 @Resolver((of) => User)
 export class AuthResolver {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private basketService: BasketService,
+  ) {}
 
   @UseInterceptors(SetCookieInterceptor)
   @Mutation((returns) => AuthState)
-  signIn(@Args('signInInput') signInInput: SignInInput) {
-    const { platform, code, state } = signInInput;
+  signIn(@Args('signInInput') signInInput: SignInInput): Observable<{
+    user: User;
+    redirectUrl: '/' | '/basket';
+  }> {
+    const { platform, code, state, basketInfo } = signInInput;
+
+    let signInObservable: Observable<User | null>;
 
     switch (platform) {
       case 'naver':
-        return this.authService.naverSignIn({ code, state });
+        signInObservable = this.authService.naverSignIn({ code, state });
+        break;
       case 'kakao':
-        return this.authService.kakaoSignIn(code);
+        signInObservable = this.authService.kakaoSignIn(code);
+        break;
       case 'google':
-        return this.authService.googleSignIn(code);
+        signInObservable = this.authService.googleSignIn(code);
+        break;
     }
+
+    return signInObservable.pipe(
+      tap(async (user) => {
+        if (user && basketInfo) {
+          const { catalogOptionRelationId, amount } = basketInfo;
+
+          const basket = await this.basketService.basket({
+            userId: user.id,
+            catalogOptionRelationId,
+          });
+
+          if (basket) {
+            this.basketService.updateBasket({
+              where: {
+                id: basket.id,
+              },
+              data: {
+                amount,
+              },
+            });
+          } else {
+            this.basketService.createBasket({
+              userId: user.id,
+              catalogOptionRelationId,
+              amount,
+            });
+          }
+        }
+      }),
+      map((user) => ({
+        user,
+        redirectUrl: basketInfo ? '/basket' : '/',
+      })),
+    );
   }
 
   @UseInterceptors(SignOutInterceptor)
