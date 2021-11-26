@@ -64,6 +64,34 @@ type Contact {
   phone: String!
 }
 
+input CreateDeliveryInput {
+  address: String!
+  email: String!
+  memo: String
+  name: String!
+  phone: String!
+}
+
+input CreateOrdererInput {
+  email: String!
+  name: String!
+  phone: String!
+}
+
+input CreatePaymentInput {
+  amount: Float!
+  orderId: String
+  paymentKey: String
+  platform: String!
+  type: String!
+}
+
+input CreatePurchaseInput {
+  delivery: CreateDeliveryInput!
+  orderer: CreateOrdererInput!
+  payment: CreatePaymentInput!
+}
+
 type Executive {
   careers: [Career!]!
   executiveFileRelations: [ExecutiveFileRelation!]!
@@ -122,6 +150,7 @@ type MetaFileRelation {
 }
 
 type Mutation {
+  createPurchase(createPurchaseInput: CreatePurchaseInput!): PurchaseResult!
   deleteBasket(id: Int!): Basket!
   signIn(signInInput: SignInInput!): AuthState!
   signOut: AuthState!
@@ -131,6 +160,11 @@ type Mutation {
 type Option {
   id: Float!
   name: String!
+}
+
+type PurchaseResult {
+  redirectUrl: String
+  state: String!
 }
 
 type Query {
