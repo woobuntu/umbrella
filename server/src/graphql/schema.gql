@@ -160,6 +160,7 @@ type Mutation {
 type Option {
   id: Float!
   name: String!
+  price: Float!
 }
 
 type PurchaseResult {

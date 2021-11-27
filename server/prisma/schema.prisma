@@ -376,6 +376,7 @@ model NotificationHistory {
 model Option {
   id                     Int                     @id @default(autoincrement())
   name                   String                  @db.VarChar(30)
+  price                  Int                     @default(0)
   catalogOptionRelations CatalogOptionRelation[]
   optionHistories        OptionHistory[]
 }
@@ -383,6 +384,7 @@ model Option {
 model OptionHistory {
   id       Int       @id @default(autoincrement())
   name     String    @db.VarChar(30)
+  price    Int       @default(0)
   optionId Int?
   from     DateTime  @default(now()) @db.Timestamp(0)
   to       DateTime? @db.Timestamp(0)
