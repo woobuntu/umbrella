@@ -23,6 +23,7 @@ import {
   kakaoConfig,
   naverConfig,
   tossConfig,
+  sendgridConfig,
 } from './config';
 
 @Module({
@@ -31,7 +32,13 @@ import {
     ConfigModule.forRoot({
       isGlobal: true,
       // https://docs.nestjs.com/techniques/configuration#configuration-namespaces
-      load: [environmentConfig, naverConfig, kakaoConfig, tossConfig],
+      load: [
+        environmentConfig,
+        naverConfig,
+        kakaoConfig,
+        tossConfig,
+        sendgridConfig,
+      ],
     }),
     MetaModule,
     MetaFileRelationModule,
