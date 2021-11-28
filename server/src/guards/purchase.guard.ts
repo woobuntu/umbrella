@@ -52,7 +52,7 @@ export class PurchaseGuard extends AuthGuard implements CanActivate {
           },
         },
       ) => sum + amount * price,
-      3000, // 배송료
+      0,
     );
 
     if (amount !== exactAmount) return false;

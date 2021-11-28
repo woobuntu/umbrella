@@ -6,6 +6,7 @@ import { DeliveryModule } from './delivery.module';
 import { OrdererModule } from './orderer.module';
 import { PaymentModule } from './payment.module';
 import { PrismaModule } from './prisma.module';
+import { SendgridModule } from './sendgrid.module';
 import { TossModule } from './toss.module';
 
 @Module({
@@ -16,6 +17,7 @@ import { TossModule } from './toss.module';
     DeliveryModule,
     PaymentModule,
     TossModule,
+    SendgridModule,
   ],
   providers: [PurchaseService, PurchaseResolver],
 })
