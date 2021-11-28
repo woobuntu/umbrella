@@ -10,7 +10,7 @@ export default function NaverButton() {
     process.env.REACT_APP_NAVER_REDIRECT_URI
   );
   const state = encodeURIComponent(v4()); // 전역관리하여 인증에 사용
-  const naverLoginUrl =
+  let naverLoginUrl =
     "https://nid.naver.com/oauth2.0/authorize" +
     "?response_type=code" +
     `&client_id=${naverClientId}` +

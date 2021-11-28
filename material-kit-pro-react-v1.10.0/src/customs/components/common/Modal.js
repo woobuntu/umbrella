@@ -15,11 +15,16 @@ export default function Modal({ onCancel, onOk, content }) {
       <Button onClick={onCancel(onClose)} color="secondary">
         취소
       </Button>
-      <Link to="/basket">
-        <Button color="primary" onClick={onOk(onClose)}>
-          확인
-        </Button>
-      </Link>
+      <Button
+        color="primary"
+        onClick={() => {
+          // onOk가 비동기 함수일 수 있으니 이후 rxjs로 wrapup할 예정
+          onOk();
+          onClose();
+        }}
+      >
+        확인
+      </Button>
     </Fragment>
   );
 

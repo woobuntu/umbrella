@@ -24,26 +24,23 @@ export default function CustomHeader() {
 
   const isAuthLoading = useReactiveVar(isAuthLoadingVar);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) console.log("로딩중...");
   if (error) alert(error.message);
-
-  const {
-    meta: { name },
-    gnbs,
-  } = data;
 
   return (
     <Header
       color="transparent"
-      brand={name}
+      brand={data && data.meta.name}
       links={
-        <HeaderLinks
-          dropdownHoverColor="info"
-          gnbs={gnbs}
-          isAuthLoading={isAuthLoading}
-          isAuthenticated={isAuthenticated}
-          onSignOut={onSignOut}
-        />
+        data && (
+          <HeaderLinks
+            dropdownHoverColor="info"
+            gnbs={data.gnbs}
+            isAuthLoading={isAuthLoading}
+            isAuthenticated={isAuthenticated}
+            onSignOut={onSignOut}
+          />
+        )
       }
       fixed
       changeColorOnScroll={{

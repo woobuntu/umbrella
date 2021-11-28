@@ -1,33 +1,39 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 
 import CustomInput from "components/CustomInput/CustomInput";
 import PhoneNumber from "./PhoneNumber";
 import { usePhoneNumber } from "hooks";
+import PropTypes from "prop-types";
 
 import Address from "./Address";
 
-export default function Delivery() {
-  const { state, actions } = usePhoneNumber();
-
+export default function Delivery({
+  customInputPropsForName,
+  phoneNumberProps,
+  addressProps,
+  customInputPropsForMemo,
+}) {
   return (
     <Fragment>
       <h3>배송 정보</h3>
       <form>
         <CustomInput
-          labelText="이름"
           formControlProps={{
             fullWidth: true,
           }}
+          {...customInputPropsForName}
         />
-        <PhoneNumber state={state} actions={actions} />
-        <Address />
-        <CustomInput
-          labelText="배송메모"
-          formControlProps={{
-            fullWidth: true,
-          }}
-        />
+        <PhoneNumber {...phoneNumberProps} />
+        <Address {...addressProps} />
+        <CustomInput {...customInputPropsForMemo} />
       </form>
     </Fragment>
   );
 }
+
+Delivery.propTypes = {
+  customInputPropsForName: PropTypes.object,
+  phoneNumberProps: PropTypes.object,
+  addressProps: PropTypes.object,
+  customInputPropsForMemo: PropTypes.object,
+};

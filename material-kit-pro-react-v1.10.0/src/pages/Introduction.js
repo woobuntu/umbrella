@@ -39,10 +39,10 @@ export default function Introduction() {
     },
   });
 
-  if (loading) return <div>로딩중...</div>;
+  if (loading) console.log("로딩중...");
   if (error) alert(error.message);
 
-  const images = data.metaFileRelations.map(({ file }) => file);
+  const images = data ? data.metaFileRelations.map(({ file }) => file) : [];
 
   const dividedImages = [];
   while (images.length) {

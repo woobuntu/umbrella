@@ -46,8 +46,8 @@ export default function MobileItem({
             <h6>{name}</h6>
             {removeHandlers && (
               <ItemRemove
-                onButtonClick={removeHandlers?.onButtonClick}
-                onModalOk={removeHandlers?.onModalOk}
+                onButtonClick={removeHandlers.onButtonClick}
+                onModalOk={removeHandlers.onModalOk}
               />
             )}
           </div>
@@ -76,13 +76,15 @@ export default function MobileItem({
                 alignItems: "center",
               }}
             >
-              {amount}{" "}
-              {amountHandlers && (
+              {amountHandlers ? (
                 <ItemAmount
-                  onAdd={amountHandlers?.onAdd}
-                  onRemove={amountHandlers?.onRemove}
-                  onOk={amountHandlers?.onOk}
+                  amount={amount}
+                  onUp={amountHandlers.onUp}
+                  onDown={amountHandlers.onDown}
+                  onModalOk={amountHandlers.onModalOk}
                 />
+              ) : (
+                amount
               )}
             </div>
           </div>

@@ -3,12 +3,12 @@ import PropTypes from "prop-types";
 import { AmountControlButtons } from "customs/components/common";
 import { Modal } from "customs/components/common";
 
-export default function ItemAmount({ amount, onAdd, onRemove, onOk }) {
+export default function ItemAmount({ amount, onUp, onDown, onModalOk }) {
   return (
     <span>
-      {amount} <AmountControlButtons onAdd={onAdd} onRemove={onRemove} />
+      {amount} <AmountControlButtons onAdd={onUp} onRemove={onDown} />
       <Modal
-        onOk={onOk}
+        onOk={onModalOk}
         content={<p>해당 물품을 장바구니에서 제거하시겠습니까?</p>}
       />
     </span>
@@ -17,7 +17,7 @@ export default function ItemAmount({ amount, onAdd, onRemove, onOk }) {
 
 ItemAmount.propTypes = {
   amount: PropTypes.number,
-  onAdd: PropTypes.func,
-  onRemove: PropTypes.func,
-  onOk: PropTypes.func,
+  onUp: PropTypes.func,
+  onDown: PropTypes.func,
+  onModalOk: PropTypes.func,
 };
