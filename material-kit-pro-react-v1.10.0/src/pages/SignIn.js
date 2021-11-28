@@ -22,25 +22,25 @@ export default function SignIn() {
     "https://woobuntu-umbrella.s3.ap-northeast-2.amazonaws.com/%E1%84%92%E1%85%A1%E1%86%B7%E1%84%81%E1%85%A6%E1%84%8A%E1%85%B3%E1%84%82%E1%85%B3%E1%86%AB%E1%84%8B%E1%85%AE%E1%84%89%E1%85%A1%E1%86%AB.jpg";
   const classes = useStyles();
 
-  let history = useHistory();
-  const googleButton = useRef();
+  // let history = useHistory();
+  // const googleButton = useRef();
 
-  useEffect(() => {
-    const {
-      google: {
-        accounts: {
-          id: { initialize, renderButton },
-        },
-      },
-    } = window;
-    initialize({
-      client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-      callback: ({ credential }) => {
-        history.push(`/?platform=google&code=${credential}`);
-      },
-    });
-    renderButton(googleButton.current, { theme: "outline", size: "large" });
-  }, []);
+  // useEffect(() => {
+  //   const {
+  //     google: {
+  //       accounts: {
+  //         id: { initialize, renderButton },
+  //       },
+  //     },
+  //   } = window;
+  //   initialize({
+  //     client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+  //     callback: ({ credential }) => {
+  //       history.push(`/?platform=google&code=${credential}`);
+  //     },
+  //   });
+  //   renderButton(googleButton.current, { theme: "outline", size: "large" });
+  // }, []);
   return (
     <div>
       <div
