@@ -10,22 +10,17 @@ import { makeStyles } from "@material-ui/styles";
 
 const useStyles = makeStyles(basketStyle);
 
-export default function Basket({ cart, children }) {
+export default function Basket({ parallaxTitle, cardTitle, cart, children }) {
   const classes = useStyles();
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    document.body.scrollTop = 0;
-  }, []);
 
   return (
     <div>
-      <BasketParallax />
+      <BasketParallax title={parallaxTitle} />
       <div className={classNames(classes.main, classes.mainRaised)}>
         <div className={classes.container}>
           <Card plain>
             <CardBody plain>
-              <h3 className={classes.cardTitle}>장바구니 목록</h3>
+              <h3 className={classes.cardTitle}>{cardTitle}</h3>
               {cart}
               {children}
             </CardBody>
@@ -37,6 +32,8 @@ export default function Basket({ cart, children }) {
 }
 
 Basket.propTypes = {
+  parallaxTitle: PropTypes.string,
+  cardTitle: PropTypes.string,
   cart: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,

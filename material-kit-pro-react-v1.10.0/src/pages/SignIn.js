@@ -9,6 +9,7 @@ import { signInStyle } from "customs/assets/styles";
 import { makeStyles } from "@material-ui/core/styles";
 import { NaverButton, KakaoButton } from "customs/components";
 import { useHistory } from "react-router";
+import { useReactiveVar } from "@apollo/client";
 
 const useStyles = makeStyles(signInStyle);
 
@@ -33,8 +34,7 @@ export default function SignIn() {
       },
     } = window;
     initialize({
-      client_id:
-        "971891934929-i0u5uk4c0hskeoj78kus93bokjbtddkc.apps.googleusercontent.com",
+      client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
       callback: ({ credential }) => {
         history.push(`/?platform=google&code=${credential}`);
       },

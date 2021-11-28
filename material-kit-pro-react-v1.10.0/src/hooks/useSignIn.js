@@ -4,6 +4,10 @@ import { isAuthLoadingVar } from "graphql/state";
 import queryString from "query-string";
 import { useHistory, useLocation } from "react-router";
 import { SIGN_IN } from "graphql/mutation";
+import {
+  getSessionItem,
+  removeSessionItem,
+} from "customs/utils/session-storage";
 
 export default function useSignIn() {
   let { search } = useLocation();
@@ -23,18 +27,37 @@ export default function useSignIn() {
     if (search) {
       const { platform, code, state } = queryString.parse(search);
 
+      const signInInput = {
+        platform,
+        code: code || "",
+        state: state || "",
+      };
+
+      const sessionBasket = getSessionItem("basket");
+
+      if (sessionBasket) {
+        const { catalogOptionRelationId, amount } = sessionBasket;
+        signInInput.basketInfo = {
+          catalogOptionRelationId,
+          amount,
+        };
+      }
+
       signIn({
         variables: {
-          signInInput: {
-            platform,
-            code: code || "",
-            state: code || "",
-          },
+          signInInput,
         },
-      }).then(() => {
-        history.push("/");
-        client.resetStore();
-      });
+      }).then(
+        ({
+          data: {
+            signIn: { redirectUrl },
+          },
+        }) => {
+          history.push(redirectUrl);
+          removeSessionItem("basket");
+          client.resetStore();
+        }
+      );
     }
   }, [search]);
 }

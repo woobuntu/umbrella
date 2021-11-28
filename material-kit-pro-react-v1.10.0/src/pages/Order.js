@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Basket from "./Basket";
 import PropTypes from "prop-types";
 import GridContainer from "components/Grid/GridContainer";
@@ -9,16 +9,28 @@ import CardBody from "components/Card/CardBody";
 import CardFooter from "components/Card/CardFooter";
 import { convertPrice } from "customs/utils";
 import Button from "components/CustomButtons/Button";
+import { useHistory } from "react-router-dom";
+import { setSessionItem } from "customs/utils/session-storage";
+import { useTossPayments } from "hooks";
 
-export default function Order({ cart, totalPrice }) {
-  const { TossPayments } = window;
+export default function Order({ cart, totalPrice, basketData }) {
+  const history = useHistory();
+
+  useEffect(() => {
+    if (!basketData) history.push("/");
+  }, [basketData]);
+
+  const { ordererProps, deliveryProps, onPay } = useTossPayments({
+    basketData,
+    totalPrice,
+  });
 
   return (
-    <Basket cart={cart}>
+    <Basket parallaxTitle="주문하기" cardTitle="주문 목록" cart={cart}>
       <GridContainer justify="space-between">
         <GridItem md={6} sm={6}>
-          <Orderer />
-          <Delivery />
+          <Orderer {...ordererProps} />
+          <Delivery {...deliveryProps} />
         </GridItem>
         <GridItem md={4} sm={4}>
           <Card raised pricing color="primary">
@@ -80,6 +92,66 @@ export default function Order({ cart, totalPrice }) {
                   color="white"
                   round
                   style={{
+                    backgroundColor: "white",
+                    color: "black",
+                    fontWeight: "bold",
+                  }}
+                  onClick={() => onPay("카드")}
+                >
+                  신용카드
+                </Button>
+                <Button
+                  color="white"
+                  round
+                  style={{
+                    backgroundColor: "white",
+                    color: "black",
+                    fontWeight: "bold",
+                  }}
+                  onClick={() => onPay("가상계좌")}
+                >
+                  가상계좌
+                </Button>
+                <Button
+                  color="white"
+                  round
+                  style={{
+                    backgroundColor: "white",
+                    color: "black",
+                    fontWeight: "bold",
+                  }}
+                  onClick={() => onPay("계좌이체")}
+                >
+                  계좌이체
+                </Button>
+                <Button
+                  color="white"
+                  round
+                  style={{
+                    backgroundColor: "white",
+                    color: "black",
+                    fontWeight: "bold",
+                  }}
+                  onClick={() => onPay("휴대폰")}
+                >
+                  휴대폰
+                </Button>
+                <Button
+                  color="white"
+                  round
+                  style={{
+                    backgroundColor: "#3182f6",
+                    color: "white",
+                    fontWeight: "bold",
+                  }}
+                  onClick={() => onPay("토스결제")}
+                >
+                  토스 간편결제
+                </Button>
+                {/* <Button
+                  color="white"
+                  round
+                  style={{
                     backgroundColor: "#03C75A",
                     color: "white",
                     fontWeight: "bold",
@@ -97,18 +169,7 @@ export default function Order({ cart, totalPrice }) {
                   }}
                 >
                   카카오페이로 결제하기
-                </Button>
-                <Button
-                  color="white"
-                  round
-                  style={{
-                    backgroundColor: "#3182f6",
-                    color: "white",
-                    fontWeight: "bold",
-                  }}
-                >
-                  토스로 결제하기
-                </Button>
+                </Button> */}
               </div>
             </CardFooter>
           </Card>
@@ -124,4 +185,5 @@ Order.propTypes = {
     PropTypes.node,
   ]),
   totalPrice: PropTypes.number,
+  basketData: PropTypes.array,
 };

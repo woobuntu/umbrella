@@ -6,10 +6,11 @@ import GridItem from "components/Grid/GridItem";
 import { basketParallaxStyle } from "customs/assets/styles/basket";
 import { makeStyles } from "@material-ui/styles";
 import classNames from "classnames";
+import PropTypes from "prop-types";
 
 const useStyles = makeStyles(basketParallaxStyle);
 
-export default function BasketParallax() {
+export default function BasketParallax({ title }) {
   const classes = useStyles();
 
   const parallaxUrl =
@@ -28,10 +29,14 @@ export default function BasketParallax() {
               classes.textCenter
             )}
           >
-            <h2 className={classes.title}>장바구니</h2>
+            <h2 className={classes.title}>{title}</h2>
           </GridItem>
         </GridContainer>
       </div>
     </Parallax>
   );
 }
+
+BasketParallax.propTypes = {
+  title: PropTypes.string,
+};

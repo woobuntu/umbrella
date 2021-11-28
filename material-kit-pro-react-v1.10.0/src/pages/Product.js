@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import GridContainer from "components/Grid/GridContainer";
 import GridItem from "components/Grid/GridItem";
-import { useParams } from "react-router-dom";
-import PropTypes from "prop-types";
 import {
   ProductParallax,
   ProductImages,
@@ -12,68 +10,107 @@ import {
 import { productStyle } from "customs/assets/styles";
 import { makeStyles } from "@material-ui/styles";
 import classNames from "classnames";
-import { useQuery, useReactiveVar } from "@apollo/client";
-import { PRODUCT } from "../graphql/query";
 import { convertPrice } from "../customs/utils";
 import { AmountControlButtons } from "customs/components/common";
 import { BasketButton } from "customs/components/product";
+import {
+  useProductQuery,
+  useProductAmount,
+  useProductOption,
+  useBasketQuery,
+} from "hooks";
+import { useReactiveVar } from "@apollo/client";
 import { isAuthenticatedVar } from "graphql/state";
+import { useHistory } from "react-router";
+import { useBasketMutation } from "hooks";
+import { isModalOpenVar } from "graphql/state";
+import { BASKETS } from "graphql/query";
+import { setSessionItem } from "customs/utils/session-storage";
 
 const useStyles = makeStyles(productStyle);
 
-export default function Product({ setBasket, basketAmount }) {
+export default function Product() {
   const classes = useStyles();
+
+  const { productLoading, productError, productData } = useProductQuery();
+
+  // 수량
+  const { productAmount, setProductAmount } = useProductAmount();
+
+  // 옵션
+  const { productOption, setProductOption } = useProductOption(productData);
+
+  // 장바구니 수량 때문에 호출 필요
+  const { basketLoading, basketError, basketData } = useBasketQuery();
+
+  const {
+    basketMutations: { upsertBasket },
+    basketMutationLoading,
+    basketMutationError,
+  } = useBasketMutation();
 
   const isAuthenticated = useReactiveVar(isAuthenticatedVar);
 
-  let { id } = useParams();
+  const history = useHistory();
 
-  const { loading, error, data } = useQuery(PRODUCT, {
-    variables: { catalogId: Number(id) },
-  });
+  const isDataLoading =
+    productLoading || basketLoading || basketMutationLoading;
+  if (isDataLoading) return <div>로딩중...</div>;
 
-  const [option, setOption] = useState();
-  const [amount, setAmount] = useState(1);
-
-  const controlAmount = ({ currentTarget: { name } }) => {
-    switch (name) {
-      case "add":
-        setAmount(amount + 1);
-        break;
-      case "remove":
-        if (amount > 1) setAmount(amount - 1);
-        break;
-      default:
-        alert("수량을 늘리거나 줄일 수만 있습니다!");
-    }
-  };
-
-  useEffect(() => {
-    if (data) {
-      const {
-        catalog: { catalogOptionRelations },
-      } = data;
-      const [firstOption] = catalogOptionRelations;
-      const { option } = firstOption;
-      setOption(option.id);
-    }
-  }, [data]);
-
+  const error = productError || basketError || basketMutationError;
   if (error) alert(error.message);
-
-  if (loading) return <div>로딩중...</div>;
 
   const {
     catalog: { name, price, catalogFileRelations, catalogOptionRelations },
-  } = data;
+  } = productData;
 
   const [catalogOptionRelation] = catalogOptionRelations.filter(
-    ({ option: { id } }) => id == option
+    ({ option: { id } }) => id == productOption
   );
+
+  const openModal = () => {
+    isModalOpenVar(true);
+  };
+
+  const upsertBasketThenOpenModal = async () => {
+    try {
+      await upsertBasket({
+        variables: {
+          upsertBasketInput: {
+            catalogOptionRelationId: catalogOptionRelation.id,
+            amount: productAmount,
+          },
+        },
+        refetchQueries: [BASKETS],
+      });
+      isModalOpenVar(true);
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  const onAddBasket = isAuthenticated ? upsertBasketThenOpenModal : openModal;
+
+  const redirectToBasket = () => history.push("/basket");
+
+  const setSessionBasketThenRedirectToSignIn = () => {
+    setSessionItem({
+      key: "basket",
+      value: {
+        catalogOptionRelationId: catalogOptionRelation.id,
+        amount: productAmount,
+      },
+    });
+    history.push("/sign-in");
+  };
+
+  const onModalOk = isAuthenticated
+    ? redirectToBasket
+    : setSessionBasketThenRedirectToSignIn;
 
   return (
     <div className={classes.productPage}>
-      <ProductParallax basketAmount={basketAmount} />
+      <ProductParallax basketAmount={basketData ? basketData.length : 0} />
       <div className={classNames(classes.section, classes.sectionGray)}>
         <div className={classes.container}>
           <div className={classNames(classes.main, classes.mainRaised)}>
@@ -91,30 +128,23 @@ export default function Product({ setBasket, basketAmount }) {
                 <h3 className={classes.mainPrice}>₩{convertPrice(price)}</h3>
                 <GridContainer className={classes.pickSize}>
                   <Option
-                    value={option}
+                    value={productOption}
                     options={catalogOptionRelations.map(({ option }) => option)}
-                    selectOption={({ target: { value } }) => setOption(value)}
+                    selectOption={({ target: { value } }) =>
+                      setProductOption(value)
+                    }
                   />
                   <GridItem md={6} sm={6}>
                     <label>수량 : </label>
-                    {amount}
+                    {productAmount}
                     <br />
                     <AmountControlButtons
-                      onAdd={controlAmount}
-                      onRemove={controlAmount}
+                      onAdd={setProductAmount}
+                      onRemove={setProductAmount}
                     />
                   </GridItem>
                 </GridContainer>
-                <BasketButton
-                  onAdd={setBasket(
-                    isAuthenticated
-                      ? {
-                          catalogOptionRelationId: catalogOptionRelation?.id,
-                          amount,
-                        }
-                      : { productId: id, option, amount }
-                  )}
-                />
+                <BasketButton onAddBasket={onAddBasket} onModalOk={onModalOk} />
               </GridItem>
             </GridContainer>
           </div>
@@ -123,8 +153,3 @@ export default function Product({ setBasket, basketAmount }) {
     </div>
   );
 }
-
-Product.propTypes = {
-  setBasket: PropTypes.func,
-  basketAmount: PropTypes.number,
-};

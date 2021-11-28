@@ -1,4 +1,5 @@
 import { useQuery } from "@apollo/client";
+import { isMobile } from "customs/utils";
 import { IS_AUTHENTICATED } from "graphql/query";
 import { isAuthenticatedVar } from "graphql/state";
 import { useChannelTalk } from "hooks";
@@ -9,19 +10,22 @@ import {
   Home,
   SignIn,
   Mall,
-  ProductForNonUser,
-  ProductForUser,
-  BasketForNonUser,
-  BasketForUser,
-  OrderForNonUser,
-  Profile,
+  Product,
+  WebBasket,
+  MobileBasket,
+  WebOrder,
+  MobileOrder,
+  Executive,
   Introduction,
   Document,
+  MyPage,
+  Success,
+  Fail,
 } from "./pages";
 
 export default function Layout() {
   useChannelTalk();
-  const { loading, error, data, refetch } = useQuery(IS_AUTHENTICATED);
+  const { loading, error, data } = useQuery(IS_AUTHENTICATED);
 
   useEffect(() => {
     if (data) {
@@ -32,40 +36,32 @@ export default function Layout() {
     }
   }, [data]);
 
-  if (loading) return <div>로딩중...</div>;
+  if (loading) console.log("로딩중...");
   if (error) console.error(error);
-
-  const {
-    isAuthenticated: { isAuthenticated },
-  } = data;
 
   return (
     <Fragment>
       <CustomHeader />
       <Switch>
-        <Route path="/profiles">
-          <Profile />
+        <Route path="/profiles" component={Executive} />
+        <Route path="/sign-in" component={SignIn} />
+        <Route path="/mall/:id" component={Product} />
+        <Route path="/mall" component={Mall} />
+        <Route path="/order" component={isMobile() ? MobileOrder : WebOrder} />
+        <Route path="/introduction" component={Introduction} />
+        <Route path="/document" component={Document} />
+        <Route
+          path="/basket"
+          component={isMobile() ? MobileBasket : WebBasket}
+        />
+        <Route path="/my-page">
+          <MyPage />
         </Route>
-        <Route path="/sign-in">
-          <SignIn />
+        <Route path="/success">
+          <Success />
         </Route>
-        <Route path="/mall/:id">
-          {isAuthenticated ? <ProductForUser /> : <ProductForNonUser />}
-        </Route>
-        <Route path="/mall">
-          <Mall />
-        </Route>
-        <Route path="/basket">
-          {isAuthenticated ? <BasketForUser /> : <BasketForNonUser />}
-        </Route>
-        <Route path="/order">
-          <OrderForNonUser />
-        </Route>
-        <Route path="/introduction">
-          <Introduction />
-        </Route>
-        <Route path="/document">
-          <Document />
+        <Route path="/fail">
+          <Fail />
         </Route>
         <Route path="/">
           <Home />

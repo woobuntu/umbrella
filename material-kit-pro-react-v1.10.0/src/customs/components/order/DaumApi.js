@@ -1,9 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 
-export default function DaumApi({ closeDaumApi, addressControllers }) {
-  const { setPostCode, setAddress } = addressControllers;
-
+export default function DaumApi({ closeDaumApi, setPostCode, setAddress }) {
   const ref = useRef();
 
   useEffect(() => {
@@ -79,5 +77,6 @@ export default function DaumApi({ closeDaumApi, addressControllers }) {
 
 DaumApi.propTypes = {
   closeDaumApi: PropTypes.func,
-  addressControllers: PropTypes.objectOf(PropTypes.func),
+  setPostCode: PropTypes.func,
+  setAddress: PropTypes.func,
 };

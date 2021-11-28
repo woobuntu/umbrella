@@ -1,28 +1,18 @@
-import React, { Fragment, useState, useRef, useEffect } from "react";
+import React, { Fragment, useRef, useEffect } from "react";
 import CustomInput from "components/CustomInput/CustomInput";
 import Button from "components/CustomButtons/Button";
 import DaumApi from "./DaumApi";
-import { useAddress } from "hooks";
+import PropTypes from "prop-types";
+import { useDaumApi, useFocusDetailAddress } from "hooks";
 
-export default function Address() {
-  const [isDaumOpen, setIsDaumOpen] = useState(false);
-
-  const openDaumApi = () => setIsDaumOpen(true);
-  const closeDaumApi = () => setIsDaumOpen(false);
-
-  const {
-    state: { postCode, address, detailAddress },
-    actions,
-  } = useAddress();
-
-  const ref = useRef();
-
-  const focusDetailAddress = () => ref.current.focus();
-
-  useEffect(() => {
-    if (postCode) focusDetailAddress();
-  }, [postCode]);
-
+export default function Address({
+  customInputPropsForPostCode,
+  customInputPropsForAddress,
+  customInputPropsForDetailAddress,
+  buttonPropsForAddressSearch,
+  daumApiProps,
+  isDaumOpen,
+}) {
   return (
     <Fragment>
       <div
@@ -32,45 +22,27 @@ export default function Address() {
           alignItems: "center",
         }}
       >
-        <CustomInput
-          state={postCode}
-          labelText="우편번호"
-          inputProps={{
-            disabled: true,
-          }}
-        />
+        <CustomInput {...customInputPropsForPostCode} />
         <Button
           color="success"
           style={{ marginLeft: "2rem" }}
-          onClick={openDaumApi}
+          {...buttonPropsForAddressSearch}
         >
           우편번호 찾기
         </Button>
       </div>
-      {isDaumOpen && (
-        <DaumApi closeDaumApi={closeDaumApi} addressControllers={actions} />
-      )}
-      <CustomInput
-        state={address}
-        labelText="주소"
-        formControlProps={{
-          fullWidth: true,
-        }}
-        inputProps={{
-          disabled: true,
-        }}
-      />
-      <CustomInput
-        state={detailAddress}
-        labelText="상세주소"
-        formControlProps={{
-          fullWidth: true,
-        }}
-        inputProps={{
-          inputRef: ref,
-        }}
-        action={actions.setDetailAddress}
-      />
+      {isDaumOpen && <DaumApi {...daumApiProps} />}
+      <CustomInput {...customInputPropsForAddress} />
+      <CustomInput {...customInputPropsForDetailAddress} />
     </Fragment>
   );
 }
+
+Address.propTypes = {
+  customInputPropsForPostCode: PropTypes.object,
+  customInputPropsForAddress: PropTypes.object,
+  customInputPropsForDetailAddress: PropTypes.object,
+  buttonPropsForAddressSearch: PropTypes.object,
+  daumApiProps: PropTypes.object,
+  isDaumOpen: PropTypes.bool,
+};
