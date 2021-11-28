@@ -58,7 +58,7 @@ export default function useTossPayments({ basketData, totalPrice }) {
     loadTossPayments(process.env.REACT_APP_TOSS_CLIENT_ID).then(
       (tossPayments) => {
         let payload = {
-          amount: totalPrice + 3000,
+          amount: totalPrice,
           orderId: v4(),
           orderName: makeOrderName(basketData),
           successUrl: `${window.location.origin}/success`,

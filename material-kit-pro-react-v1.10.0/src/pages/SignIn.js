@@ -72,9 +72,9 @@ export default function SignIn() {
                         alignItems: "center",
                       }}
                     >
-                      <NaverButton />
+                      {/*<NaverButton />*/}
                       <KakaoButton />
-                      <div ref={googleButton} />
+                      {/*<div ref={googleButton} />*/}
                     </div>
                   </CardBody>
                 </form>

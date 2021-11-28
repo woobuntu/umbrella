@@ -20,19 +20,19 @@ export default function MobileOrder() {
     ({
       id,
       catalogOptionRelation: {
-        catalog: { name, price: stringPrice, catalogFileRelations },
-        option,
+        catalog: { name, price: catalogPrice, catalogFileRelations },
+        option: { name: optionName, price: optionPrice },
       },
       amount,
     }) => {
       const [{ file }] = catalogFileRelations;
 
-      const price = Number(stringPrice);
+      const price = Number(catalogPrice) + Number(optionPrice);
 
       const itemState = {
         id,
         name,
-        optionName: option.name,
+        optionName,
         price,
         amount,
         file,
@@ -47,11 +47,12 @@ export default function MobileOrder() {
       total,
       {
         catalogOptionRelation: {
-          catalog: { price },
+          catalog: { price: catalogPrice },
+          option: { price: optionPrice },
         },
         amount,
       }
-    ) => total + Number(price) * amount,
+    ) => total + (Number(catalogPrice) + Number(optionPrice)) * amount,
     0
   );
 

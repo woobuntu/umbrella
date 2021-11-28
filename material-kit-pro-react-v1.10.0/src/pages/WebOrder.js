@@ -22,19 +22,19 @@ export default function WebOrder() {
     ({
       id,
       catalogOptionRelation: {
-        catalog: { name, price: stringPrice, catalogFileRelations },
-        option,
+        catalog: { name, price: catalogPrice, catalogFileRelations },
+        option: { name: optionName, price: optionPrice },
       },
       amount,
     }) => {
       const [{ file }] = catalogFileRelations;
 
-      const price = Number(stringPrice);
+      const price = Number(catalogPrice) + Number(optionPrice);
 
       return [
         <ItemThumbnail key={id} src={file.path} alt={file.name} />,
         <ItemName key={id} id={id} name={name} />,
-        option.name,
+        optionName,
         <ItemPrice key={id} price={price} />,
         <span key={id}>{amount}</span>,
         <ItemPrice key={id} price={price * amount} />,
@@ -51,11 +51,12 @@ export default function WebOrder() {
       total,
       {
         catalogOptionRelation: {
-          catalog: { price },
+          catalog: { price: catalogPrice },
+          option: { price: optionPrice },
         },
         amount,
       }
-    ) => total + Number(price) * amount,
+    ) => total + (Number(catalogPrice) + Number(optionPrice)) * amount,
     0
   );
 
