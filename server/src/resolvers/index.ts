@@ -10,3 +10,4 @@ export { CatalogResolver } from './catalog.resolver';
 export { CatalogFileRelationResolver } from './catalog-file-relation.resolver';
 export { CatalogOptionRelationResolver } from './catalog-option-relation.resolver';
 export { BasketResolver } from './basket.resolver';
+export { PurchaseResolver } from './purchase.resolver';

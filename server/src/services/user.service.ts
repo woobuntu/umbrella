@@ -21,7 +21,7 @@ export class UserService {
       data: {
         ...data,
         userHistories: {
-          create: [dataForNewUserHistory],
+          create: dataForNewUserHistory,
         },
       },
     });
@@ -63,7 +63,7 @@ export class UserService {
             },
           },
           // 3. 새 이력 시작
-          create: [dataForNewUserHistory],
+          create: dataForNewUserHistory,
         },
       },
     });

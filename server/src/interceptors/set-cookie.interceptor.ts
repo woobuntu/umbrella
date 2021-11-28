@@ -21,8 +21,8 @@ export class SetCookieInterceptor implements NestInterceptor {
     isAuthenticated: boolean;
   }> {
     return next.handle().pipe(
-      tap((data) => {
-        if (!data) throw new Error();
+      tap(({ user }) => {
+        if (!user) throw new Error();
 
         const ctx = GqlExecutionContext.create(context);
         const {
@@ -34,7 +34,7 @@ export class SetCookieInterceptor implements NestInterceptor {
           },
         } = ctx.getContext();
 
-        session.set('user', data);
+        session.set('user', user);
 
         const { expires } =
           this.configService.get<EnvironmentConfig>('environment');
@@ -45,8 +45,9 @@ export class SetCookieInterceptor implements NestInterceptor {
           expires: calculatedExpires,
         });
       }),
-      map(() => ({ isAuthenticated: true })),
-      catchError(() => of({ isAuthenticated: false })),
+      map(({ redirectUrl }) => ({ isAuthenticated: true, redirectUrl })),
+      catchError(() => of({ isAuthenticated: false, redirectUrl: '/' })),
+      // 에러 페이지를 달리 만들지는 고민 중
     );
   }
 }

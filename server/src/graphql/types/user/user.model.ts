@@ -4,7 +4,7 @@ import { ObjectType } from '@nestjs/graphql';
 export class User {
   id: string;
 
-  email: string;
+  email?: string;
 
   name?: string;
 

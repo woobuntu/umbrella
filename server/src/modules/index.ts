@@ -9,3 +9,4 @@ export { AuthModule } from './auth.module';
 export { CatalogModule } from './catalog.module';
 export { BasketModule } from './basket.module';
 export { StaticModule } from './static.module';
+export { PurchaseModule } from './purchase.module';

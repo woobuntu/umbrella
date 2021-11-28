@@ -7,5 +7,6 @@ import { PrismaModule } from './prisma.module';
 @Module({
   imports: [PrismaModule, CatalogOptionRelationModule],
   providers: [BasketService, BasketResolver],
+  exports: [BasketService],
 })
 export class BasketModule {}

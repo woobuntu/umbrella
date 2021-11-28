@@ -25,7 +25,7 @@ export class BasketService {
       data: {
         ...data,
         basketHistories: {
-          create: [data],
+          create: data,
         },
       },
     });
@@ -69,7 +69,7 @@ export class BasketService {
               to: new Date(),
             },
           },
-          create: [dataForNewBasketHistory],
+          create: dataForNewBasketHistory,
         },
       },
     });

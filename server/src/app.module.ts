@@ -15,9 +15,15 @@ import {
   CatalogModule,
   BasketModule,
   StaticModule,
+  PurchaseModule,
 } from './modules';
 import { ExecutiveModule } from './modules/executive.module';
-import { environmentConfig, kakaoConfig, naverConfig } from './config';
+import {
+  environmentConfig,
+  kakaoConfig,
+  naverConfig,
+  tossConfig,
+} from './config';
 
 @Module({
   imports: [
@@ -25,7 +31,7 @@ import { environmentConfig, kakaoConfig, naverConfig } from './config';
     ConfigModule.forRoot({
       isGlobal: true,
       // https://docs.nestjs.com/techniques/configuration#configuration-namespaces
-      load: [environmentConfig, naverConfig, kakaoConfig],
+      load: [environmentConfig, naverConfig, kakaoConfig, tossConfig],
     }),
     MetaModule,
     MetaFileRelationModule,
@@ -39,6 +45,7 @@ import { environmentConfig, kakaoConfig, naverConfig } from './config';
     CatalogModule,
     BasketModule,
     StaticModule,
+    PurchaseModule,
     GraphQLModule.forRootAsync({
       useFactory: async (configService: ConfigService) => ({
         // code first approach를 통해 schema 파일 생성

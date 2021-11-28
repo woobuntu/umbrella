@@ -20,3 +20,8 @@ export { OptionService } from './option.service';
 export { BasketService } from './basket.service';
 export { KakaoService } from './kakao.service';
 export { GoogleService } from './google.service';
+export { OrdererService } from './orderer.service';
+export { DeliveryService } from './delivery.service';
+export { PaymentService } from './payment.service';
+export { PurchaseService } from './purchase.service';
+export { TossService } from './toss.service';

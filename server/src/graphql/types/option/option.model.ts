@@ -5,4 +5,6 @@ export class Option {
   id: number;
 
   name: string;
+
+  price: number;
 }

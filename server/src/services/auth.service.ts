@@ -96,7 +96,7 @@ export class AuthService {
           }),
         ),
       ),
-      catchError(() => EMPTY),
+      catchError(() => of(EMPTY)),
       map(() => ({ isAuthenticated: false })),
     );
   }
@@ -166,7 +166,7 @@ export class AuthService {
           }),
         ),
       ),
-      catchError(() => EMPTY),
+      catchError(() => of(EMPTY)),
       map(() => ({ isAuthenticated: false })),
     );
   }
