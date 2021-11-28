@@ -535,7 +535,6 @@ model Delivery {
   id                Int               @id @default(autoincrement())
   name              String            @db.VarChar(255)
   phone             String            @db.VarChar(255)
-  email             String            @db.VarChar(255)
   address           String            @db.VarChar(255)
   memo              String?           @db.VarChar(255)
   deliveryHistories DeliveryHistory[]
@@ -546,7 +545,6 @@ model DeliveryHistory {
   id         Int       @id @default(autoincrement())
   name       String    @db.VarChar(255)
   phone      String    @db.VarChar(255)
-  email      String    @db.VarChar(255)
   address    String    @db.VarChar(255)
   memo       String?   @db.VarChar(255)
   deliveryId Int?

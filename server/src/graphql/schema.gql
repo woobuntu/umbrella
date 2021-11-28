@@ -66,7 +66,6 @@ type Contact {
 
 input CreateDeliveryInput {
   address: String!
-  email: String!
   memo: String
   name: String!
   phone: String!

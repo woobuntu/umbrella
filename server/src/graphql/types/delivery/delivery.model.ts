@@ -8,8 +8,6 @@ export class Delivery {
 
   phone: string;
 
-  email: string;
-
   address: string;
 
   memo?: string;
