@@ -69,19 +69,19 @@ export default function WebBasket() {
       id,
       catalogOptionRelationId,
       catalogOptionRelation: {
-        catalog: { name, price: stringPrice, catalogFileRelations },
-        option,
+        catalog: { name, price: catalogPrice, catalogFileRelations },
+        option: { name: optionName, price: optionPrice },
       },
       amount,
     }) => {
       const [{ file }] = catalogFileRelations;
 
-      const price = Number(stringPrice);
+      const price = Number(catalogPrice) + Number(optionPrice);
 
       return [
         <ItemThumbnail src={file.path} alt={file.name} key={id} />,
         <ItemName id={id} key={id} name={name} />,
-        option.name,
+        optionName,
         <ItemPrice key={id} price={price} />,
         <ItemAmount
           key={id}
@@ -107,15 +107,8 @@ export default function WebBasket() {
   };
 
   const totalPrice = (basketData ? basketData : []).reduce(
-    (
-      total,
-      {
-        catalogOptionRelation: {
-          catalog: { price },
-        },
-        amount,
-      }
-    ) => total + Number(price) * amount,
+    (total, { catalogOptionRelation: { catalog, option }, amount }) =>
+      total + (Number(catalog.price) + Number(option.price)) * amount,
     0
   );
 

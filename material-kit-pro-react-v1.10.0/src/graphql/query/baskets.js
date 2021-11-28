@@ -27,6 +27,7 @@ const BASKETS = gql`
         option {
           id
           name
+          price
         }
       }
       amount

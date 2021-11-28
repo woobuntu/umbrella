@@ -58,7 +58,7 @@ export default function Order({ cart, totalPrice, basketData }) {
                     }}
                   >
                     <span>배송료</span>
-                    <span>3000원</span>
+                    <span>상품 금액에 포함</span>
                   </div>
                 </li>
                 <li>
@@ -73,7 +73,7 @@ export default function Order({ cart, totalPrice, basketData }) {
                       <strong>최종 결제금액</strong>
                     </span>
                     <span>
-                      <strong>{convertPrice(totalPrice + 3000)}원</strong>
+                      <strong>{convertPrice(totalPrice)}원</strong>
                     </span>
                   </div>
                 </li>

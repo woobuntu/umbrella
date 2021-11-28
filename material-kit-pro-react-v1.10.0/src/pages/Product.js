@@ -125,7 +125,12 @@ export default function Product() {
               </GridItem>
               <GridItem md={6} sm={6}>
                 <h2 className={classes.title}>{name}</h2>
-                <h3 className={classes.mainPrice}>₩{convertPrice(price)}</h3>
+                <h3 className={classes.mainPrice}>
+                  ₩
+                  {convertPrice(
+                    price + Number(catalogOptionRelation?.option?.price)
+                  )}
+                </h3>
                 <GridContainer className={classes.pickSize}>
                   <Option
                     value={productOption}

@@ -17,6 +17,7 @@ const PRODUCT = gql`
         option {
           id
           name
+          price
         }
       }
     }
