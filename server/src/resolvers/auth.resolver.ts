@@ -1,10 +1,17 @@
-import { UseInterceptors } from '@nestjs/common';
+import { UseGuards, UseInterceptors } from '@nestjs/common';
 import { Args, Mutation, Resolver, Query, Context } from '@nestjs/graphql';
 import { map, Observable, tap } from 'rxjs';
 import { CurrentUser } from 'src/decorators';
-import { AuthState, SignInInput, User } from 'src/graphql/types/user';
+import {
+  AuthState,
+  PublicUser,
+  SignInInput,
+  UpdateUserInput,
+  User,
+} from 'src/graphql/types/user';
+import { AuthGuard } from 'src/guards';
 import { SetCookieInterceptor, SignOutInterceptor } from 'src/interceptors';
-import { AuthService, BasketService } from 'src/services';
+import { AuthService, BasketService, UserService } from 'src/services';
 
 interface ContextWithSession {
   request: {
@@ -18,6 +25,7 @@ interface ContextWithSession {
 export class AuthResolver {
   constructor(
     private authService: AuthService,
+    private userService: UserService,
     private basketService: BasketService,
   ) {}
 
@@ -109,5 +117,25 @@ export class AuthResolver {
     return session.get('user')
       ? { isAuthenticated: true }
       : { isAuthenticated: false };
+  }
+
+  @UseGuards(AuthGuard)
+  @Query((returns) => PublicUser)
+  async profile(@CurrentUser() user: User) {
+    return this.userService.user({ id: user.id });
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation((returns) => PublicUser)
+  async updateProfile(
+    @CurrentUser() user: User,
+    @Args('updateUserInput') updateUserInput: UpdateUserInput,
+  ) {
+    return this.userService.updateUser({
+      where: {
+        id: user.id,
+      },
+      data: updateUserInput,
+    });
   }
 }

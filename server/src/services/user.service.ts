@@ -1,5 +1,6 @@
 import { Prisma, User } from '.prisma/client';
 import { Injectable } from '@nestjs/common';
+import { UpdateUserInput } from 'src/graphql/types/user';
 import { Tokens } from 'src/types/user';
 import { PrismaService } from './prisma.service';
 
@@ -21,6 +22,45 @@ export class UserService {
       data: {
         ...data,
         userHistories: {
+          create: dataForNewUserHistory,
+        },
+      },
+    });
+  }
+
+  async updateUser(params: {
+    where: Prisma.UserWhereUniqueInput;
+    data: UpdateUserInput;
+  }): Promise<User> {
+    const { where, data } = params;
+
+    const userLastHistory = await this.prisma.userHistory.findFirst({
+      where: {
+        userId: where.id,
+        to: null,
+      },
+    });
+
+    const { id, userId, ...prevUserHistory } = userLastHistory;
+
+    const dataForNewUserHistory = {
+      ...prevUserHistory,
+      ...data,
+    };
+
+    return this.prisma.user.update({
+      where,
+      data: {
+        ...data,
+        userHistories: {
+          update: {
+            where: {
+              id: userLastHistory.id,
+            },
+            data: {
+              to: new Date(),
+            },
+          },
           create: dataForNewUserHistory,
         },
       },

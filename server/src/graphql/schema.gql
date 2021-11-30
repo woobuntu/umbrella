@@ -153,6 +153,7 @@ type Mutation {
   deleteBasket(id: Int!): Basket!
   signIn(signInInput: SignInInput!): AuthState!
   signOut: AuthState!
+  updateProfile(updateUserInput: UpdateUserInput!): PublicUser!
   upsertBasket(upsertBasketInput: UpsertBasketInput!): Basket!
 }
 
@@ -160,6 +161,13 @@ type Option {
   id: Float!
   name: String!
   price: Float!
+}
+
+type PublicUser {
+  email: String
+  id: String!
+  name: String
+  phone: String
 }
 
 type PurchaseResult {
@@ -179,6 +187,7 @@ type Query {
   isAuthenticated: AuthState!
   meta: Meta!
   metaFileRelations(type: String!): [MetaFileRelation!]!
+  profile: PublicUser!
 }
 
 input SignInInput {
@@ -186,6 +195,12 @@ input SignInInput {
   code: String!
   platform: String!
   state: String!
+}
+
+input UpdateUserInput {
+  email: String
+  name: String
+  phone: String
 }
 
 input UpsertBasketInput {
