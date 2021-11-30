@@ -17,8 +17,15 @@ export class UserService {
   }
 
   async createUser(data: Prisma.UserCreateInput): Promise<User> {
+    const createDefaultDelivery = this.prisma.delivery.create({
+      data: {
+        name: '',
+        phone: '010--',
+        address: '',
+      },
+    });
     const { id, ...dataForNewUserHistory } = data;
-    return this.prisma.user.create({
+    const createUser = this.prisma.user.create({
       data: {
         ...data,
         userHistories: {
@@ -26,6 +33,21 @@ export class UserService {
         },
       },
     });
+
+    const [defaultDelivery, user] = await this.prisma.$transaction([
+      createDefaultDelivery,
+      createUser,
+    ]);
+
+    await this.prisma.userDelivery.create({
+      data: {
+        userId: user.id,
+        deliveryId: defaultDelivery.id,
+        default: true,
+      },
+    });
+
+    return user;
   }
 
   async updateUser(params: {

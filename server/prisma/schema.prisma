@@ -8,26 +8,22 @@ datasource db {
 }
 
 model Account {
-  id                Int              @id @default(1)
-  bank              String           @db.VarChar(10)
-  number            String           @db.VarChar(30)
-  holder            String           @db.VarChar(20)
-  consentGuidance   String?          @db.Text
-  deductionGuidance String?          @db.Text
-  accountHistories  AccountHistory[]
+  id               Int              @id @default(1)
+  bank             String           @db.VarChar(10)
+  number           String           @db.VarChar(30)
+  holder           String           @db.VarChar(20)
+  accountHistories AccountHistory[]
 }
 
 model AccountHistory {
-  id                Int       @id @default(autoincrement())
-  bank              String    @db.VarChar(10)
-  number            String    @db.VarChar(30)
-  holder            String    @db.VarChar(20)
-  consentGuidance   String?   @db.Text
-  deductionGuidance String?   @db.Text
-  accountId         Int       @default(1)
-  from              DateTime  @default(now()) @db.Timestamp(0)
-  to                DateTime? @db.Timestamp(0)
-  account           Account   @relation(fields: [accountId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounthistory_ibfk_1")
+  id        Int       @id @default(autoincrement())
+  bank      String    @db.VarChar(10)
+  number    String    @db.VarChar(30)
+  holder    String    @db.VarChar(20)
+  accountId Int       @default(1)
+  from      DateTime  @default(now()) @db.Timestamp(0)
+  to        DateTime? @db.Timestamp(0)
+  account   Account   @relation(fields: [accountId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounthistory_ibfk_1")
 
   @@index([accountId], map: "accountId")
 }
@@ -503,16 +499,16 @@ model PurchaseHistory {
 }
 
 model User {
-  id            String        @id @db.VarChar(255)
-  email         String?       @db.VarChar(255)
-  name          String?       @db.VarChar(10)
-  phone         String?       @db.VarChar(255)
-  address       String?       @db.VarChar(255)
-  accessToken   String?       @db.VarChar(255)
-  refreshToken  String?       @db.VarChar(255)
-  baskets       Basket[]
-  purchases     Purchase[]
-  userHistories UserHistory[]
+  id             String         @id @db.VarChar(255)
+  email          String?        @db.VarChar(255)
+  name           String?        @db.VarChar(10)
+  phone          String?        @default("010--") @db.VarChar(255)
+  accessToken    String?        @db.VarChar(255)
+  refreshToken   String?        @db.VarChar(255)
+  baskets        Basket[]
+  purchases      Purchase[]
+  userDeliveries UserDelivery[]
+  userHistories  UserHistory[]
 }
 
 model UserHistory {
@@ -520,7 +516,6 @@ model UserHistory {
   email        String?   @db.VarChar(255)
   name         String?   @db.VarChar(10)
   phone        String?   @db.VarChar(255)
-  address      String?   @db.VarChar(255)
   accessToken  String?   @db.VarChar(255)
   refreshToken String?   @db.VarChar(255)
   userId       String?   @db.VarChar(255)
@@ -539,6 +534,7 @@ model Delivery {
   memo              String?           @db.VarChar(255)
   deliveryHistories DeliveryHistory[]
   purchases         Purchase[]
+  userDeliveries    UserDelivery[]
 }
 
 model DeliveryHistory {
@@ -601,4 +597,30 @@ model PaymentHistory {
   payment    Payment?  @relation(fields: [paymentId], references: [id], onUpdate: NoAction, map: "paymenthistory_ibfk_1")
 
   @@index([paymentId], map: "paymentId")
+}
+
+model UserDelivery {
+  id                    Int                   @id @default(autoincrement())
+  userId                String                @db.VarChar(255)
+  deliveryId            Int
+  default               Boolean
+  delivery              Delivery              @relation(fields: [deliveryId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "userdelivery_ibfk_2")
+  user                  User                  @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "userdelivery_ibfk_1")
+  userDeliveryHistories UserDeliveryHistory[]
+
+  @@index([deliveryId], map: "deliveryId")
+  @@index([userId], map: "userId")
+}
+
+model UserDeliveryHistory {
+  id             Int           @id @default(autoincrement())
+  userId         String        @db.VarChar(255)
+  deliveryId     Int
+  default        Boolean
+  userDeliveryId Int?
+  from           DateTime      @default(now()) @db.Timestamp(0)
+  to             DateTime?     @db.Timestamp(0)
+  userDelivery   UserDelivery? @relation(fields: [userDeliveryId], references: [id], onUpdate: NoAction, map: "userdeliveryhistory_ibfk_1")
+
+  @@index([userDeliveryId], map: "userDeliveryId")
 }
