@@ -11,3 +11,4 @@ export { CatalogFileRelationResolver } from './catalog-file-relation.resolver';
 export { CatalogOptionRelationResolver } from './catalog-option-relation.resolver';
 export { BasketResolver } from './basket.resolver';
 export { PurchaseResolver } from './purchase.resolver';
+export { UserDeliveryRelationResolver } from './user-delivery-relation.resolver';

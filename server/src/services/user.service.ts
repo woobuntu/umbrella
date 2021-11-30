@@ -39,7 +39,7 @@ export class UserService {
       createUser,
     ]);
 
-    await this.prisma.userDelivery.create({
+    await this.prisma.userDeliveryRelation.create({
       data: {
         userId: user.id,
         deliveryId: defaultDelivery.id,

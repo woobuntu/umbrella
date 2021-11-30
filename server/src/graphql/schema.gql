@@ -91,6 +91,14 @@ input CreatePurchaseInput {
   payment: CreatePaymentInput!
 }
 
+type Delivery {
+  address: String!
+  id: Float!
+  memo: String
+  name: String!
+  phone: String!
+}
+
 type Executive {
   careers: [Career!]!
   executiveFileRelations: [ExecutiveFileRelation!]!
@@ -153,7 +161,7 @@ type Mutation {
   deleteBasket(id: Int!): Basket!
   signIn(signInInput: SignInInput!): AuthState!
   signOut: AuthState!
-  updateProfile(updateUserInput: UpdateUserInput!): PublicUser!
+  updateProfile(updateUserInput: UpdateUserInput!): User!
   upsertBasket(upsertBasketInput: UpsertBasketInput!): Basket!
 }
 
@@ -168,6 +176,7 @@ type PublicUser {
   id: String!
   name: String
   phone: String
+  userDeliveryRelations: [UserDeliveryRelation!]!
 }
 
 type PurchaseResult {
@@ -206,4 +215,21 @@ input UpdateUserInput {
 input UpsertBasketInput {
   amount: Float!
   catalogOptionRelationId: Float!
+}
+
+type User {
+  accessToken: String
+  email: String
+  id: String!
+  name: String
+  phone: String
+  refreshToken: String
+}
+
+type UserDeliveryRelation {
+  default: Boolean!
+  delivery: Delivery!
+  deliveryId: Float!
+  id: Float!
+  userId: String!
 }
