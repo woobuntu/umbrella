@@ -38,9 +38,12 @@ type Career {
 type Catalog {
   catalogFileRelations: [CatalogFileRelation!]!
   catalogOptionRelations: [CatalogOptionRelation!]!
+  expirationDate: String
   id: Float!
+  ingredients: String
   name: String!
   price: Float!
+  storageMethod: String
 }
 
 type CatalogFileRelation {
@@ -66,9 +69,11 @@ type Contact {
 
 input CreateDeliveryInput {
   address: String!
+  detailAddress: String!
   memo: String
   name: String!
   phone: String!
+  postCode: String!
 }
 
 input CreateOrdererInput {
@@ -93,10 +98,12 @@ input CreatePurchaseInput {
 
 type Delivery {
   address: String!
+  detailAddress: String!
   id: Float!
   memo: String
   name: String!
   phone: String!
+  postCode: String!
 }
 
 type Executive {
@@ -161,6 +168,7 @@ type Mutation {
   deleteBasket(id: Int!): Basket!
   signIn(signInInput: SignInInput!): AuthState!
   signOut: AuthState!
+  updateDelivery(deliveryId: Int!, updateDeliveryInput: UpdateDeliveryInput!): Delivery!
   updateProfile(updateUserInput: UpdateUserInput!): User!
   upsertBasket(upsertBasketInput: UpsertBasketInput!): Basket!
 }
@@ -204,6 +212,15 @@ input SignInInput {
   code: String!
   platform: String!
   state: String!
+}
+
+input UpdateDeliveryInput {
+  address: String
+  detailAddress: String
+  memo: String
+  name: String
+  phone: String
+  postCode: String
 }
 
 input UpdateUserInput {

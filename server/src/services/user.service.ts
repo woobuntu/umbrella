@@ -17,11 +17,19 @@ export class UserService {
   }
 
   async createUser(data: Prisma.UserCreateInput): Promise<User> {
+    const emptyDelivery = {
+      name: '',
+      phone: '010--',
+      postCode: '',
+      address: '',
+      detailAddress: '',
+    };
     const createDefaultDelivery = this.prisma.delivery.create({
       data: {
-        name: '',
-        phone: '010--',
-        address: '',
+        ...emptyDelivery,
+        deliveryHistories: {
+          create: emptyDelivery,
+        },
       },
     });
     const { id, ...dataForNewUserHistory } = data;

@@ -82,6 +82,9 @@ model Catalog {
   id                     Int                     @id @default(autoincrement())
   name                   String                  @db.VarChar(30)
   price                  Int
+  expirationDate         String?                 @db.VarChar(255)
+  storageMethod          String?                 @db.VarChar(255)
+  ingredients            String?                 @db.VarChar(255)
   catalogFileRelations   CatalogFileRelation[]
   catalogHistories       CatalogHistory[]
   catalogOptionRelations CatalogOptionRelation[]
@@ -112,13 +115,16 @@ model CatalogFileRelationHistory {
 }
 
 model CatalogHistory {
-  id        Int       @id @default(autoincrement())
-  name      String    @db.VarChar(30)
-  price     Int
-  catalogId Int?
-  from      DateTime  @default(now()) @db.Timestamp(0)
-  to        DateTime? @db.Timestamp(0)
-  catalog   Catalog?  @relation(fields: [catalogId], references: [id], onUpdate: NoAction, map: "cataloghistory_ibfk_1")
+  id             Int       @id @default(autoincrement())
+  name           String    @db.VarChar(30)
+  price          Int
+  expirationDate String?   @db.VarChar(255)
+  storageMethod  String?   @db.VarChar(255)
+  ingredients    String?   @db.VarChar(255)
+  catalogId      Int?
+  from           DateTime  @default(now()) @db.Timestamp(0)
+  to             DateTime? @db.Timestamp(0)
+  catalog        Catalog?  @relation(fields: [catalogId], references: [id], onUpdate: NoAction, map: "cataloghistory_ibfk_1")
 
   @@index([catalogId], map: "catalogId")
 }
@@ -527,26 +533,30 @@ model UserHistory {
 }
 
 model Delivery {
-  id                   Int                    @id @default(autoincrement())
-  name                 String                 @db.VarChar(255)
-  phone                String                 @default("010--") @db.VarChar(255)
-  address              String                 @db.VarChar(255)
-  memo                 String?                @db.VarChar(255)
-  deliveryHistories    DeliveryHistory[]
-  purchases            Purchase[]
-  UserDeliveryRelation UserDeliveryRelation[]
+  id                    Int                    @id @default(autoincrement())
+  name                  String                 @db.VarChar(255)
+  phone                 String                 @default("010--") @db.VarChar(255)
+  postCode              String                 @db.VarChar(255)
+  address               String                 @db.VarChar(255)
+  detailAddress         String                 @db.VarChar(255)
+  memo                  String?                @db.VarChar(255)
+  deliveryHistories     DeliveryHistory[]
+  purchases             Purchase[]
+  userDeliveryRelations UserDeliveryRelation[]
 }
 
 model DeliveryHistory {
-  id         Int       @id @default(autoincrement())
-  name       String    @db.VarChar(255)
-  phone      String    @db.VarChar(255)
-  address    String    @db.VarChar(255)
-  memo       String?   @db.VarChar(255)
-  deliveryId Int?
-  from       DateTime  @default(now()) @db.Timestamp(0)
-  to         DateTime? @db.Timestamp(0)
-  delivery   Delivery? @relation(fields: [deliveryId], references: [id], onUpdate: NoAction, map: "deliveryhistory_ibfk_1")
+  id            Int       @id @default(autoincrement())
+  name          String    @db.VarChar(255)
+  phone         String    @db.VarChar(255)
+  postCode      String    @db.VarChar(255)
+  address       String    @db.VarChar(255)
+  detailAddress String    @db.VarChar(255)
+  memo          String?   @db.VarChar(255)
+  deliveryId    Int?
+  from          DateTime  @default(now()) @db.Timestamp(0)
+  to            DateTime? @db.Timestamp(0)
+  delivery      Delivery? @relation(fields: [deliveryId], references: [id], onUpdate: NoAction, map: "deliveryhistory_ibfk_1")
 
   @@index([deliveryId], map: "deliveryId")
 }
