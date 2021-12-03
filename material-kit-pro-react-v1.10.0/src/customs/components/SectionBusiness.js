@@ -38,6 +38,7 @@ export default function SectionBusiness() {
             <InfoArea
               title="법인소개"
               icon={Business}
+              description=""
               iconColor="primary"
               vertical
             />
@@ -48,6 +49,7 @@ export default function SectionBusiness() {
             title="활동실적"
             icon={PhotoLibrary}
             iconColor="success"
+            description=""
             vertical
           />
         </GridItem>
@@ -57,6 +59,7 @@ export default function SectionBusiness() {
               title="쇼핑몰"
               icon={LocalMall}
               iconColor="info"
+              description=""
               vertical
             />
           </Link>

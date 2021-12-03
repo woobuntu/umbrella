@@ -17,7 +17,7 @@ export default function KakaoButton({ disabled }) {
     `&redirect_uri=${redirectUri}` +
     `&state=${state}` +
     "&response_type=code";
-  console.log(disabled);
+
   return (
     <div
       style={{

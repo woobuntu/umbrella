@@ -1,5 +1,6 @@
 import { useMutation } from "@apollo/client";
 import { UPDATE_DELIVERY } from "graphql/mutation";
+import { PROFILE, BASKETS } from "graphql/query";
 import { useReducer, useRef, useState, useEffect, useCallback } from "react";
 import { basicReducer } from "reducers";
 import useAddress from "./useAddress";
@@ -162,21 +163,25 @@ export default function useBasicDelivery(profileData) {
             phone: `${firstNumber}-${secondNumber}-${thirdNumber}`,
           },
         };
-        updateDelivery({ variables }).then(({ data: { updateDelivery } }) => {
-          dispatch({ type: "name", value: updateDelivery.name });
-          dispatch({ type: "memo", value: updateDelivery.memo });
+        updateDelivery({ variables, refetchQueries: [PROFILE, BASKETS] }).then(
+          ({ data: { updateDelivery } }) => {
+            dispatch({ type: "name", value: updateDelivery.name });
+            dispatch({ type: "memo", value: updateDelivery.memo });
 
-          const [first, second, third] = updateDelivery.phone.split("-");
-          setFirstNumber({ target: { value: first } });
-          setSecondNumber({ target: { value: second } });
-          setThirdNumber({ target: { value: third } });
+            const [first, second, third] = updateDelivery.phone.split("-");
+            setFirstNumber({ target: { value: first } });
+            setSecondNumber({ target: { value: second } });
+            setThirdNumber({ target: { value: third } });
 
-          setPostCode(updateDelivery.postCode);
-          setAddress(updateDelivery.address);
-          setDetailAddress({ target: { value: updateDelivery.detailAddress } });
+            setPostCode(updateDelivery.postCode);
+            setAddress(updateDelivery.address);
+            setDetailAddress({
+              target: { value: updateDelivery.detailAddress },
+            });
 
-          setIsEditing(false);
-        });
+            setIsEditing(false);
+          }
+        );
       } else {
         setIsEditing(true);
       }

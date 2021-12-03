@@ -50,11 +50,12 @@ export default function useDelivery({ submitted, profileData }) {
       const {
         profile: { userDeliveryRelations },
       } = profileData;
+
       const [basicDelivery] = userDeliveryRelations
         .filter((userDeliveryRelation) => userDeliveryRelation.default)
         .map(({ delivery }) => delivery);
 
-      dispatch({ type: "name", value: basicDelivery.name });
+      dispatch({ type: "name", value: basicDelivery.name || "" });
       const {
         customSelectPropsForFirstNumber: { action: setFirstNumber },
         customInputPropsForSecondNumber: { action: setSecondNumber },
@@ -62,6 +63,7 @@ export default function useDelivery({ submitted, profileData }) {
       } = phoneNumberProps;
       const [firstNumber, secondNumber, thirdNumber] =
         basicDelivery.phone.split("-");
+
       setFirstNumber({ target: { value: firstNumber } });
       setSecondNumber({ target: { value: secondNumber } });
       setThirdNumber({ target: { value: thirdNumber } });
@@ -71,11 +73,12 @@ export default function useDelivery({ submitted, profileData }) {
         customInputPropsForDetailAddress: { action: setDetailAddress },
       } = addressProps;
       const { postCode, address, detailAddress } = basicDelivery;
+
       setPostCode(postCode);
       setAddress(address);
       setDetailAddress({ target: { value: detailAddress } });
 
-      dispatch({ type: "memo", value: basicDelivery.memo });
+      dispatch({ type: "memo", value: basicDelivery.memo || "" });
     }
   }, [profileData]);
 

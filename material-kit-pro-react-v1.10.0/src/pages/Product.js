@@ -121,7 +121,6 @@ export default function Product() {
     : setSessionBasketThenRedirectToSignIn;
 
   const accordionCollapses = [];
-  console.log(0, productData);
   if (expirationDate) {
     accordionCollapses.push({
       title: "유통 기한",
