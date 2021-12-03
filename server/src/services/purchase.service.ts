@@ -164,15 +164,8 @@ export class PurchaseService {
             .join('');
 
           const exactAmount = baskets.reduce(
-            (
-              sum,
-              {
-                amount,
-                catalogOptionRelation: {
-                  catalog: { price },
-                },
-              },
-            ) => sum + amount * price,
+            (sum, { amount, catalogOptionRelation: { catalog, option } }) =>
+              sum + amount * (catalog.price + option.price),
             0,
           );
 
