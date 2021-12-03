@@ -55,7 +55,9 @@ export class PurchaseGuard extends AuthGuard implements CanActivate {
       0,
     );
 
-    if (amount !== exactAmount) return false;
+    const deliveryFee = exactAmount > 30000 ? 0 : 3000;
+
+    if (amount !== exactAmount + deliveryFee) return false;
 
     return super.canActivate(context);
   }

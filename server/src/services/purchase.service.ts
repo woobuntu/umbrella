@@ -17,6 +17,7 @@ import {
   of,
 } from 'rxjs';
 import { SendgridService } from './sendgrid.service';
+import { convertPrice } from 'src/utils';
 
 @Injectable()
 export class PurchaseService {
@@ -156,9 +157,27 @@ export class PurchaseService {
           const purchaseList = baskets
             .map(({ amount, catalogOptionRelation: { catalog, option } }) => {
               const price = (catalog.price + option.price) * amount;
-              return `<p>${catalog.name}(${option.name}) ${amount}개 = ${price}원</p>`;
+              return `<p>${catalog.name}(${
+                option.name
+              }) ${amount}개 = ${convertPrice(price)}원</p>`;
             })
             .join('');
+
+          const exactAmount = baskets.reduce(
+            (
+              sum,
+              {
+                amount,
+                catalogOptionRelation: {
+                  catalog: { price },
+                },
+              },
+            ) => sum + amount * price,
+            0,
+          );
+
+          const deliveryFee = exactAmount > 30000 ? 0 : 3000;
+
           const msg = {
             to: 'withus1030@naver.com',
             from: 'withus1030@naver.com',
@@ -177,7 +196,9 @@ export class PurchaseService {
                     <br />
                     <h3>주문목록</h3>
                     ${purchaseList}
-                    <p>총 결제금액 : ${payment.amount}원</p>
+                    <p>총 상품금액 : ${convertPrice(exactAmount)}원</p>
+                    <p>배송비 : ${convertPrice(deliveryFee)}원</p>
+                    <p>총 결제금액 : ${convertPrice(payment.amount)}원</p>
                   </div>`,
           };
           return from(this.sendgridService.sendMail(msg));
