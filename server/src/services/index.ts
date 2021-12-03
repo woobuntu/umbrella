@@ -26,3 +26,4 @@ export { PaymentService } from './payment.service';
 export { PurchaseService } from './purchase.service';
 export { TossService } from './toss.service';
 export { SendgridService } from './sendgrid.service';
+export { UserDeliveryRelationService } from './user-delivery-relation.service';

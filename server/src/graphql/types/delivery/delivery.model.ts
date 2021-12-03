@@ -8,7 +8,11 @@ export class Delivery {
 
   phone: string;
 
+  postCode: string;
+
   address: string;
+
+  detailAddress: string;
 
   memo?: string;
 }

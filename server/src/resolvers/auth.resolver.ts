@@ -1,35 +1,58 @@
-import { UseInterceptors } from '@nestjs/common';
-import { Args, Mutation, Resolver, Query, Context } from '@nestjs/graphql';
+import { UseGuards, UseInterceptors } from '@nestjs/common';
+import {
+  Args,
+  Mutation,
+  Resolver,
+  Query,
+  Context,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { map, Observable, tap } from 'rxjs';
 import { CurrentUser } from 'src/decorators';
-import { AuthState, SignInInput, User } from 'src/graphql/types/user';
+import {
+  AuthState,
+  PublicUser,
+  SignInInput,
+  UpdateUserInput,
+  User,
+} from 'src/graphql/types/user';
+import { UserDeliveryRelation } from 'src/graphql/types/user-delivery-relation';
+import { AuthGuard } from 'src/guards';
 import { SetCookieInterceptor, SignOutInterceptor } from 'src/interceptors';
-import { AuthService, BasketService } from 'src/services';
+import {
+  AuthService,
+  BasketService,
+  UserDeliveryRelationService,
+  UserService,
+} from 'src/services';
 
 interface ContextWithSession {
   request: {
     session: {
-      get: (param: 'user') => User | undefined;
+      get: (param: 'user') => PublicUser | undefined;
     };
   };
 }
 
-@Resolver((of) => User)
+@Resolver((of) => PublicUser)
 export class AuthResolver {
   constructor(
     private authService: AuthService,
+    private userService: UserService,
     private basketService: BasketService,
+    private userDeliveryRelationService: UserDeliveryRelationService,
   ) {}
 
   @UseInterceptors(SetCookieInterceptor)
   @Mutation((returns) => AuthState)
   signIn(@Args('signInInput') signInInput: SignInInput): Observable<{
-    user: User;
+    user: PublicUser;
     redirectUrl: '/' | '/basket';
   }> {
     const { platform, code, state, basketInfo } = signInInput;
 
-    let signInObservable: Observable<User | null>;
+    let signInObservable: Observable<any | null>; // any 바꾸자
 
     switch (platform) {
       case 'naver':
@@ -109,5 +132,34 @@ export class AuthResolver {
     return session.get('user')
       ? { isAuthenticated: true }
       : { isAuthenticated: false };
+  }
+
+  @UseGuards(AuthGuard)
+  @Query((returns) => PublicUser)
+  async profile(@CurrentUser() user: User) {
+    return this.userService.user({ id: user.id });
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation((returns) => User)
+  async updateProfile(
+    @CurrentUser() user: User,
+    @Args('updateUserInput') updateUserInput: UpdateUserInput,
+  ) {
+    return this.userService.updateUser({
+      where: {
+        id: user.id,
+      },
+      data: updateUserInput,
+    });
+  }
+
+  @ResolveField()
+  async userDeliveryRelations(@Parent() user: PublicUser) {
+    return this.userDeliveryRelationService.userDeliveryRelations({
+      where: {
+        userId: user.id,
+      },
+    });
   }
 }

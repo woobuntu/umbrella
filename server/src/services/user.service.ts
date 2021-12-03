@@ -1,5 +1,6 @@
 import { Prisma, User } from '.prisma/client';
 import { Injectable } from '@nestjs/common';
+import { UpdateUserInput } from 'src/graphql/types/user';
 import { Tokens } from 'src/types/user';
 import { PrismaService } from './prisma.service';
 
@@ -16,11 +17,80 @@ export class UserService {
   }
 
   async createUser(data: Prisma.UserCreateInput): Promise<User> {
+    const emptyDelivery = {
+      name: '',
+      phone: '010--',
+      postCode: '',
+      address: '',
+      detailAddress: '',
+    };
+    const createDefaultDelivery = this.prisma.delivery.create({
+      data: {
+        ...emptyDelivery,
+        deliveryHistories: {
+          create: emptyDelivery,
+        },
+      },
+    });
     const { id, ...dataForNewUserHistory } = data;
-    return this.prisma.user.create({
+    const createUser = this.prisma.user.create({
       data: {
         ...data,
         userHistories: {
+          create: dataForNewUserHistory,
+        },
+      },
+    });
+
+    const [defaultDelivery, user] = await this.prisma.$transaction([
+      createDefaultDelivery,
+      createUser,
+    ]);
+
+    await this.prisma.userDeliveryRelation.create({
+      data: {
+        userId: user.id,
+        deliveryId: defaultDelivery.id,
+        default: true,
+      },
+    });
+
+    return user;
+  }
+
+  async updateUser(params: {
+    where: Prisma.UserWhereUniqueInput;
+    data: UpdateUserInput;
+  }): Promise<User> {
+    const { where, data } = params;
+
+    const userLastHistory = await this.prisma.userHistory.findFirst({
+      where: {
+        userId: where.id,
+        to: null,
+      },
+    });
+
+    const { id, userId, ...prevUserHistory } = userLastHistory;
+
+    const dataForNewUserHistory = {
+      ...prevUserHistory,
+      ...data,
+    };
+
+    return this.prisma.user.update({
+      where,
+      data: {
+        ...data,
+        userHistories: {
+          update: {
+            where: {
+              id: userLastHistory.id,
+            },
+            data: {
+              to: new Date(),
+            },
+          },
           create: dataForNewUserHistory,
         },
       },

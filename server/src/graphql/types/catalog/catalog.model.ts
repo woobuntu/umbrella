@@ -10,6 +10,12 @@ export class Catalog {
 
   price: number;
 
+  expirationDate?: string;
+
+  storageMethod?: string;
+
+  ingredients?: string;
+
   catalogFileRelations: CatalogFileRelation[];
 
   catalogOptionRelations: CatalogOptionRelation[];

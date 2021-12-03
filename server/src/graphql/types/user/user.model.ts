@@ -1,4 +1,5 @@
 import { ObjectType } from '@nestjs/graphql';
+import { UserDeliveryRelation } from '../user-delivery-relation';
 
 @ObjectType()
 export class User {
@@ -6,11 +7,13 @@ export class User {
 
   email?: string;
 
-  name?: string;
+  phone?: string;
 
-  address?: string;
+  name?: string;
 
   accessToken?: string;
 
   refreshToken?: string;
+
+  // userDeliveryRelations: UserDeliveryRelation[];
 }

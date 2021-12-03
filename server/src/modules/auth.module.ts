@@ -6,9 +6,17 @@ import { AuthResolver } from 'src/resolvers';
 import { KakaoModule } from './kakao.module';
 import { GoogleModule } from './google.module';
 import { BasketModule } from './basket.module';
+import { UserDeliveryRelationModule } from './user-delivery-relation.module';
 
 @Module({
-  imports: [NaverModule, UserModule, KakaoModule, GoogleModule, BasketModule],
+  imports: [
+    NaverModule,
+    UserModule,
+    KakaoModule,
+    GoogleModule,
+    BasketModule,
+    UserDeliveryRelationModule,
+  ],
   providers: [AuthService, AuthResolver],
 })
 export class AuthModule {}

@@ -38,9 +38,12 @@ type Career {
 type Catalog {
   catalogFileRelations: [CatalogFileRelation!]!
   catalogOptionRelations: [CatalogOptionRelation!]!
+  expirationDate: String
   id: Float!
+  ingredients: String
   name: String!
   price: Float!
+  storageMethod: String
 }
 
 type CatalogFileRelation {
@@ -66,9 +69,11 @@ type Contact {
 
 input CreateDeliveryInput {
   address: String!
+  detailAddress: String!
   memo: String
   name: String!
   phone: String!
+  postCode: String!
 }
 
 input CreateOrdererInput {
@@ -89,6 +94,16 @@ input CreatePurchaseInput {
   delivery: CreateDeliveryInput!
   orderer: CreateOrdererInput!
   payment: CreatePaymentInput!
+}
+
+type Delivery {
+  address: String!
+  detailAddress: String!
+  id: Float!
+  memo: String
+  name: String!
+  phone: String!
+  postCode: String!
 }
 
 type Executive {
@@ -153,6 +168,8 @@ type Mutation {
   deleteBasket(id: Int!): Basket!
   signIn(signInInput: SignInInput!): AuthState!
   signOut: AuthState!
+  updateDelivery(deliveryId: Int!, updateDeliveryInput: UpdateDeliveryInput!): Delivery!
+  updateProfile(updateUserInput: UpdateUserInput!): User!
   upsertBasket(upsertBasketInput: UpsertBasketInput!): Basket!
 }
 
@@ -160,6 +177,14 @@ type Option {
   id: Float!
   name: String!
   price: Float!
+}
+
+type PublicUser {
+  email: String
+  id: String!
+  name: String
+  phone: String
+  userDeliveryRelations: [UserDeliveryRelation!]!
 }
 
 type PurchaseResult {
@@ -179,6 +204,7 @@ type Query {
   isAuthenticated: AuthState!
   meta: Meta!
   metaFileRelations(type: String!): [MetaFileRelation!]!
+  profile: PublicUser!
 }
 
 input SignInInput {
@@ -188,7 +214,39 @@ input SignInInput {
   state: String!
 }
 
+input UpdateDeliveryInput {
+  address: String
+  detailAddress: String
+  memo: String
+  name: String
+  phone: String
+  postCode: String
+}
+
+input UpdateUserInput {
+  email: String
+  name: String
+  phone: String
+}
+
 input UpsertBasketInput {
   amount: Float!
   catalogOptionRelationId: Float!
+}
+
+type User {
+  accessToken: String
+  email: String
+  id: String!
+  name: String
+  phone: String
+  refreshToken: String
+}
+
+type UserDeliveryRelation {
+  default: Boolean!
+  delivery: Delivery!
+  deliveryId: Float!
+  id: Float!
+  userId: String!
 }
