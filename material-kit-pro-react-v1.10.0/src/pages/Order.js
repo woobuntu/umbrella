@@ -16,6 +16,7 @@ import { useTossPayments } from "hooks";
 export default function Order({ cart, totalPrice, basketData }) {
   const history = useHistory();
 
+  // 주문 페이지에서 새로고침하면 반드시 홈으로 리다이렉트 되므로 수정 필요
   useEffect(() => {
     if (!basketData) history.push("/");
   }, [basketData]);

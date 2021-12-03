@@ -8,7 +8,7 @@ import { makeStyles } from "@material-ui/styles";
 import classNames from "classnames";
 import { SectionCatalogs } from "customs/components";
 import InfoArea from "components/InfoArea/InfoArea";
-import { LocalGroceryStore, Eco } from "@material-ui/icons";
+import { Eco } from "@material-ui/icons";
 import { FaHands } from "react-icons/fa";
 import { GiReceiveMoney } from "react-icons/gi";
 const useStyles = makeStyles(mallStyle);
@@ -81,6 +81,7 @@ export default function Mall() {
                   className={classes.infoArea}
                   icon={GiReceiveMoney}
                   title="모든 수익금은 발달장애인의 일자리 지원사업에 사용됩니다"
+                  description=""
                   iconColor="info"
                 />
               </GridItem>

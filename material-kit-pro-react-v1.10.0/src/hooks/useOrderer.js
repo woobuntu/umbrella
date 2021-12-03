@@ -51,7 +51,7 @@ export default function useOrderer({ submitted, profileData }) {
   useEffect(() => {
     if (profileData) {
       const { profile } = profileData;
-      dispatch({ type: "name", value: profile.name });
+      dispatch({ type: "name", value: profile.name || "" });
       const {
         customSelectPropsForFirstNumber: { action: setFirstNumber },
         customInputPropsForSecondNumber: { action: setSecondNumber },

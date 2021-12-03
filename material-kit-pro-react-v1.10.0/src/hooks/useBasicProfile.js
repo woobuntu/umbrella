@@ -1,5 +1,7 @@
 import { useMutation } from "@apollo/client";
 import { UPDATE_PROFILE } from "graphql/mutation";
+import { BASKETS } from "graphql/query";
+import { PROFILE } from "graphql/query";
 import { useEffect, useReducer, useRef, useState } from "react";
 import { profileReducer } from "reducers";
 import usePhoneNumber from "./usePhoneNumber";
@@ -118,17 +120,19 @@ export default function useBasicProfile(profileData) {
           return;
         }
 
-        updateProfile({ variables }).then(({ data: { updateProfile } }) => {
-          dispatch({ type: "name", value: updateProfile.name });
-          dispatch({ type: "email", value: updateProfile.email });
+        updateProfile({ variables, refetchQueries: [PROFILE, BASKETS] }).then(
+          ({ data: { updateProfile } }) => {
+            dispatch({ type: "name", value: updateProfile.name });
+            dispatch({ type: "email", value: updateProfile.email });
 
-          const [first, second, third] = updateProfile.phone.split("-");
-          setFirstNumber({ target: { value: first } });
-          setSecondNumber({ target: { value: second } });
-          setThirdNumber({ target: { value: third } });
+            const [first, second, third] = updateProfile.phone.split("-");
+            setFirstNumber({ target: { value: first } });
+            setSecondNumber({ target: { value: second } });
+            setThirdNumber({ target: { value: third } });
 
-          setIsEditing(false);
-        });
+            setIsEditing(false);
+          }
+        );
       } else {
         setIsEditing(true);
       }
