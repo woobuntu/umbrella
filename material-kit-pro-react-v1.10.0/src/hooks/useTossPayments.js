@@ -55,7 +55,7 @@ export default function useTossPayments({ basketData, totalPrice }) {
     memo,
   };
 
-  const onPay = (method) => {
+  const onPay = ({ method, deliveryFee }) => {
     if (ordererProps.isOrdererNotValid || deliveryProps.isDeliveryNotValid) {
       setSubmitted(true);
       alert("작성하지 않은 항목이 있습니다!");
@@ -107,6 +107,7 @@ export default function useTossPayments({ basketData, totalPrice }) {
               platform: "토스",
               type: method,
             },
+            deliveryFee,
           },
         });
       }

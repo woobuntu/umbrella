@@ -10,7 +10,6 @@ import CardFooter from "components/Card/CardFooter";
 import { convertPrice } from "customs/utils";
 import Button from "components/CustomButtons/Button";
 import { useHistory } from "react-router-dom";
-import { setSessionItem } from "customs/utils/session-storage";
 import { useTossPayments } from "hooks";
 
 export default function Order({ cart, totalPrice, basketData }) {
@@ -21,9 +20,11 @@ export default function Order({ cart, totalPrice, basketData }) {
     if (!basketData) history.push("/");
   }, [basketData]);
 
+  const deliveryFee = totalPrice > 30000 ? 0 : 3000;
+
   const { ordererProps, deliveryProps, onPay } = useTossPayments({
     basketData,
-    totalPrice,
+    totalPrice: deliveryFee + totalPrice,
   });
 
   return (
@@ -59,7 +60,7 @@ export default function Order({ cart, totalPrice, basketData }) {
                     }}
                   >
                     <span>배송료</span>
-                    <span>상품 금액에 포함</span>
+                    <span>{convertPrice(deliveryFee)}원</span>
                   </div>
                 </li>
                 <li>
@@ -74,7 +75,9 @@ export default function Order({ cart, totalPrice, basketData }) {
                       <strong>최종 결제금액</strong>
                     </span>
                     <span>
-                      <strong>{convertPrice(totalPrice)}원</strong>
+                      <strong>
+                        {convertPrice(totalPrice + deliveryFee)}원
+                      </strong>
                     </span>
                   </div>
                 </li>
@@ -97,7 +100,7 @@ export default function Order({ cart, totalPrice, basketData }) {
                     color: "black",
                     fontWeight: "bold",
                   }}
-                  onClick={() => onPay("카드")}
+                  onClick={() => onPay({ method: "카드", deliveryFee })}
                 >
                   신용카드
                 </Button>
@@ -109,7 +112,7 @@ export default function Order({ cart, totalPrice, basketData }) {
                     color: "black",
                     fontWeight: "bold",
                   }}
-                  onClick={() => onPay("가상계좌")}
+                  onClick={() => onPay({ method: "가상계좌", deliveryFee })}
                 >
                   가상계좌
                 </Button>
@@ -121,7 +124,7 @@ export default function Order({ cart, totalPrice, basketData }) {
                     color: "black",
                     fontWeight: "bold",
                   }}
-                  onClick={() => onPay("계좌이체")}
+                  onClick={() => onPay({ method: "계좌이체", deliveryFee })}
                 >
                   계좌이체
                 </Button>
@@ -133,7 +136,7 @@ export default function Order({ cart, totalPrice, basketData }) {
                     color: "white",
                     fontWeight: "bold",
                   }}
-                  onClick={() => onPay("토스결제")}
+                  onClick={() => onPay({ method: "토스결제", deliveryFee })}
                 >
                   토스 간편결제
                 </Button>

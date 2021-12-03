@@ -15,6 +15,7 @@ import GridItem from "components/Grid/GridItem";
 import Card from "components/Card/Card";
 import CardBody from "components/Card/CardBody";
 import { convertPrice } from "customs/utils";
+import { number } from "prop-types";
 
 const useStyles = makeStyles(successStyle);
 
@@ -47,7 +48,9 @@ export default function Success() {
           },
         },
       };
-      createPurchase({ variables });
+      createPurchase({ variables }).catch(() => {
+        history.push("/");
+      });
     } else {
       history.push("/");
     }
@@ -77,7 +80,7 @@ export default function Success() {
                         classes.cardCategory + " " + classes.marginBottom30
                       }
                     >
-                      배송 정보
+                      배송정보
                     </h3>
                     <ul>
                       <li>
@@ -137,7 +140,7 @@ export default function Success() {
                         classes.cardCategory + " " + classes.marginBottom30
                       }
                     >
-                      결제 정보
+                      결제정보
                     </h3>
                     <ul>
                       <li>
@@ -150,7 +153,12 @@ export default function Success() {
                         >
                           <span>총 상품가격</span>
                           <span>
-                            <b>{convertPrice(amount - 3000)}원</b>
+                            <b>
+                              {convertPrice(
+                                Number(amount) - sessionPurchase.deliveryFee
+                              )}
+                              원
+                            </b>
                           </span>
                         </div>
                       </li>
@@ -164,7 +172,7 @@ export default function Success() {
                         >
                           <span>배송비</span>
                           <span>
-                            <b>3,000원</b>
+                            <b>{convertPrice(sessionPurchase.deliveryFee)}원</b>
                           </span>
                         </div>
                       </li>
