@@ -9,3 +9,5 @@ export { default as profileStyle } from "./profile-style";
 export { default as introductionStyle } from "./introduction-style";
 export { default as documentStyle } from "./document-style";
 export { default as successStyle } from "./success-style";
+export { default as mypageStyle } from "./mypage-style";
+export { default as signUpStyle } from "./sign-up-style";

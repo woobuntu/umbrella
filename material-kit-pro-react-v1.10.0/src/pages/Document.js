@@ -3,7 +3,7 @@ import Parallax from "components/Parallax/Parallax";
 import { documentStyle } from "customs/assets/styles";
 import React, { Fragment } from "react";
 import { useLocation } from "react-router";
-import { termsAndConditions } from "../documents";
+import { termsAndConditions, privacyPolicy, guide } from "../documents";
 import GridContainer from "components/Grid/GridContainer";
 import GridItem from "components/Grid/GridItem";
 
@@ -21,11 +21,13 @@ export default function Document() {
 
   switch (subject) {
     case "guide":
+      data = guide;
       break;
     case "terms-and-conditions":
       data = termsAndConditions;
       break;
     case "privacy-policy":
+      data = privacyPolicy;
       break;
   }
 
@@ -40,6 +42,12 @@ export default function Document() {
         break;
       case "depth2":
         listStyleType = "hangul-consonant";
+        break;
+      case "depth3":
+        listStyleType = "circle";
+        break;
+      case "depth4":
+        listStyleType = "square";
         break;
       case "comment":
         listStyleType = "disclosure-closed";
@@ -82,37 +90,33 @@ export default function Document() {
           <div className={classes.section}>
             <GridContainer justify="center">
               <GridItem xs={12} sm={10} md={10} className={classes.section}>
+                {subject == "privacy-policy" && (
+                  <p>{`<함께쓰는우산장애인보호작업장>('https://withus1030.co.kr'이하 '함께쓰는우산')은(는) 「개인정보 보호법」 제30조에 따라 정보주체의 개인정보를 보호하고 이와 관련한 고충을 신속하고 원활하게 처리할 수 있도록 하기 위하여 다음과 같이 개인정보 처리방침을 수립·공개합니다.`}</p>
+                )}
+                {subject == "privacy-policy" && (
+                  <p>{`○ 이 개인정보처리방침은 2021년 12월 1부터 적용됩니다.`}</p>
+                )}
                 {data.map(({ title, contents }, index) => (
                   <ul key={index}>
                     <h3 className={classes.title}>{title}</h3>
-                    {contents.map(({ type, text, contents }, index) => {
-                      return (
-                        <li
-                          key={index}
-                          style={{
-                            listStyleType: switchListStyleType(type),
-                            marginBottom: "2rem",
-                          }}
-                        >
-                          <p style={{ marginBottom: 0 }}>{text}</p>
-                          {contents && (
-                            <ul>
-                              {contents.map(({ type, text }, index) => (
-                                <li
-                                  key={index}
-                                  style={{
-                                    listStyleType: switchListStyleType(type),
-                                    marginBottom: "0.5rem",
-                                  }}
-                                >
-                                  {text}
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-                        </li>
+                    {(function recursion(contents) {
+                      return contents.map(
+                        ({ type, text, contents: innerContents }, index) => (
+                          <li
+                            key={index}
+                            style={{
+                              listStyleType: switchListStyleType(type),
+                              marginBottom: "2rem",
+                            }}
+                          >
+                            <p style={{ marginBottom: 0 }}>{text}</p>
+                            {innerContents && (
+                              <ul>{recursion(innerContents)}</ul>
+                            )}
+                          </li>
+                        )
                       );
-                    })}
+                    })(contents)}
                   </ul>
                 ))}
               </GridItem>

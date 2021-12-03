@@ -5,3 +5,4 @@ export { default as IS_AUTHENTICATED } from "./is-authenticated";
 export { default as BASKETS } from "./baskets";
 export { default as EXECUTIVE } from "./executive";
 export { default as META_FILE_RELATIONS } from "./metaFileRelations";
+export { default as PROFILE } from "./profile";

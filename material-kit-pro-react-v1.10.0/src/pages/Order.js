@@ -128,18 +128,6 @@ export default function Order({ cart, totalPrice, basketData }) {
                   color="white"
                   round
                   style={{
-                    backgroundColor: "white",
-                    color: "black",
-                    fontWeight: "bold",
-                  }}
-                  onClick={() => onPay("휴대폰")}
-                >
-                  휴대폰
-                </Button>
-                <Button
-                  color="white"
-                  round
-                  style={{
                     backgroundColor: "#3182f6",
                     color: "white",
                     fontWeight: "bold",

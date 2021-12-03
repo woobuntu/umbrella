@@ -10,3 +10,5 @@ export { default as useDelivery } from "./useDelivery";
 export { default as useFocusDetailAddress } from "./useFocusDetailAddress";
 export { default as usePurchaseMuation } from "./usePurchaseMutation";
 export { default as useTossPayments } from "./useTossPayments";
+export { default as useBasicProfile } from "./useBasicProfile";
+export { default as useBasicDelivery } from "./useBasicDelivery";

@@ -5,7 +5,7 @@ import { isAuthenticatedVar } from "graphql/state";
 import { useChannelTalk } from "hooks";
 import React, { Fragment, useEffect } from "react";
 import { Switch, Route } from "react-router-dom";
-import { CustomHeader, CustomFooter } from "./customs/components";
+import { CustomHeader, CustomFooter, PrivateRoute } from "./customs/components";
 import {
   Home,
   SignIn,
@@ -21,6 +21,7 @@ import {
   MyPage,
   Success,
   Fail,
+  SignUp,
 } from "./pages";
 
 export default function Layout() {
@@ -47,22 +48,24 @@ export default function Layout() {
         <Route path="/sign-in" component={SignIn} />
         <Route path="/mall/:id" component={Product} />
         <Route path="/mall" component={Mall} />
-        <Route path="/order" component={isMobile() ? MobileOrder : WebOrder} />
+        <PrivateRoute path="/order">
+          {isMobile() ? <MobileOrder /> : <WebOrder />}
+        </PrivateRoute>
         <Route path="/introduction" component={Introduction} />
         <Route path="/document" component={Document} />
         <Route
           path="/basket"
           component={isMobile() ? MobileBasket : WebBasket}
         />
-        <Route path="/my-page">
+        <PrivateRoute path="/my-page">
           <MyPage />
-        </Route>
-        <Route path="/success">
+        </PrivateRoute>
+        <PrivateRoute path="/success">
           <Success />
-        </Route>
-        <Route path="/fail">
+        </PrivateRoute>
+        <PrivateRoute path="/fail">
           <Fail />
-        </Route>
+        </PrivateRoute>
         <Route path="/">
           <Home />
         </Route>

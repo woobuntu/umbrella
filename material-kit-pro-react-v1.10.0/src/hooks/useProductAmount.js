@@ -8,7 +8,7 @@ export default function useProductAmount() {
         setAmount(amount + 1);
         break;
       case "remove":
-        if (amount > 1) setAmount(productAmount - 1);
+        if (amount > 1) setAmount(amount - 1);
         break;
       default:
         alert("수량을 늘리거나 줄일 수만 있습니다!");

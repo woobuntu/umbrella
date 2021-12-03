@@ -2,7 +2,7 @@ import useFocusDetailAddress from "./useFocusDetailAddress";
 import { useReducer, useState } from "react";
 import { addressReducer } from "reducers";
 
-export default function useAddress(submitted) {
+export default function useAddress({ submitted = false, isEditing = true }) {
   const [{ postCode, address, detailAddress }, dispatch] = useReducer(
     addressReducer,
     {
@@ -17,6 +17,9 @@ export default function useAddress(submitted) {
     state: postCode,
     inputProps: {
       disabled: true,
+      id: "post-code",
+      name: "postCode",
+      autoComplete: "post-code",
     },
     error: submitted && isPostCodeNotValid,
     labelText: "우편번호",
@@ -30,6 +33,9 @@ export default function useAddress(submitted) {
     },
     inputProps: {
       disabled: true,
+      id: "address",
+      name: "address",
+      autoComplete: "address",
     },
     error: submitted && isAddressNotValid,
     labelText:
@@ -47,6 +53,10 @@ export default function useAddress(submitted) {
     },
     inputProps: {
       inputRef: detailAddressRef,
+      disabled: isEditing ? false : true,
+      id: "detail-address",
+      name: "detailAddress",
+      autoComplete: "detail-address",
     },
     action: setDetailAddress,
     error: submitted && isDetailAddressNotValid,
@@ -60,6 +70,7 @@ export default function useAddress(submitted) {
   const openDaumApi = () => setIsDaumOpen(true);
   const buttonPropsForAddressSearch = {
     onClick: openDaumApi,
+    disabled: isEditing ? false : true,
   };
 
   const closeDaumApi = () => setIsDaumOpen(false);
