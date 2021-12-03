@@ -48,7 +48,7 @@ export default function Success() {
           },
         },
       };
-      createPurchase({ variables }).catch(() => {
+      createPurchase({ variables }).catch((error) => {
         history.push("/");
       });
     } else {
