@@ -2,7 +2,6 @@ import React, { Fragment } from "react";
 
 import CustomInput from "components/CustomInput/CustomInput";
 import PhoneNumber from "./PhoneNumber";
-import { usePhoneNumber } from "hooks";
 import PropTypes from "prop-types";
 
 import Address from "./Address";

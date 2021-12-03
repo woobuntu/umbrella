@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 
 const useStyles = makeStyles(customSelectStyle);
 
-export default function CustomSelect({ options, state, action }) {
+export default function CustomSelect({ options, state, action, disabled }) {
   const classes = useStyles();
 
   return (
@@ -23,6 +23,7 @@ export default function CustomSelect({ options, state, action }) {
         inputProps={{
           name: "simpleSelect",
           id: "simple-select",
+          disabled,
         }}
       >
         {options.map((option) => (
@@ -46,4 +47,5 @@ CustomSelect.propTypes = {
   options: PropTypes.array,
   state: PropTypes.string,
   action: PropTypes.func,
+  disabled: PropTypes.bool,
 };

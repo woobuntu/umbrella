@@ -5,6 +5,9 @@ const PRODUCT = gql`
     catalog(id: $catalogId) {
       name
       price
+      expirationDate
+      storageMethod
+      ingredients
       catalogFileRelations {
         file {
           id

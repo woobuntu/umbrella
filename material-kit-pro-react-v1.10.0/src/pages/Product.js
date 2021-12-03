@@ -26,6 +26,10 @@ import { useBasketMutation } from "hooks";
 import { isModalOpenVar } from "graphql/state";
 import { BASKETS } from "graphql/query";
 import { setSessionItem } from "customs/utils/session-storage";
+import Accordion from "components/Accordion/Accordion.js";
+import InfoArea from "components/InfoArea/InfoArea";
+import { LocalShipping, VerifiedUser } from "@material-ui/icons";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles(productStyle);
 
@@ -61,7 +65,15 @@ export default function Product() {
   if (error) alert(error.message);
 
   const {
-    catalog: { name, price, catalogFileRelations, catalogOptionRelations },
+    catalog: {
+      name,
+      price,
+      expirationDate,
+      storageMethod,
+      ingredients,
+      catalogFileRelations,
+      catalogOptionRelations,
+    },
   } = productData;
 
   const [catalogOptionRelation] = catalogOptionRelations.filter(
@@ -108,6 +120,26 @@ export default function Product() {
     ? redirectToBasket
     : setSessionBasketThenRedirectToSignIn;
 
+  const accordionCollapses = [];
+  console.log(0, productData);
+  if (expirationDate) {
+    accordionCollapses.push({
+      title: "유통 기한",
+      content: <p>{expirationDate}</p>,
+    });
+  }
+  if (storageMethod) {
+    accordionCollapses.push({
+      title: "보관 방법",
+      content: <p>{storageMethod}</p>,
+    });
+  }
+  if (ingredients) {
+    accordionCollapses.push({
+      title: "재료",
+      content: <p>{ingredients}</p>,
+    });
+  }
   return (
     <div className={classes.productPage}>
       <ProductParallax basketAmount={basketData ? basketData.length : 0} />
@@ -131,6 +163,11 @@ export default function Product() {
                     price + Number(catalogOptionRelation?.option?.price)
                   )}
                 </h3>
+                <Accordion
+                  active={accordionCollapses.map((_, index) => index)}
+                  activeColor="info"
+                  collapses={accordionCollapses}
+                />
                 <GridContainer className={classes.pickSize}>
                   <Option
                     value={productOption}
@@ -150,6 +187,39 @@ export default function Product() {
                   </GridItem>
                 </GridContainer>
                 <BasketButton onAddBasket={onAddBasket} onModalOk={onModalOk} />
+              </GridItem>
+            </GridContainer>
+          </div>
+          <div className={classNames(classes.features, classes.textCenter)}>
+            <GridContainer>
+              <GridItem md={4} sm={4}>
+                <InfoArea
+                  title="배송기한"
+                  description="모든 제품은 주문 접수 후 제작되므로, 배송까지는 4일 가량 소요됩니다."
+                  icon={LocalShipping}
+                  vertical
+                  iconColor="info"
+                />
+              </GridItem>
+              <GridItem md={4} sm={4}>
+                <InfoArea
+                  title="배송비"
+                  description="3,000원(구매금액 30,000원 이상 무료배송)"
+                  icon={LocalShipping}
+                  vertical
+                  iconColor="warning"
+                />
+              </GridItem>
+              <GridItem md={4} sm={4}>
+                <Link to="/document/guide">
+                  <InfoArea
+                    title="교환 및 환불 정책"
+                    description="클릭하시면 교환 및 환불 정책이 명시된, 이용안내 페이지로 안내해드립니다."
+                    icon={VerifiedUser}
+                    vertical
+                    iconColor="success"
+                  />
+                </Link>
               </GridItem>
             </GridContainer>
           </div>

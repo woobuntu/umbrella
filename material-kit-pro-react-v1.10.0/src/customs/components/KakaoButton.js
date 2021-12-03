@@ -1,8 +1,9 @@
 import React from "react";
 import kakaoButtonUrl from "../../customs/assets/img/kakao_login_button.png";
 import { v4 } from "uuid";
+import PropTypes from "prop-types";
 
-export default function KakaoButton() {
+export default function KakaoButton({ disabled }) {
   const kakakoClientId = encodeURIComponent(
     process.env.REACT_APP_KAKAO_CLIENT_ID
   );
@@ -16,6 +17,7 @@ export default function KakaoButton() {
     `&redirect_uri=${redirectUri}` +
     `&state=${state}` +
     "&response_type=code";
+  console.log(disabled);
   return (
     <div
       style={{
@@ -26,11 +28,19 @@ export default function KakaoButton() {
         display: "flex",
         justifyContent: "center",
         borderRadius: "0.5rem",
+        opacity: disabled ? 0.5 : 1,
       }}
     >
-      <a href={kakaoLoginUrl}>
+      <a
+        href={disabled ? "#" : kakaoLoginUrl}
+        style={{ cursor: disabled ? "default" : "pointer" }}
+      >
         <img src={kakaoButtonUrl} style={{ height: "38px" }} />
       </a>
     </div>
   );
 }
+
+KakaoButton.propTypes = {
+  disabled: PropTypes.bool,
+};

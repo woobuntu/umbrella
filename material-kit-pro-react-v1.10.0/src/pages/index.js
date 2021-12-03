@@ -12,3 +12,4 @@ export { default as WebBasket } from "./WebBasket";
 export { default as MobileBasket } from "./MobileBasket";
 export { default as WebOrder } from "./WebOrder";
 export { default as MobileOrder } from "./MobileOrder";
+export { default as SignUp } from "./SignUp";

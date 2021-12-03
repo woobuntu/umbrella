@@ -65,7 +65,9 @@ export default function CustomFooter() {
               className={classes.documentLink}
             >
               <li>
-                <h6>개인정보처리방침</h6>
+                <h6 style={{ fontWeight: "bold", color: "#ff8e77" }}>
+                  개인정보처리방침
+                </h6>
               </li>
             </Link>
             <li>

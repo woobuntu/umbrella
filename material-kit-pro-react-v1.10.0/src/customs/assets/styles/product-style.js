@@ -74,6 +74,12 @@ const productStyle = {
   mainPrice: {
     margin: "10px 0px 25px",
   },
+  textCenter: {
+    textAlign: "center!important",
+  },
+  features: {
+    paddingTop: "30px",
+  },
 };
 
 export default productStyle;

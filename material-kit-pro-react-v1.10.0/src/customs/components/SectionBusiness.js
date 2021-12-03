@@ -3,8 +3,9 @@ import GridContainer from "components/Grid/GridContainer";
 import GridItem from "components/Grid/GridItem";
 import { sectionBusinessStyle } from "customs/assets/styles";
 import { makeStyles } from "@material-ui/styles";
-import { ThumbUp, Business, PhotoLibrary } from "@material-ui/icons";
+import { LocalMall, Business, PhotoLibrary } from "@material-ui/icons";
 import InfoArea from "components/InfoArea/InfoArea";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles(sectionBusinessStyle);
 
@@ -33,31 +34,32 @@ export default function SectionBusiness() {
       </GridContainer>
       <GridContainer>
         <GridItem xs={12} sm={4} md={4}>
-          <InfoArea
-            title="법인소개"
-            description="Divide details about your product or agency work into parts. Write a few lines about each one. A paragraph describing a feature will be enough."
-            icon={Business}
-            iconColor="primary"
-            vertical
-          />
+          <Link to="/introduction/company">
+            <InfoArea
+              title="법인소개"
+              icon={Business}
+              iconColor="primary"
+              vertical
+            />
+          </Link>
         </GridItem>
         <GridItem xs={12} sm={4} md={4}>
           <InfoArea
             title="활동실적"
-            description="Divide details about your product or agency work into parts. Write a few lines about each one. A paragraph describing a feature will be enough."
             icon={PhotoLibrary}
             iconColor="success"
             vertical
           />
         </GridItem>
         <GridItem xs={12} sm={4} md={4}>
-          <InfoArea
-            title="후원안내"
-            description="Divide details about your product or agency work into parts. Write a few lines about each one. A paragraph describing a feature will be enough."
-            icon={ThumbUp}
-            iconColor="info"
-            vertical
-          />
+          <Link to="/mall">
+            <InfoArea
+              title="쇼핑몰"
+              icon={LocalMall}
+              iconColor="info"
+              vertical
+            />
+          </Link>
         </GridItem>
       </GridContainer>
     </div>

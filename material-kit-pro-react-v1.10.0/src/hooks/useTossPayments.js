@@ -5,12 +5,15 @@ import useDelivery from "./useDelivery";
 import { v4 } from "uuid";
 import { makeOrderName } from "customs/utils";
 import { setSessionItem } from "customs/utils/session-storage";
+import { useQuery } from "@apollo/client";
+import { PROFILE } from "graphql/query";
 
 export default function useTossPayments({ basketData, totalPrice }) {
+  const { data: profileData } = useQuery(PROFILE);
   const [submitted, setSubmitted] = useState(false);
 
-  const ordererProps = useOrderer(submitted);
-  const deliveryProps = useDelivery(submitted);
+  const ordererProps = useOrderer({ submitted, profileData });
+  const deliveryProps = useDelivery({ submitted, profileData });
 
   const {
     customInputPropsForName: { state: ordererName },
@@ -46,13 +49,16 @@ export default function useTossPayments({ basketData, totalPrice }) {
   const delivery = {
     name: deliveryName,
     phone: deliveryFirstNumber + deliverySecondNumber + deliveryThirdNumber,
-    address: `${address} ${detailAddress} (우편번호 : ${postCode})`,
+    postCode,
+    address,
+    detailAddress,
     memo,
   };
 
   const onPay = (method) => {
     if (ordererProps.isOrdererNotValid || deliveryProps.isDeliveryNotValid) {
       setSubmitted(true);
+      alert("작성하지 않은 항목이 있습니다!");
       return;
     }
     loadTossPayments(process.env.REACT_APP_TOSS_CLIENT_ID).then(
@@ -89,8 +95,6 @@ export default function useTossPayments({ basketData, totalPrice }) {
               customerEmail: orderer.email,
               bank: "농협",
             };
-            break;
-          case "휴대폰":
             break;
         }
         tossPayments.requestPayment(method, payload);

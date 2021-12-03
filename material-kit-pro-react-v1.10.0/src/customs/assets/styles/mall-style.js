@@ -26,6 +26,23 @@ const mallStyle = {
   title,
   main,
   mainRaised,
+  features: {
+    padding: "80px 0",
+    "& $phoneContainer": {
+      maxWidth: "220px",
+      margin: "0 auto",
+    },
+  },
+  phoneContainer: {
+    "& img": {
+      width: "100%",
+    },
+  },
+  infoArea: {
+    maxWidth: "none",
+    margin: "0 auto",
+    padding: "10px 0 0px",
+  },
 };
 
 export default mallStyle;
