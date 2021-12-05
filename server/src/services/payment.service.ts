@@ -10,17 +10,11 @@ export class PaymentService {
     private dayjsService: DayjsService,
   ) {}
 
-  async createPayment(data: Prisma.PaymentCreateInput): Promise<Payment> {
-    return this.prisma.payment.create({
-      data: {
-        ...data,
-        paymentHistories: {
-          create: {
-            ...data,
-            from: this.dayjsService.getCurrentTime(),
-          },
-        },
-      },
+  async payment(
+    paymentWhereUniqueInput: Prisma.PaymentWhereUniqueInput,
+  ): Promise<Payment | null> {
+    return this.prisma.payment.findUnique({
+      where: paymentWhereUniqueInput,
     });
   }
 }

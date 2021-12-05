@@ -106,12 +106,22 @@ export class PurchaseService {
             },
           });
 
+          const exactAmount = baskets.reduce(
+            (sum, { amount, catalogOptionRelation: { catalog, option } }) =>
+              sum + amount * (catalog.price + option.price),
+            0,
+          );
+
+          const deliveryFee = exactAmount > 30000 ? 0 : 3000;
+
           const createPayment = this.prisma.payment.create({
             data: {
               ...payment,
+              deliveryFee,
               paymentHistories: {
                 create: {
                   ...payment,
+                  deliveryFee,
                   from: currentTime,
                 },
               },
@@ -190,14 +200,6 @@ export class PurchaseService {
             })
             .join('');
 
-          const exactAmount = baskets.reduce(
-            (sum, { amount, catalogOptionRelation: { catalog, option } }) =>
-              sum + amount * (catalog.price + option.price),
-            0,
-          );
-
-          const deliveryFee = exactAmount > 30000 ? 0 : 3000;
-
           const msg = {
             to: 'withus1030@naver.com',
             from: 'withus1030@naver.com',
@@ -216,8 +218,10 @@ export class PurchaseService {
                     <br />
                     <h3>주문목록</h3>
                     ${purchaseList}
-                    <p>총 상품금액 : ${convertPrice(exactAmount)}원</p>
-                    <p>배송비 : ${convertPrice(deliveryFee)}원</p>
+                    <p>총 상품금액 : ${convertPrice(
+                      payment.amount - payment.deliveryFee,
+                    )}원</p>
+                    <p>배송비 : ${convertPrice(payment.deliveryFee)}원</p>
                     <p>총 결제금액 : ${convertPrice(payment.amount)}원</p>
                   </div>`,
           };

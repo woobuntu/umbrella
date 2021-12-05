@@ -1,6 +1,8 @@
 import { ObjectType } from '@nestjs/graphql';
 import { PurchaseHistory } from './purchase-history.model';
 import { CatalogOptionRelation } from '../catalog-option-relation';
+import { Delivery } from '../delivery';
+import { PublicPayment } from '../payment';
 
 @ObjectType()
 export class Purchase {
@@ -16,7 +18,11 @@ export class Purchase {
 
   deliveryId: number;
 
+  delivery: Delivery;
+
   paymentId: number;
+
+  payment: PublicPayment;
 
   amount: number;
 

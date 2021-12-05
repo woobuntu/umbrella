@@ -85,6 +85,7 @@ input CreateOrdererInput {
 
 input CreatePaymentInput {
   amount: Float!
+  deliveryFee: Float!
   orderId: String
   paymentKey: String
   platform: String!
@@ -186,6 +187,14 @@ type Option {
   price: Float!
 }
 
+type PublicPayment {
+  amount: Float!
+  deliveryFee: Float!
+  id: Float!
+  platform: String!
+  type: String!
+}
+
 type PublicUser {
   email: String
   id: String!
@@ -198,9 +207,11 @@ type Purchase {
   amount: Float!
   catalogOptionRelation: CatalogOptionRelation!
   catalogOptionRelationId: Float!
+  delivery: Delivery!
   deliveryId: Float!
   id: Float!
   ordererId: Float!
+  payment: PublicPayment!
   paymentId: Float!
   purchaseHistories: [PurchaseHistory!]!
   userId: String!

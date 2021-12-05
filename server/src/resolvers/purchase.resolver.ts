@@ -15,12 +15,21 @@ import {
 } from 'src/graphql/types/purchase';
 import { User } from 'src/graphql/types/user';
 import { AuthGuard, PurchaseGuard } from 'src/guards';
-import { CatalogOptionRelationService, PurchaseService } from 'src/services';
+import {
+  CatalogOptionRelationService,
+  DeliveryService,
+  OrdererService,
+  PaymentService,
+  PurchaseService,
+} from 'src/services';
 
 @Resolver((of) => Purchase)
 export class PurchaseResolver {
   constructor(
     private purchaseService: PurchaseService,
+    private ordererService: OrdererService,
+    private deliveryService: DeliveryService,
+    private paymentService: PaymentService,
     private catalogOptionRelationService: CatalogOptionRelationService,
   ) {}
 
@@ -53,6 +62,20 @@ export class PurchaseResolver {
   async catalogOptionRelation(@Parent() purchase: Purchase) {
     return this.catalogOptionRelationService.catalogOptionRelation({
       id: purchase.catalogOptionRelationId,
+    });
+  }
+
+  @ResolveField()
+  async delivery(@Parent() purchase: Purchase) {
+    return this.deliveryService.delivery({
+      id: purchase.deliveryId,
+    });
+  }
+
+  @ResolveField()
+  async payment(@Parent() purchase: Purchase) {
+    return this.paymentService.payment({
+      id: purchase.paymentId,
     });
   }
 }

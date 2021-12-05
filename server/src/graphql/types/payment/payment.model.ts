@@ -10,6 +10,8 @@ export class Payment {
 
   amount: number;
 
+  deliveryFee: number;
+
   orderId?: string;
 
   paymentKey?: string;
