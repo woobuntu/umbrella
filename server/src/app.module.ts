@@ -16,6 +16,8 @@ import {
   BasketModule,
   StaticModule,
   PurchaseModule,
+  DayjsModule,
+  PrismaModule,
 } from './modules';
 import { ExecutiveModule } from './modules/executive.module';
 import {
@@ -53,6 +55,8 @@ import {
     BasketModule,
     StaticModule,
     PurchaseModule,
+    DayjsModule,
+    PrismaModule,
     GraphQLModule.forRootAsync({
       useFactory: async (configService: ConfigService) => ({
         // code first approach를 통해 schema 파일 생성

@@ -20,6 +20,7 @@ import { SendgridService } from './sendgrid.service';
 import { convertPrice } from 'src/utils';
 import { FindManyPurchaseParams } from 'src/types/purchase';
 import { Purchase } from '.prisma/client';
+import { DayjsService } from './dayjs.service';
 
 @Injectable()
 export class PurchaseService {
@@ -28,6 +29,7 @@ export class PurchaseService {
     private basketService: BasketService,
     private tossService: TossService,
     private sendgridService: SendgridService,
+    private dayjsService: DayjsService,
   ) {}
 
   purchases(params: FindManyPurchaseParams): Promise<Purchase[]> {
@@ -76,11 +78,16 @@ export class PurchaseService {
         ),
         // 3. orderer, delivery, payment 저장
         concatMap((baskets: any[]) => {
+          const currentTime = this.dayjsService.getCurrentTime();
+
           const createOrderer = this.prisma.orderer.create({
             data: {
               ...orderer,
               ordererHistories: {
-                create: orderer,
+                create: {
+                  ...orderer,
+                  from: currentTime,
+                },
               },
             },
           });
@@ -89,7 +96,10 @@ export class PurchaseService {
             data: {
               ...delivery,
               deliveryHistories: {
-                create: delivery,
+                create: {
+                  ...delivery,
+                  from: currentTime,
+                },
               },
             },
           });
@@ -98,7 +108,10 @@ export class PurchaseService {
             data: {
               ...payment,
               paymentHistories: {
-                create: payment,
+                create: {
+                  ...payment,
+                  from: currentTime,
+                },
               },
             },
           });
@@ -131,12 +144,17 @@ export class PurchaseService {
             }),
           );
 
+          const currentTime = this.dayjsService.getCurrentTime();
+
           const createPurchasesAndHistories = purchasesData.map((data) =>
             this.prisma.purchase.create({
               data: {
                 ...data,
                 purchaseHistories: {
-                  create: data,
+                  create: {
+                    ...data,
+                    from: currentTime,
+                  },
                 },
               },
             }),

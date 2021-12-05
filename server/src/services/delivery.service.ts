@@ -1,11 +1,15 @@
 import { Delivery, Prisma } from '.prisma/client';
 import { Injectable } from '@nestjs/common';
 import { UpdateDeliveryInput } from 'src/graphql/types/delivery';
+import { DayjsService } from './dayjs.service';
 import { PrismaService } from './prisma.service';
 
 @Injectable()
 export class DeliveryService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private dayjsService: DayjsService,
+  ) {}
 
   async delivery(
     deliveryWhereUniqueInput: Prisma.DeliveryWhereUniqueInput,
@@ -23,6 +27,7 @@ export class DeliveryService {
           create: {
             ...data,
             phone: data.phone ? data.phone : '010--',
+            from: this.dayjsService.getCurrentTime(),
           },
         },
       },
@@ -43,6 +48,8 @@ export class DeliveryService {
         },
       });
 
+    const currentTime = this.dayjsService.getCurrentTime();
+
     return this.prisma.delivery.update({
       where,
       data: {
@@ -53,12 +60,13 @@ export class DeliveryService {
               id,
             },
             data: {
-              to: new Date(),
+              to: currentTime,
             },
           },
           create: {
             ...prevDeliveryHistory,
             ...data,
+            from: currentTime,
           },
         },
       },

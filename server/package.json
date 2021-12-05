@@ -31,6 +31,7 @@
     "@sendgrid/mail": "^7.6.0",
     "apollo-server-fastify": "^3.4.0",
     "axios": "^0.24.0",
+    "dayjs": "^1.10.7",
     "fastify": "^3.22.1",
     "fastify-secure-session": "^3.0.0",
     "fastify-static": "^4.5.0",

@@ -10,3 +10,5 @@ export { CatalogModule } from './catalog.module';
 export { BasketModule } from './basket.module';
 export { StaticModule } from './static.module';
 export { PurchaseModule } from './purchase.module';
+export { DayjsModule } from './dayjs.module';
+export { PrismaModule } from './prisma.module';

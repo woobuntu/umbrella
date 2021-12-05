@@ -1,11 +1,15 @@
 import { Basket, Prisma } from '.prisma/client';
 import { Injectable } from '@nestjs/common';
 import { CreateBasket, FindManyBasketParams } from 'src/types/basket';
+import { DayjsService } from './dayjs.service';
 import { PrismaService } from './prisma.service';
 
 @Injectable()
 export class BasketService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private dayjsService: DayjsService,
+  ) {}
 
   async basket(basketWhereInput: {
     userId: string;
@@ -25,7 +29,10 @@ export class BasketService {
       data: {
         ...data,
         basketHistories: {
-          create: data,
+          create: {
+            ...data,
+            from: this.dayjsService.getCurrentTime(),
+          },
         },
       },
     });
@@ -56,6 +63,8 @@ export class BasketService {
       amount,
     };
 
+    const currentTime = this.dayjsService.getCurrentTime();
+
     return this.prisma.basket.update({
       where,
       data: {
@@ -66,10 +75,13 @@ export class BasketService {
               id: basketLastHistory.id,
             },
             data: {
-              to: new Date(),
+              to: currentTime,
             },
           },
-          create: dataForNewBasketHistory,
+          create: {
+            ...dataForNewBasketHistory,
+            from: currentTime,
+          },
         },
       },
     });

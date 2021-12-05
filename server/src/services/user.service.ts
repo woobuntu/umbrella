@@ -2,11 +2,15 @@ import { Prisma, User } from '.prisma/client';
 import { Injectable } from '@nestjs/common';
 import { UpdateUserInput } from 'src/graphql/types/user';
 import { Tokens } from 'src/types/user';
+import { DayjsService } from './dayjs.service';
 import { PrismaService } from './prisma.service';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private dayjsService: DayjsService,
+  ) {}
 
   async user(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
@@ -24,11 +28,17 @@ export class UserService {
       address: '',
       detailAddress: '',
     };
+
+    const currentTime = this.dayjsService.getCurrentTime();
+
     const createDefaultDelivery = this.prisma.delivery.create({
       data: {
         ...emptyDelivery,
         deliveryHistories: {
-          create: emptyDelivery,
+          create: {
+            ...emptyDelivery,
+            from: currentTime,
+          },
         },
       },
     });
@@ -37,7 +47,10 @@ export class UserService {
       data: {
         ...data,
         userHistories: {
-          create: dataForNewUserHistory,
+          create: {
+            ...dataForNewUserHistory,
+            from: currentTime,
+          },
         },
       },
     });
@@ -47,11 +60,21 @@ export class UserService {
       createUser,
     ]);
 
+    const userDeliveryRelationData = {
+      userId: user.id,
+      deliveryId: defaultDelivery.id,
+      default: true,
+    };
+
     await this.prisma.userDeliveryRelation.create({
       data: {
-        userId: user.id,
-        deliveryId: defaultDelivery.id,
-        default: true,
+        ...userDeliveryRelationData,
+        userDeliveryRelationHistories: {
+          create: {
+            ...userDeliveryRelationData,
+            from: currentTime,
+          },
+        },
       },
     });
 
@@ -78,6 +101,8 @@ export class UserService {
       ...data,
     };
 
+    const currentTime = this.dayjsService.getCurrentTime();
+
     return this.prisma.user.update({
       where,
       data: {
@@ -88,10 +113,13 @@ export class UserService {
               id: userLastHistory.id,
             },
             data: {
-              to: new Date(),
+              to: currentTime,
             },
           },
-          create: dataForNewUserHistory,
+          create: {
+            ...dataForNewUserHistory,
+            from: currentTime,
+          },
         },
       },
     });
@@ -117,6 +145,8 @@ export class UserService {
       ...data,
     };
 
+    const currentTime = this.dayjsService.getCurrentTime();
+
     return this.prisma.user.update({
       where,
       data: {
@@ -129,11 +159,14 @@ export class UserService {
               id: userLastHistory.id,
             },
             data: {
-              to: new Date(),
+              to: currentTime,
             },
           },
           // 3. 새 이력 시작
-          create: dataForNewUserHistory,
+          create: {
+            ...dataForNewUserHistory,
+            from: currentTime,
+          },
         },
       },
     });
