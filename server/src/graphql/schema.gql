@@ -72,6 +72,7 @@ input CreateDeliveryInput {
   detailAddress: String!
   memo: String
   name: String!
+  orderStatus: String
   phone: String!
   postCode: String!
 }
@@ -107,6 +108,7 @@ type Delivery {
   id: Float!
   memo: String
   name: String!
+  orderStatus: String
   phone: String!
   postCode: String!
 }
@@ -249,6 +251,7 @@ input UpdateDeliveryInput {
   detailAddress: String
   memo: String
   name: String
+  orderStatus: String
   phone: String
   postCode: String
 }

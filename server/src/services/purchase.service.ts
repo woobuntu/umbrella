@@ -95,10 +95,12 @@ export class PurchaseService {
           const createDelivery = this.prisma.delivery.create({
             data: {
               ...delivery,
+              orderStatus: '결제완료', // 가상계좌는 웹훅에서 처리
               deliveryHistories: {
                 create: {
                   ...delivery,
                   from: currentTime,
+                  orderStatus: '결제완료',
                 },
               },
             },

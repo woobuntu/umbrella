@@ -540,6 +540,7 @@ model Delivery {
   address               String                 @db.VarChar(255)
   detailAddress         String                 @db.VarChar(255)
   memo                  String?                @db.VarChar(255)
+  orderStatus           String?                @db.VarChar(30)
   deliveryHistories     DeliveryHistory[]
   purchases             Purchase[]
   userDeliveryRelations UserDeliveryRelation[]
@@ -553,6 +554,7 @@ model DeliveryHistory {
   address       String    @db.VarChar(255)
   detailAddress String    @db.VarChar(255)
   memo          String?   @db.VarChar(255)
+  orderStatus   String?   @db.VarChar(30)
   deliveryId    Int?
   from          DateTime  @default(now()) @db.Timestamp(0)
   to            DateTime? @db.Timestamp(0)
