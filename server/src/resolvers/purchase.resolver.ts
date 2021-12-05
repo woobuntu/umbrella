@@ -1,5 +1,12 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Mutation,
+  Resolver,
+  Query,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { CurrentUser } from 'src/decorators';
 import {
   CreatePurchaseInput,
@@ -7,12 +14,28 @@ import {
   PurchaseResult,
 } from 'src/graphql/types/purchase';
 import { User } from 'src/graphql/types/user';
-import { PurchaseGuard } from 'src/guards';
-import { PurchaseService } from 'src/services';
+import { AuthGuard, PurchaseGuard } from 'src/guards';
+import { CatalogOptionRelationService, PurchaseService } from 'src/services';
 
 @Resolver((of) => Purchase)
 export class PurchaseResolver {
-  constructor(private purchaseService: PurchaseService) {}
+  constructor(
+    private purchaseService: PurchaseService,
+    private catalogOptionRelationService: CatalogOptionRelationService,
+  ) {}
+
+  @UseGuards(AuthGuard)
+  @Query((returns) => [Purchase])
+  async purchases(@CurrentUser() user: User) {
+    return this.purchaseService.purchases({
+      where: {
+        userId: user.id,
+      },
+      include: {
+        purchaseHistories: true,
+      },
+    });
+  }
 
   @UseGuards(PurchaseGuard)
   @Mutation((returns) => PurchaseResult)
@@ -23,6 +46,13 @@ export class PurchaseResolver {
     return this.purchaseService.createPurchase({
       user,
       data: createPurchaseInput,
+    });
+  }
+
+  @ResolveField()
+  async catalogOptionRelation(@Parent() purchase: Purchase) {
+    return this.catalogOptionRelationService.catalogOptionRelation({
+      id: purchase.catalogOptionRelationId,
     });
   }
 }

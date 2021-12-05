@@ -96,6 +96,11 @@ input CreatePurchaseInput {
   payment: CreatePaymentInput!
 }
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type Delivery {
   address: String!
   detailAddress: String!
@@ -187,6 +192,30 @@ type PublicUser {
   userDeliveryRelations: [UserDeliveryRelation!]!
 }
 
+type Purchase {
+  amount: Float!
+  catalogOptionRelation: CatalogOptionRelation!
+  catalogOptionRelationId: Float!
+  deliveryId: Float!
+  id: Float!
+  ordererId: Float!
+  paymentId: Float!
+  purchaseHistories: [PurchaseHistory!]!
+  userId: String!
+}
+
+type PurchaseHistory {
+  amount: Float!
+  catalogOptionRelationId: Float!
+  deliveryId: Float!
+  from: DateTime!
+  id: Float!
+  ordererId: Float!
+  paymentId: Float!
+  purchaseId: Float
+  userId: String!
+}
+
 type PurchaseResult {
   redirectUrl: String
   state: String!
@@ -205,6 +234,7 @@ type Query {
   meta: Meta!
   metaFileRelations(type: String!): [MetaFileRelation!]!
   profile: PublicUser!
+  purchases: [Purchase!]!
 }
 
 input SignInInput {

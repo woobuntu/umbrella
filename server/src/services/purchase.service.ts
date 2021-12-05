@@ -18,6 +18,8 @@ import {
 } from 'rxjs';
 import { SendgridService } from './sendgrid.service';
 import { convertPrice } from 'src/utils';
+import { FindManyPurchaseParams } from 'src/types/purchase';
+import { Purchase } from '.prisma/client';
 
 @Injectable()
 export class PurchaseService {
@@ -27,6 +29,10 @@ export class PurchaseService {
     private tossService: TossService,
     private sendgridService: SendgridService,
   ) {}
+
+  purchases(params: FindManyPurchaseParams): Promise<Purchase[]> {
+    return this.prisma.purchase.findMany(params);
+  }
 
   createPurchase(params: {
     user: User;
@@ -125,14 +131,16 @@ export class PurchaseService {
             }),
           );
 
-          const createPurchases = this.prisma.purchase.createMany({
-            data: purchasesData,
-          });
-
-          const createPurchasesHistories =
-            this.prisma.purchaseHistory.createMany({
-              data: purchasesData,
-            });
+          const createPurchasesAndHistories = purchasesData.map((data) =>
+            this.prisma.purchase.create({
+              data: {
+                ...data,
+                purchaseHistories: {
+                  create: data,
+                },
+              },
+            }),
+          );
 
           const deleteBaskets = this.prisma.basket.deleteMany({
             where: {
@@ -146,8 +154,7 @@ export class PurchaseService {
             of({ orderer, delivery, payment, baskets }),
             from(
               this.prisma.$transaction([
-                createPurchases,
-                createPurchasesHistories,
+                ...createPurchasesAndHistories,
                 deleteBaskets,
               ]),
             ),
