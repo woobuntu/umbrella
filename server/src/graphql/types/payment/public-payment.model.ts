@@ -5,4 +5,5 @@ import { Payment } from './payment.model';
 export class PublicPayment extends OmitType(Payment, [
   'orderId',
   'paymentKey',
+  'tid',
 ]) {}

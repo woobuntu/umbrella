@@ -92,4 +92,63 @@ export class BasketService {
       where,
     });
   }
+
+  async getBasketInfoForKakaoPay(userId: string) {
+    const baskets = await this.prisma.basket.findMany({
+      where: {
+        userId,
+      },
+      include: {
+        catalogOptionRelation: {
+          include: {
+            catalog: true,
+            option: true,
+          },
+        },
+      },
+    });
+
+    const orderName = this.makeOrderName(baskets);
+    const totalQuantity = baskets.length;
+    const productsAmount = this.sumBasketsAmount(baskets);
+    const deliveryFee = this.calculateDeliveryFee(productsAmount);
+
+    return {
+      orderName,
+      totalQuantity,
+      totalAmount: productsAmount + deliveryFee,
+    };
+  }
+
+  makeOrderName(baskets: any[]) {
+    const basketNames = baskets.map(
+      ({ catalogOptionRelation: { catalog, option } }) => ({
+        catalogName: catalog.name,
+        optionName: option.name,
+      }),
+    );
+
+    let orderName = '';
+    if (basketNames.length === 1) {
+      const [{ catalogName, optionName }] = basketNames;
+      orderName = `${catalogName} - ${optionName}`;
+    } else if (basketNames.length > 1) {
+      const [{ catalogName, optionName }] = basketNames;
+      orderName = `${catalogName}(${optionName}) 포함 ${basketNames.length}건`;
+    }
+
+    return orderName;
+  }
+
+  sumBasketsAmount(baskets: any[]) {
+    return baskets.reduce(
+      (sum, { amount, catalogOptionRelation: { catalog, option } }) =>
+        sum + amount * (catalog.price + option.price),
+      0,
+    );
+  }
+
+  calculateDeliveryFee(productsAmount: number) {
+    return productsAmount > 30000 ? 0 : 3000;
+  }
 }

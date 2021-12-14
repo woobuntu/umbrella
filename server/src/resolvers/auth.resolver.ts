@@ -17,7 +17,6 @@ import {
   UpdateUserInput,
   User,
 } from 'src/graphql/types/user';
-import { UserDeliveryRelation } from 'src/graphql/types/user-delivery-relation';
 import { AuthGuard } from 'src/guards';
 import { SetCookieInterceptor, SignOutInterceptor } from 'src/interceptors';
 import {

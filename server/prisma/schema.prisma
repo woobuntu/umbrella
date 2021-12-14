@@ -588,11 +588,11 @@ model OrdererHistory {
 model Payment {
   id               Int              @id @default(autoincrement())
   platform         String           @db.VarChar(20)
-  type             String           @db.VarChar(20)
   amount           Int
   orderId          String?          @db.VarChar(255)
   paymentKey       String?          @db.VarChar(255)
   deliveryFee      Int              @default(0)
+  tid              String?          @db.VarChar(255)
   paymentHistories PaymentHistory[]
   purchases        Purchase[]
 }
@@ -600,11 +600,11 @@ model Payment {
 model PaymentHistory {
   id          Int       @id @default(autoincrement())
   platform    String    @db.VarChar(20)
-  type        String    @db.VarChar(20)
   amount      Int
   orderId     String?   @db.VarChar(255)
   paymentKey  String?   @db.VarChar(255)
   deliveryFee Int
+  tid         String?   @db.VarChar(255)
   paymentId   Int?
   from        DateTime  @default(now()) @db.Timestamp(0)
   to          DateTime? @db.Timestamp(0)

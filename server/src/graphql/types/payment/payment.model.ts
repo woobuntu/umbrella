@@ -6,8 +6,6 @@ export class Payment {
 
   platform: string;
 
-  type: string;
-
   amount: number;
 
   deliveryFee: number;
@@ -15,4 +13,6 @@ export class Payment {
   orderId?: string;
 
   paymentKey?: string;
+
+  tid?: string;
 }

@@ -1,13 +1,16 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { BasketService } from 'src/services';
+import { BasketService, UserService } from 'src/services';
 import { AuthGuard } from './auth.guard';
 
 // https://github.com/nestjs/nest/issues/873
 @Injectable()
-export class PurchaseGuard extends AuthGuard implements CanActivate {
-  constructor(private basketService: BasketService) {
-    super();
+export class PurchaseByTossGuard extends AuthGuard implements CanActivate {
+  constructor(
+    private basketService: BasketService,
+    protected readonly userService: UserService,
+  ) {
+    super(userService);
   }
 
   async canActivate(context: ExecutionContext) {
@@ -15,15 +18,13 @@ export class PurchaseGuard extends AuthGuard implements CanActivate {
     const {
       request: {
         session,
-        body: {
-          variables: {
-            createPurchaseInput: {
-              payment: { amount },
-            },
-          },
-        },
+        body: { variables },
       },
     } = ctx.getContext();
+
+    const {
+      tossPaymentInput: { amount },
+    } = variables;
 
     const user = session.get('user');
 
@@ -43,15 +44,20 @@ export class PurchaseGuard extends AuthGuard implements CanActivate {
       },
     });
 
-    const exactAmount = baskets.reduce(
+    const basketTotalPrice = baskets.reduce(
       (sum, { amount, catalogOptionRelation: { catalog, option } }) =>
         sum + amount * (catalog.price + option.price),
       0,
     );
 
-    const deliveryFee = exactAmount > 30000 ? 0 : 3000;
+    const deliveryFee = basketTotalPrice > 30000 ? 0 : 3000;
 
-    if (amount !== exactAmount + deliveryFee) return false;
+    if (amount !== basketTotalPrice + deliveryFee) return false;
+
+    session.set('basketsAndDeliveryFee', {
+      baskets,
+      deliveryFee,
+    });
 
     return super.canActivate(context);
   }

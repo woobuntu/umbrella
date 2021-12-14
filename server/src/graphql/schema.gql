@@ -67,37 +67,6 @@ type Contact {
   phone: String!
 }
 
-input CreateDeliveryInput {
-  address: String!
-  detailAddress: String!
-  memo: String
-  name: String!
-  orderStatus: String
-  phone: String!
-  postCode: String!
-}
-
-input CreateOrdererInput {
-  email: String!
-  name: String!
-  phone: String!
-}
-
-input CreatePaymentInput {
-  amount: Float!
-  deliveryFee: Float!
-  orderId: String
-  paymentKey: String
-  platform: String!
-  type: String!
-}
-
-input CreatePurchaseInput {
-  delivery: CreateDeliveryInput!
-  orderer: CreateOrdererInput!
-  payment: CreatePaymentInput!
-}
-
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -107,6 +76,26 @@ type Delivery {
   address: String!
   detailAddress: String!
   id: Float!
+  memo: String
+  name: String!
+  orderStatus: String
+  phone: String!
+  postCode: String!
+}
+
+type DeliveryWithOutId {
+  address: String!
+  detailAddress: String!
+  memo: String
+  name: String!
+  orderStatus: String
+  phone: String!
+  postCode: String!
+}
+
+input DeliveryWithOutIdInput {
+  address: String!
+  detailAddress: String!
   memo: String
   name: String!
   orderStatus: String
@@ -152,6 +141,11 @@ type History {
   event: String!
 }
 
+type KakaoPayPrepareResult {
+  mobileRedirectUrl: String!
+  webRedirectUrl: String!
+}
+
 type Lnb {
   gnbId: Float!
   id: Float!
@@ -172,10 +166,13 @@ type MetaFileRelation {
 }
 
 type Mutation {
-  createPurchase(createPurchaseInput: CreatePurchaseInput!): PurchaseResult!
+  createPurchaseByKakaoPay(pgToken: String!): PurchaseResult!
+  createPurchaseByTossPayments(tossPaymentInput: TossPaymentInput!): PurchaseResult!
   deleteBasket(id: Int!): Basket!
+  prepareKakaoPayment: KakaoPayPrepareResult!
   signIn(signInInput: SignInInput!): AuthState!
   signOut: AuthState!
+  storeOrderRelatedInfoInSession(orderRelatedInfoInput: OrderRelatedInfoInput!): OrderRelatedInfo!
   updateDelivery(deliveryId: Int!, updateDeliveryInput: UpdateDeliveryInput!): Delivery!
   updateProfile(updateUserInput: UpdateUserInput!): User!
   upsertBasket(upsertBasketInput: UpsertBasketInput!): Basket!
@@ -187,12 +184,40 @@ type Option {
   price: Float!
 }
 
+type OrderRelatedInfo {
+  delivery: DeliveryWithOutId!
+  orderer: OrdererWithOutId!
+}
+
+input OrderRelatedInfoInput {
+  delivery: DeliveryWithOutIdInput!
+  orderer: OrdererWithOutIdInput!
+}
+
+type Orderer {
+  email: String!
+  id: Float!
+  name: String!
+  phone: String!
+}
+
+type OrdererWithOutId {
+  email: String!
+  name: String!
+  phone: String!
+}
+
+input OrdererWithOutIdInput {
+  email: String!
+  name: String!
+  phone: String!
+}
+
 type PublicPayment {
   amount: Float!
   deliveryFee: Float!
   id: Float!
   platform: String!
-  type: String!
 }
 
 type PublicUser {
@@ -230,8 +255,9 @@ type PurchaseHistory {
 }
 
 type PurchaseResult {
-  redirectUrl: String
-  state: String!
+  delivery: Delivery!
+  orderer: Orderer!
+  payment: PublicPayment!
 }
 
 type Query {
@@ -255,6 +281,12 @@ input SignInInput {
   code: String!
   platform: String!
   state: String!
+}
+
+input TossPaymentInput {
+  amount: Float!
+  orderId: String!
+  paymentKey: String!
 }
 
 input UpdateDeliveryInput {

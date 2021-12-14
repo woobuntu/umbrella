@@ -1,9 +1,11 @@
 import { ObjectType } from '@nestjs/graphql';
+import { Delivery } from '../delivery';
+import { Orderer } from '../orderer';
+import { PublicPayment } from '../payment';
 
 @ObjectType()
 export class PurchaseResult {
-  // 추후 union...
-  state: string;
-
-  redirectUrl?: string;
+  orderer: Orderer;
+  delivery: Delivery;
+  payment: PublicPayment;
 }
