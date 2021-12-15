@@ -1,13 +1,9 @@
 import { gql } from "@apollo/client";
 
 const UPDATE_DELIVERY = gql`
-  mutation Mutation(
-    $deliveryId: Int!
-    $updateDeliveryInput: UpdateDeliveryInput!
-  ) {
-    updateDelivery(
-      deliveryId: $deliveryId
-      updateDeliveryInput: $updateDeliveryInput
+  mutation Mutation($updateDefaultDeliveryInput: UpdateDefaultDeliveryInput!) {
+    updateDefaultDelivery(
+      updateDefaultDeliveryInput: $updateDefaultDeliveryInput
     ) {
       name
       phone

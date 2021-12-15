@@ -9,7 +9,7 @@ export default function useProduct() {
     error: productError,
     data: productData,
   } = useQuery(PRODUCT, {
-    variables: { catalogId: Number(id) },
+    variables: { productId: Number(id) },
   });
 
   return {

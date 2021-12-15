@@ -1,21 +1,67 @@
 import { gql } from "@apollo/client";
 
 const PROFILE = gql`
-  query Profile {
+  query Query {
     profile {
+      id
       name
       phone
       email
-      userDeliveryRelations {
-        default
+      defaultDelivery {
+        id
+        name
+        phone
+        postCode
+        address
+        detailAddress
+        memo
+      }
+      payments {
+        id
+        amount
+        deliveryFee
+        orderStatus
+        type
+        platform
         delivery {
-          id
           name
           phone
           postCode
           address
           detailAddress
           memo
+        }
+        orderer {
+          name
+          phone
+          email
+        }
+        purchases {
+          id
+          quantity
+          productOptionRelation {
+            product {
+              id
+              name
+              price
+              productFileRelations {
+                id
+                file {
+                  name
+                  path
+                  type
+                }
+              }
+            }
+            option {
+              name
+              price
+            }
+          }
+        }
+        paymentHistories {
+          from
+          to
         }
       }
     }

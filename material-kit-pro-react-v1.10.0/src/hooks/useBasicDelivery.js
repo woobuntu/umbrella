@@ -4,7 +4,7 @@ import { PROFILE, BASKETS } from "graphql/query";
 import { useReducer, useRef, useState, useEffect, useCallback } from "react";
 import { basicReducer } from "reducers";
 import useAddress from "./useAddress";
-import usePhoneNumber from "./usePhoneNumber";
+import usePhoneNumber from "./usePhoneNumberLegacy";
 
 export default function useBasicDelivery(profileData) {
   const [{ name, memo }, dispatch] = useReducer(basicReducer, {
@@ -106,6 +106,8 @@ export default function useBasicDelivery(profileData) {
   }, [profileData]);
 
   const editButtonProps = {
+    color: isEditing ? "info" : "primary",
+    text: isEditing ? "저장하기" : "수정하기",
     onClick: () => {
       if (isEditing) {
         const {
@@ -186,8 +188,6 @@ export default function useBasicDelivery(profileData) {
         setIsEditing(true);
       }
     },
-    color: isEditing ? "info" : "primary",
-    text: isEditing ? "저장하기" : "수정하기",
   };
 
   return {

@@ -8,7 +8,7 @@ import CardHeader from "components/Card/CardHeader";
 import CardBody from "components/Card/CardBody";
 import CardFooter from "components/Card/CardFooter";
 import { useQuery } from "@apollo/client";
-import { CATALOGS } from "../../graphql/query";
+import { PRODUCTS } from "../../graphql/query";
 import { Link } from "react-router-dom";
 import { convertPrice } from "customs/utils";
 
@@ -17,7 +17,7 @@ const useStyles = makeStyles(sectionCatalogsStyle);
 export default function SectionCatalogs() {
   const classes = useStyles();
 
-  const { loading, data, error } = useQuery(CATALOGS);
+  const { loading, data, error } = useQuery(PRODUCTS);
 
   if (error) alert(error.message);
 
@@ -29,16 +29,16 @@ export default function SectionCatalogs() {
         <h2>상품 목록</h2>
         <GridContainer>
           {data &&
-            data.catalogs.map(
+            data.products.map(
               ({
                 id,
                 name,
                 price,
-                catalogFileRelations: [catalogFileRelation],
+                productFileRelations: [productFileRelation],
               }) => {
                 const {
                   file: { path },
-                } = catalogFileRelation;
+                } = productFileRelation;
                 return (
                   <GridItem md={4} sm={4} key={id}>
                     <Card product plain>
@@ -62,7 +62,7 @@ export default function SectionCatalogs() {
                       </CardHeader>
                       <CardBody className={classes.textCenter} plain>
                         <h4 className={classes.cardTitle}>{name}</h4>
-                        <p className={classes.cardDescription}>상품설명</p>
+                        {/* <p className={classes.cardDescription}>상품설명</p> */}
                       </CardBody>
                       <CardFooter plain>
                         <div className={classes.priceContainer}>

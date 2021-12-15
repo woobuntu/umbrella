@@ -1,21 +1,21 @@
 import { gql } from "@apollo/client";
 
 const PRODUCT = gql`
-  query Query($catalogId: Int!) {
-    catalog(id: $catalogId) {
+  query Query($productId: Int!) {
+    product(id: $productId) {
       name
       price
       expirationDate
       storageMethod
       ingredients
-      catalogFileRelations {
+      productFileRelations {
         file {
           id
           name
           path
         }
       }
-      catalogOptionRelations {
+      productOptionRelations {
         id
         option {
           id

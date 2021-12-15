@@ -1,4 +1,4 @@
-import usePhoneNumber from "./usePhoneNumber";
+import usePhoneNumber from "./usePhoneNumberLegacy";
 import { useEffect, useReducer } from "react";
 import { ordererReducer } from "reducers";
 

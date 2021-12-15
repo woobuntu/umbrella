@@ -2,7 +2,6 @@ import React, { Fragment } from "react";
 
 import Button from "components/CustomButtons/Button.js";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
 
 import { isModalOpenVar } from "graphql/state";
 import BaseModal from "./BaseModal";

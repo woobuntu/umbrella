@@ -1,66 +1,28 @@
-import { useReducer } from "react";
-import { phoneNumberReducer } from "reducers";
+import { useState } from "react";
 
-export default function usePhoneNumber({
-  submitted = false,
-  isEditing = true,
-}) {
-  const [{ first, second, third }, dispatch] = useReducer(phoneNumberReducer, {
-    first: "010",
-    second: "",
-    third: "",
-  });
+export default function usePhoneNumber() {
+  const [firstNumber, setFirstNumber] = useState("010");
+  const [secondNumber, setSecondNumber] = useState("");
+  const [thirdNumber, setThirdNumber] = useState("");
 
-  const setFirstNumber = (e) =>
-    dispatch({ type: "first", value: e.target.value });
-  const customSelectPropsForFirstNumber = {
-    options: ["010", "011", "016", "017", "019"],
-    state: first,
-    action: setFirstNumber,
-    disabled: isEditing ? false : true,
-    inputProps: {
-      id: "first-number",
-      name: "firstNumber",
-      autoComplete: "first-number",
+  const phoneNumberFormProps = {
+    customSelectPropsForFirstNumber: {
+      value: firstNumber,
+      onChange: (e) => setFirstNumber(e.target.value),
+    },
+    customInputPropsForSecondNumber: {
+      inputProps: {
+        value: secondNumber,
+        onChange: (e) => setSecondNumber(e.target.value),
+      },
+    },
+    customInputPropsForThirdNumber: {
+      inputProps: {
+        value: thirdNumber,
+        onChange: (e) => setThirdNumber(e.target.value),
+      },
     },
   };
 
-  const setSecondNumber = (e) =>
-    dispatch({ type: "second", value: e.target.value });
-  const isSecondNumberNotValid = second.length < 3 ? true : false;
-  const customInputPropsForSecondNumber = {
-    state: second,
-    action: setSecondNumber,
-    error: submitted && isSecondNumberNotValid,
-    labelText: "(X)XXX",
-    inputProps: {
-      disabled: isEditing ? false : true,
-      id: "second-number",
-      name: "secondNumber",
-      autoComplete: "second-number",
-    },
-  };
-
-  const setThirdNumber = (e) =>
-    dispatch({ type: "third", value: e.target.value });
-  const isThirdNumberNotValid = third.length < 4 ? true : false;
-  const customInputPropsForThirdNumber = {
-    state: third,
-    action: setThirdNumber,
-    error: submitted && isThirdNumberNotValid,
-    labelText: "XXXX",
-    inputProps: {
-      disabled: isEditing ? false : true,
-      id: "third-number",
-      name: "thirdNumber",
-      autoComplete: "third-number",
-    },
-  };
-
-  return {
-    customSelectPropsForFirstNumber,
-    customInputPropsForSecondNumber,
-    customInputPropsForThirdNumber,
-    isPhoneNumberNotValid: isSecondNumberNotValid || isThirdNumberNotValid,
-  };
+  return phoneNumberFormProps;
 }

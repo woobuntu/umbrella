@@ -1,18 +1,18 @@
 export default function makeOrderName(basketData) {
   const basketNames = (basketData ? basketData : []).map(
-    ({ catalogOptionRelation: { catalog, option } }) => ({
-      catalogName: catalog.name,
+    ({ productOptionRelation: { product, option } }) => ({
+      productName: product.name,
       optionName: option.name,
     })
   );
 
   let orderName = "";
   if (basketNames.length === 1) {
-    const [{ catalogName, optionName }] = basketNames;
-    orderName = `${catalogName}(${optionName})`;
+    const [{ productName, optionName }] = basketNames;
+    orderName = `${productName}(${optionName})`;
   } else if (basketNames.length > 1) {
-    const [{ catalogName, optionName }] = basketNames;
-    orderName = `${catalogName}(${optionName}) 포함 ${basketNames.length}건`;
+    const [{ productName, optionName }] = basketNames;
+    orderName = `${productName}(${optionName}) 포함 ${basketNames.length}건`;
   }
 
   return orderName;
