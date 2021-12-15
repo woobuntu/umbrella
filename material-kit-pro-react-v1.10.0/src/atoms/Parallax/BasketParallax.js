@@ -30,7 +30,7 @@ const useStyles = makeStyles({
 export default function BasketParallax() {
   const classes = useStyles();
   return (
-    <UmbrellaParallax>
+    <UmbrellaParallax small>
       <div className={classes.container}>
         <GridContainer>
           <GridItem
