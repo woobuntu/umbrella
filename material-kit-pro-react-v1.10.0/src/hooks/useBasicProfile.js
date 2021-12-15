@@ -4,7 +4,7 @@ import { BASKETS } from "graphql/query";
 import { PROFILE } from "graphql/query";
 import { useEffect, useReducer, useRef, useState } from "react";
 import { profileReducer } from "reducers";
-import usePhoneNumber from "./usePhoneNumber";
+import usePhoneNumber from "./usePhoneNumberLegacy";
 
 export default function useBasicProfile(profileData) {
   const [{ name, email }, dispatch] = useReducer(profileReducer, {
@@ -25,8 +25,8 @@ export default function useBasicProfile(profileData) {
 
   const setName = (e) => dispatch({ type: "name", value: e.target.value });
   const customInputPropsForName = {
-    state: name,
-    action: setName,
+    // state: name,
+    // action: setName,
     labelText: "이름",
     formControlProps: {
       style: {
@@ -49,8 +49,8 @@ export default function useBasicProfile(profileData) {
 
   const setEmail = (e) => dispatch({ type: "email", value: e.target.value });
   const customInputPropsForEmail = {
-    state: email,
-    action: setEmail,
+    // state: email,
+    // action: setEmail,
     labelText: "이메일",
     inputProps: {
       disabled: isEditing ? false : true,

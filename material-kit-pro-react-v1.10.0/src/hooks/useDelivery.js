@@ -1,6 +1,6 @@
 import { useEffect, useReducer } from "react";
 import { deliveryReducer } from "../reducers";
-import usePhoneNumber from "./usePhoneNumber";
+import usePhoneNumber from "./usePhoneNumberLegacy";
 import useAddress from "./useAddress";
 
 export default function useDelivery({ submitted, profileData }) {

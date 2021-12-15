@@ -4,16 +4,15 @@ const BASKETS = gql`
   query Query {
     baskets {
       id
-      userId
-      catalogOptionRelationId
-      catalogOptionRelation {
+      productOptionRelationId
+      productOptionRelation {
         id
-        catalogId
-        catalog {
+        productId
+        product {
           id
           name
           price
-          catalogFileRelations {
+          productFileRelations {
             id
             file {
               id
@@ -30,7 +29,7 @@ const BASKETS = gql`
           price
         }
       }
-      amount
+      quantity
     }
   }
 `;

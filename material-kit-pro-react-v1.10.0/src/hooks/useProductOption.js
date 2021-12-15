@@ -6,10 +6,10 @@ export default function useProductOption(productData) {
   useEffect(() => {
     if (productData) {
       const {
-        catalog: { catalogOptionRelations },
+        product: { productOptionRelations },
       } = productData;
 
-      const [firstOption] = catalogOptionRelations;
+      const [firstOption] = productOptionRelations;
 
       const { option } = firstOption;
 

@@ -27,29 +27,6 @@ export default function CustomHeader() {
   if (loading) console.log("로딩중...");
   if (error) alert(error.message);
 
-  if (data)
-    console.log(
-      data.gnbs
-        .filter(({ id }) => id !== 2)
-        .map((gnb) => {
-          const { id, lnbs } = gnb;
-          if (id == 1) {
-            return {
-              ...gnb,
-              lnbs: lnbs.filter((lnb) => {
-                const { name } = lnb;
-                return !(
-                  name == "연혁" ||
-                  name == "조직도" ||
-                  name == "찾아오시는 길"
-                );
-              }),
-            };
-          }
-          return gnb;
-        })
-    );
-
   const tempGnbs = data
     ? data.gnbs
         .filter(({ id }) => id !== 2)

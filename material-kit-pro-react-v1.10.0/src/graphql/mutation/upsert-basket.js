@@ -5,8 +5,8 @@ const UPSERT_BASKET = gql`
     upsertBasket(upsertBasketInput: $upsertBasketInput) {
       id
       userId
-      catalogOptionRelationId
-      amount
+      productOptionRelationId
+      quantity
     }
   }
 `;

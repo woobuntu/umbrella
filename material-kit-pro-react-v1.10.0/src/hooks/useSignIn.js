@@ -36,10 +36,10 @@ export default function useSignIn() {
       const sessionBasket = getSessionItem("basket");
 
       if (sessionBasket) {
-        const { catalogOptionRelationId, amount } = sessionBasket;
+        const { productOptionRelationId, quantity } = sessionBasket;
         signInInput.basketInfo = {
-          catalogOptionRelationId,
-          amount,
+          productOptionRelationId,
+          quantity,
         };
       }
 

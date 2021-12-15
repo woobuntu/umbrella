@@ -45,7 +45,7 @@ export default function Product() {
   const { productOption, setProductOption } = useProductOption(productData);
 
   // 장바구니 수량 때문에 호출 필요
-  const { basketLoading, basketError, basketData } = useBasketQuery();
+  const basketData = useBasketQuery();
 
   const {
     basketMutations: { upsertBasket },
@@ -57,26 +57,25 @@ export default function Product() {
 
   const history = useHistory();
 
-  const isDataLoading =
-    productLoading || basketLoading || basketMutationLoading;
+  const isDataLoading = productLoading || basketMutationLoading;
   if (isDataLoading) return <div>로딩중...</div>;
 
-  const error = productError || basketError || basketMutationError;
+  const error = productError || basketMutationError;
   if (error) alert(error.message);
 
   const {
-    catalog: {
+    product: {
       name,
       price,
       expirationDate,
       storageMethod,
       ingredients,
-      catalogFileRelations,
-      catalogOptionRelations,
+      productFileRelations,
+      productOptionRelations,
     },
   } = productData;
 
-  const [catalogOptionRelation] = catalogOptionRelations.filter(
+  const [productOptionRelation] = productOptionRelations.filter(
     ({ option: { id } }) => id == productOption
   );
 
@@ -89,8 +88,8 @@ export default function Product() {
       await upsertBasket({
         variables: {
           upsertBasketInput: {
-            catalogOptionRelationId: catalogOptionRelation.id,
-            amount: productAmount,
+            productOptionRelationId: productOptionRelation.id,
+            quantity: productAmount,
           },
         },
         refetchQueries: [BASKETS],
@@ -109,8 +108,8 @@ export default function Product() {
     setSessionItem({
       key: "basket",
       value: {
-        catalogOptionRelationId: catalogOptionRelation.id,
-        amount: productAmount,
+        productOptionRelationId: productOptionRelation.id,
+        quantity: productAmount,
       },
     });
     history.push("/sign-in");
@@ -148,7 +147,7 @@ export default function Product() {
             <GridContainer>
               <GridItem md={6} sm={6}>
                 <ProductImages
-                  items={catalogFileRelations.map(({ file: { path } }) => ({
+                  items={productFileRelations.map(({ file: { path } }) => ({
                     original: path,
                     thumbnail: path,
                   }))}
@@ -159,7 +158,7 @@ export default function Product() {
                 <h3 className={classes.mainPrice}>
                   ₩
                   {convertPrice(
-                    price + Number(catalogOptionRelation?.option?.price)
+                    price + Number(productOptionRelation?.option?.price)
                   )}
                 </h3>
                 <Accordion
@@ -170,7 +169,7 @@ export default function Product() {
                 <GridContainer className={classes.pickSize}>
                   <Option
                     value={productOption}
-                    options={catalogOptionRelations.map(({ option }) => option)}
+                    options={productOptionRelations.map(({ option }) => option)}
                     selectOption={({ target: { value } }) =>
                       setProductOption(value)
                     }
