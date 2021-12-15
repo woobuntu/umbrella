@@ -126,5 +126,12 @@ export default function useDeliveryInfoForm({
       addressFormProps,
       memoInputProps,
     },
+    isDeliveryInfoValid:
+      isNameValid &&
+      isSecondNumberValid &&
+      isThirdNumberValid &&
+      isPostCodeValid &&
+      isAddressValid &&
+      isDetailAddressValid,
   };
 }
