@@ -82,5 +82,7 @@ export default function useOrdererInfoForm({
       phoneNumberFormProps,
       emailInputProps,
     },
+    isOrdererInfoValid:
+      isNameValid && isSecondNumberValid && isThirdNumberValid && isEmailValid,
   };
 }

@@ -10,6 +10,7 @@ export default function useMakePaymentInfoCardProps({
   products,
   ordererInfo,
   deliveryInfo,
+  validateForm,
 }) {
   const basketTotalPrice = products.reduce(
     (sum, { productTotalPrice }) => sum + productTotalPrice,
@@ -39,6 +40,7 @@ export default function useMakePaymentInfoCardProps({
   // db가 아닌 session에 order, delivery, payment 정보 저장해두면 되네용...?
   const paymentMethodsProps = {
     onClickCreditCardButton: () =>
+      validateForm() &&
       storeOrdererAndDeliveryInSession().then(() =>
         requestTossPayments({
           method: "카드",
@@ -51,6 +53,7 @@ export default function useMakePaymentInfoCardProps({
         })
       ),
     onClickVirtualAccountButton: () =>
+      validateForm() &&
       storeOrdererAndDeliveryInSession().then(() =>
         requestTossPayments({
           method: "가상계좌",
@@ -63,6 +66,7 @@ export default function useMakePaymentInfoCardProps({
         })
       ),
     onClickAccountTransferButton: () =>
+      validateForm() &&
       storeOrdererAndDeliveryInSession().then(() =>
         requestTossPayments({
           method: "계좌이체",
@@ -73,6 +77,7 @@ export default function useMakePaymentInfoCardProps({
         })
       ),
     onClickTossSimplePaymentButton: () =>
+      validateForm() &&
       storeOrdererAndDeliveryInSession().then(() =>
         requestTossPayments({
           method: "토스결제",
@@ -85,6 +90,7 @@ export default function useMakePaymentInfoCardProps({
         })
       ),
     onClickKakaoPayButton: () =>
+      validateForm() &&
       storeOrdererAndDeliveryInSession().then(() =>
         prepareKakaoPay()
           .then(
