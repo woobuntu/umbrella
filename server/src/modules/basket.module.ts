@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common';
 import { BasketResolver } from 'src/resolvers';
 import { BasketService } from 'src/services';
-import { CatalogOptionRelationModule } from './catalog-option-relation.module';
-import { UserModule } from './user.module';
+import { ProductOptionRelationModule } from './product-option-relation.module';
 
 @Module({
-  imports: [CatalogOptionRelationModule, UserModule],
+  imports: [ProductOptionRelationModule],
   providers: [BasketService, BasketResolver],
   exports: [BasketService],
 })

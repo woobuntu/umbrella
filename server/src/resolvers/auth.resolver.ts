@@ -22,7 +22,8 @@ import { SetCookieInterceptor, SignOutInterceptor } from 'src/interceptors';
 import {
   AuthService,
   BasketService,
-  UserDeliveryRelationService,
+  DefaultDeliveryService,
+  PaymentService,
   UserService,
 } from 'src/services';
 
@@ -40,7 +41,8 @@ export class AuthResolver {
     private authService: AuthService,
     private userService: UserService,
     private basketService: BasketService,
-    private userDeliveryRelationService: UserDeliveryRelationService,
+    private defaultDeliveryService: DefaultDeliveryService,
+    private paymentService: PaymentService,
   ) {}
 
   @UseInterceptors(SetCookieInterceptor)
@@ -68,11 +70,11 @@ export class AuthResolver {
     return signInObservable.pipe(
       tap(async (user) => {
         if (user && basketInfo) {
-          const { catalogOptionRelationId, amount } = basketInfo;
+          const { productOptionRelationId, quantity } = basketInfo;
 
           const basket = await this.basketService.basket({
             userId: user.id,
-            catalogOptionRelationId,
+            productOptionRelationId,
           });
 
           if (basket) {
@@ -81,14 +83,14 @@ export class AuthResolver {
                 id: basket.id,
               },
               data: {
-                amount,
+                quantity,
               },
             });
           } else {
             this.basketService.createBasket({
               userId: user.id,
-              catalogOptionRelationId,
-              amount,
+              productOptionRelationId,
+              quantity,
             });
           }
         }
@@ -154,8 +156,13 @@ export class AuthResolver {
   }
 
   @ResolveField()
-  async userDeliveryRelations(@Parent() user: PublicUser) {
-    return this.userDeliveryRelationService.userDeliveryRelations({
+  async defaultDelivery(@Parent() user: User) {
+    return this.defaultDeliveryService.defaultDelivery(user.id);
+  }
+
+  @ResolveField()
+  async payments(@Parent() user: User) {
+    return this.paymentService.payments({
       where: {
         userId: user.id,
       },

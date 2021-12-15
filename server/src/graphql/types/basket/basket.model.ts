@@ -1,5 +1,5 @@
 import { ObjectType } from '@nestjs/graphql';
-import { CatalogOptionRelation } from '../catalog-option-relation';
+import { ProductOptionRelation } from '../product-option-relation';
 
 @ObjectType()
 export class Basket {
@@ -7,9 +7,9 @@ export class Basket {
 
   userId: string;
 
-  catalogOptionRelationId: number;
+  productOptionRelationId: number;
 
-  amount: number;
+  quantity: number;
 
-  catalogOptionRelation: CatalogOptionRelation;
+  productOptionRelation: ProductOptionRelation;
 }

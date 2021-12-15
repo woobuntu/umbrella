@@ -198,7 +198,7 @@ export class KakaoService {
     partnerOrderId: string;
     partnerUserId: string;
     pgToken: string;
-  }): Observable<{ tid: string }> {
+  }): Observable<{ tid: string; paymentMethodType: '현금' | '카드' }> {
     const { accessToken, tid, partnerOrderId, partnerUserId, pgToken } = params;
 
     const url = 'https://kapi.kakao.com/v1/payment/approve';
@@ -219,6 +219,11 @@ export class KakaoService {
           Authorization: `Bearer ${accessToken}`,
         },
       })
-      .pipe(map(({ data: { tid } }) => tid));
+      .pipe(
+        map(({ data: { tid, payment_method_type } }) => ({
+          tid,
+          paymentMethodType: payment_method_type === 'CARD' ? '카드' : '현금',
+        })),
+      );
   }
 }

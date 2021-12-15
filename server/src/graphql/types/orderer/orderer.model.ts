@@ -2,7 +2,7 @@ import { ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class Orderer {
-  id: number;
+  paymentId: number;
 
   name: string;
 

@@ -1,30 +1,15 @@
 import { ObjectType } from '@nestjs/graphql';
-import { PurchaseHistory } from './purchase-history.model';
-import { CatalogOptionRelation } from '../catalog-option-relation';
-import { Delivery } from '../delivery';
-import { PublicPayment } from '../payment';
+import { ProductOptionRelation } from '../product-option-relation';
 
 @ObjectType()
 export class Purchase {
   id: number;
 
-  userId: string;
-
-  catalogOptionRelationId: number;
-
-  catalogOptionRelation: CatalogOptionRelation;
-
-  ordererId: number;
-
-  deliveryId: number;
-
-  delivery: Delivery;
+  productOptionRelationId?: number;
 
   paymentId: number;
 
-  payment: PublicPayment;
+  quantity: number;
 
-  amount: number;
-
-  purchaseHistories: PurchaseHistory[];
+  productOptionRelation?: ProductOptionRelation;
 }

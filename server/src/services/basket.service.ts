@@ -13,7 +13,7 @@ export class BasketService {
 
   async basket(basketWhereInput: {
     userId: string;
-    catalogOptionRelationId: number;
+    productOptionRelationId: number;
   }): Promise<Basket | null> {
     return this.prisma.basket.findFirst({
       where: basketWhereInput,
@@ -26,64 +26,21 @@ export class BasketService {
 
   async createBasket(data: CreateBasket): Promise<Basket> {
     return this.prisma.basket.create({
-      data: {
-        ...data,
-        basketHistories: {
-          create: {
-            ...data,
-            from: this.dayjsService.getCurrentTime(),
-          },
-        },
-      },
+      data,
     });
   }
 
   async updateBasket(params: {
     where: Prisma.BasketWhereUniqueInput;
     data: {
-      amount: number;
+      quantity: number;
     };
   }): Promise<Basket> {
-    const {
-      where,
-      data: { amount },
-    } = params;
-
-    const basketLastHistory = await this.prisma.basketHistory.findFirst({
-      where: {
-        basketId: where.id,
-        to: null,
-      },
-    });
-
-    const { id, basketId, ...prevBasketHistory } = basketLastHistory;
-
-    const dataForNewBasketHistory = {
-      ...prevBasketHistory,
-      amount,
-    };
-
-    const currentTime = this.dayjsService.getCurrentTime();
+    const { where, data } = params;
 
     return this.prisma.basket.update({
       where,
-      data: {
-        amount,
-        basketHistories: {
-          update: {
-            where: {
-              id: basketLastHistory.id,
-            },
-            data: {
-              to: currentTime,
-            },
-          },
-          create: {
-            ...dataForNewBasketHistory,
-            from: currentTime,
-          },
-        },
-      },
+      data,
     });
   }
 
@@ -99,9 +56,10 @@ export class BasketService {
         userId,
       },
       include: {
-        catalogOptionRelation: {
+        // pro
+        productOptionRelation: {
           include: {
-            catalog: true,
+            product: true,
             option: true,
           },
         },
@@ -122,19 +80,19 @@ export class BasketService {
 
   makeOrderName(baskets: any[]) {
     const basketNames = baskets.map(
-      ({ catalogOptionRelation: { catalog, option } }) => ({
-        catalogName: catalog.name,
+      ({ productOptionRelation: { product, option } }) => ({
+        productName: product.name,
         optionName: option.name,
       }),
     );
 
     let orderName = '';
     if (basketNames.length === 1) {
-      const [{ catalogName, optionName }] = basketNames;
-      orderName = `${catalogName} - ${optionName}`;
+      const [{ productName, optionName }] = basketNames;
+      orderName = `${productName} - ${optionName}`;
     } else if (basketNames.length > 1) {
-      const [{ catalogName, optionName }] = basketNames;
-      orderName = `${catalogName}(${optionName}) 포함 ${basketNames.length}건`;
+      const [{ productName, optionName }] = basketNames;
+      orderName = `${productName}(${optionName}) 포함 ${basketNames.length}건`;
     }
 
     return orderName;
@@ -142,8 +100,8 @@ export class BasketService {
 
   sumBasketsAmount(baskets: any[]) {
     return baskets.reduce(
-      (sum, { amount, catalogOptionRelation: { catalog, option } }) =>
-        sum + amount * (catalog.price + option.price),
+      (sum, { quantity, productOptionRelation: { product, option } }) =>
+        sum + quantity * (product.price + option.price),
       0,
     );
   }

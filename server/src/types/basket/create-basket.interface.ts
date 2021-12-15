@@ -1,7 +1,7 @@
 export interface CreateBasket {
   userId: string;
 
-  catalogOptionRelationId: number;
+  productOptionRelationId: number;
 
-  amount: number;
+  quantity: number;
 }

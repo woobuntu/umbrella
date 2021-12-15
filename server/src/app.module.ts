@@ -12,12 +12,13 @@ import {
   ExecutiveFileRelationModule,
   GnbModule,
   AuthModule,
-  CatalogModule,
+  ProductModule,
   BasketModule,
   StaticModule,
-  PurchaseModule,
   DayjsModule,
   PrismaModule,
+  UserModule,
+  PaymentModule,
 } from './modules';
 import { ExecutiveModule } from './modules/executive.module';
 import {
@@ -51,12 +52,13 @@ import {
     ExecutiveFileRelationModule,
     GnbModule,
     AuthModule,
-    CatalogModule,
+    ProductModule,
     BasketModule,
     StaticModule,
-    PurchaseModule,
     DayjsModule,
     PrismaModule,
+    UserModule,
+    PaymentModule,
     GraphQLModule.forRootAsync({
       useFactory: async (configService: ConfigService) => ({
         // code first approach를 통해 schema 파일 생성

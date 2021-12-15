@@ -28,24 +28,22 @@ export class UserService {
       address: '',
       detailAddress: '',
     };
-
     const currentTime = this.dayjsService.getCurrentTime();
-
-    const createDefaultDelivery = this.prisma.delivery.create({
-      data: {
-        ...emptyDelivery,
-        deliveryHistories: {
-          create: {
-            ...emptyDelivery,
-            from: currentTime,
-          },
-        },
-      },
-    });
     const { id, ...dataForNewUserHistory } = data;
-    const createUser = this.prisma.user.create({
+    return this.prisma.user.create({
       data: {
         ...data,
+        defaultDeliveries: {
+          create: {
+            ...emptyDelivery,
+            defaultDeliveryHistories: {
+              create: {
+                ...emptyDelivery,
+                userId: id,
+              },
+            },
+          },
+        },
         userHistories: {
           create: {
             ...dataForNewUserHistory,
@@ -54,31 +52,6 @@ export class UserService {
         },
       },
     });
-
-    const [defaultDelivery, user] = await this.prisma.$transaction([
-      createDefaultDelivery,
-      createUser,
-    ]);
-
-    const userDeliveryRelationData = {
-      userId: user.id,
-      deliveryId: defaultDelivery.id,
-      default: true,
-    };
-
-    await this.prisma.userDeliveryRelation.create({
-      data: {
-        ...userDeliveryRelationData,
-        userDeliveryRelationHistories: {
-          create: {
-            ...userDeliveryRelationData,
-            from: currentTime,
-          },
-        },
-      },
-    });
-
-    return user;
   }
 
   async updateUser(params: {

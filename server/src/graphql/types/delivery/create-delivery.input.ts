@@ -4,6 +4,6 @@ import { Delivery } from './delivery.model';
 @InputType()
 export class CreateDeliveryInput extends OmitType(
   Delivery,
-  ['id'] as const,
+  ['paymentId'],
   InputType,
 ) {}

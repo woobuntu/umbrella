@@ -16,16 +16,16 @@ type AuthState {
 }
 
 type Basket {
-  amount: Float!
-  catalogOptionRelation: CatalogOptionRelation!
-  catalogOptionRelationId: Float!
   id: Float!
+  productOptionRelation: ProductOptionRelation!
+  productOptionRelationId: Float!
+  quantity: Float!
   userId: String!
 }
 
 input BasketInfo {
-  amount: Float!
-  catalogOptionRelationId: Float!
+  productOptionRelationId: Float!
+  quantity: Float!
 }
 
 type Career {
@@ -35,35 +35,24 @@ type Career {
   record: String!
 }
 
-type Catalog {
-  catalogFileRelations: [CatalogFileRelation!]!
-  catalogOptionRelations: [CatalogOptionRelation!]!
-  expirationDate: String
-  id: Float!
-  ingredients: String
-  name: String!
-  price: Float!
-  storageMethod: String
-}
-
-type CatalogFileRelation {
-  catalogId: Float!
-  file: File!
-  fileId: Float!
-  id: Float!
-}
-
-type CatalogOptionRelation {
-  catalog: Catalog!
-  catalogId: Float!
-  id: Float!
-  option: Option!
-  optionId: Float!
-}
-
 type Contact {
   address: String!
   mail: String!
+  phone: String!
+}
+
+input CreateDeliveryInput {
+  address: String!
+  detailAddress: String!
+  memo: String
+  name: String!
+  phone: String!
+  postCode: String!
+}
+
+input CreateOrdererInput {
+  email: String!
+  name: String!
   phone: String!
 }
 
@@ -72,33 +61,33 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type Delivery {
+type DefaultDelivery {
   address: String!
   detailAddress: String!
   id: Float!
   memo: String
   name: String!
-  orderStatus: String
   phone: String!
   postCode: String!
+  user: User!
+  userId: String!
 }
 
-type DeliveryWithOutId {
+type Delivery {
   address: String!
   detailAddress: String!
   memo: String
   name: String!
-  orderStatus: String
+  paymentId: Float!
   phone: String!
   postCode: String!
 }
 
-input DeliveryWithOutIdInput {
+type DeliveryWithOutPaymentId {
   address: String!
   detailAddress: String!
   memo: String
   name: String!
-  orderStatus: String
   phone: String!
   postCode: String!
 }
@@ -126,7 +115,7 @@ type File {
   type: String!
 }
 
-input FilterCatalogsInput {
+input FilterProductsInput {
   ids: [Float!]!
 }
 
@@ -166,14 +155,14 @@ type MetaFileRelation {
 }
 
 type Mutation {
-  createPurchaseByKakaoPay(pgToken: String!): PurchaseResult!
-  createPurchaseByTossPayments(tossPaymentInput: TossPaymentInput!): PurchaseResult!
+  createPaymentByKakao(pgToken: String!): Payment!
+  createPaymentByToss(tossPaymentsInput: TossPaymentsInput!): Payment!
   deleteBasket(id: Int!): Basket!
   prepareKakaoPayment: KakaoPayPrepareResult!
   signIn(signInInput: SignInInput!): AuthState!
   signOut: AuthState!
-  storeOrderRelatedInfoInSession(orderRelatedInfoInput: OrderRelatedInfoInput!): OrderRelatedInfo!
-  updateDelivery(deliveryId: Int!, updateDeliveryInput: UpdateDeliveryInput!): Delivery!
+  storeOrdererAndDelivery(createDeliveryInput: CreateDeliveryInput!, createOrdererInput: CreateOrdererInput!): OrdererAndDelivery!
+  updateDefaultDelivery(updateDefaultDeliveryInput: UpdateDefaultDeliveryInput!): DefaultDelivery!
   updateProfile(updateUserInput: UpdateUserInput!): User!
   upsertBasket(upsertBasketInput: UpsertBasketInput!): Basket!
 }
@@ -184,87 +173,101 @@ type Option {
   price: Float!
 }
 
-type OrderRelatedInfo {
-  delivery: DeliveryWithOutId!
-  orderer: OrdererWithOutId!
-}
-
-input OrderRelatedInfoInput {
-  delivery: DeliveryWithOutIdInput!
-  orderer: OrdererWithOutIdInput!
-}
-
 type Orderer {
   email: String!
-  id: Float!
   name: String!
+  paymentId: Float!
   phone: String!
 }
 
-type OrdererWithOutId {
+type OrdererAndDelivery {
+  delivery: DeliveryWithOutPaymentId!
+  orderer: OrdererWithOutPaymentId!
+}
+
+type OrdererWithOutPaymentId {
   email: String!
   name: String!
   phone: String!
 }
 
-input OrdererWithOutIdInput {
-  email: String!
-  name: String!
-  phone: String!
-}
-
-type PublicPayment {
+type Payment {
   amount: Float!
+  delivery: Delivery
   deliveryFee: Float!
   id: Float!
+  orderId: String
+  orderStatus: String
+  orderer: Orderer
+  paymentHistories: [PaymentHistory!]!
+  paymentKey: String
   platform: String!
+  purchases: [Purchase!]!
+  tid: String
+  type: String!
+}
+
+type PaymentHistory {
+  amount: Float!
+  deliveryFee: Float!
+  from: DateTime!
+  id: Float!
+  orderId: String
+  orderStatus: String
+  paymentKey: String
+  platform: String!
+  tid: String
+  to: DateTime
+  type: String!
+  userId: String!
+}
+
+type Product {
+  expirationDate: String
+  id: Float!
+  ingredients: String
+  name: String!
+  price: Float!
+  productFileRelations: [ProductFileRelation!]!
+  productOptionRelations: [ProductOptionRelation!]!
+  storageMethod: String
+}
+
+type ProductFileRelation {
+  file: File!
+  fileId: Float!
+  id: Float!
+  productId: Float!
+}
+
+type ProductOptionRelation {
+  id: Float!
+  option: Option!
+  optionId: Float!
+  product: Product!
+  productId: Float!
 }
 
 type PublicUser {
+  defaultDelivery: DefaultDelivery!
   email: String
   id: String!
   name: String
+  payments: [Payment!]!
   phone: String
-  userDeliveryRelations: [UserDeliveryRelation!]!
 }
 
 type Purchase {
-  amount: Float!
-  catalogOptionRelation: CatalogOptionRelation!
-  catalogOptionRelationId: Float!
-  delivery: Delivery!
-  deliveryId: Float!
   id: Float!
-  ordererId: Float!
-  payment: PublicPayment!
   paymentId: Float!
-  purchaseHistories: [PurchaseHistory!]!
-  userId: String!
-}
-
-type PurchaseHistory {
-  amount: Float!
-  catalogOptionRelationId: Float!
-  deliveryId: Float!
-  from: DateTime!
-  id: Float!
-  ordererId: Float!
-  paymentId: Float!
-  purchaseId: Float
-  userId: String!
-}
-
-type PurchaseResult {
-  delivery: Delivery!
-  orderer: Orderer!
-  payment: PublicPayment!
+  productOptionRelation: ProductOptionRelation
+  productOptionRelationId: Float
+  quantity: Float!
 }
 
 type Query {
   account: Account!
   baskets: [Basket!]!
-  catalog(id: Int!): Catalog!
-  catalogs(filterCatalogsInput: FilterCatalogsInput): [Catalog!]!
   contact: Contact!
   executive(id: Int!): Executive!
   gnbs: [Gnb!]!
@@ -272,8 +275,9 @@ type Query {
   isAuthenticated: AuthState!
   meta: Meta!
   metaFileRelations(type: String!): [MetaFileRelation!]!
+  product(id: Int!): Product!
+  products(filterProductsInput: FilterProductsInput): [Product!]!
   profile: PublicUser!
-  purchases: [Purchase!]!
 }
 
 input SignInInput {
@@ -283,18 +287,17 @@ input SignInInput {
   state: String!
 }
 
-input TossPaymentInput {
+input TossPaymentsInput {
   amount: Float!
   orderId: String!
   paymentKey: String!
 }
 
-input UpdateDeliveryInput {
+input UpdateDefaultDeliveryInput {
   address: String
   detailAddress: String
   memo: String
   name: String
-  orderStatus: String
   phone: String
   postCode: String
 }
@@ -306,8 +309,8 @@ input UpdateUserInput {
 }
 
 input UpsertBasketInput {
-  amount: Float!
-  catalogOptionRelationId: Float!
+  productOptionRelationId: Float!
+  quantity: Float!
 }
 
 type User {
@@ -317,12 +320,4 @@ type User {
   name: String
   phone: String
   refreshToken: String
-}
-
-type UserDeliveryRelation {
-  default: Boolean!
-  delivery: Delivery!
-  deliveryId: Float!
-  id: Float!
-  userId: String!
 }
