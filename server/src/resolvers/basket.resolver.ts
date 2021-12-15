@@ -12,13 +12,13 @@ import { CurrentUser } from 'src/decorators';
 import { Basket, UpsertBasketInput } from 'src/graphql/types/basket';
 import { User } from 'src/graphql/types/user';
 import { AuthGuard } from 'src/guards';
-import { BasketService, CatalogOptionRelationService } from 'src/services';
+import { BasketService, ProductOptionRelationService } from 'src/services';
 
 @Resolver((of) => Basket)
 export class BasketResolver {
   constructor(
     private basketService: BasketService,
-    private catalogOptionRelationService: CatalogOptionRelationService,
+    private productOptionRelationService: ProductOptionRelationService,
   ) {}
 
   @Query((returns) => [Basket])
@@ -37,11 +37,11 @@ export class BasketResolver {
     @Args('upsertBasketInput') upsertBasketInput: UpsertBasketInput,
     @CurrentUser() user: User,
   ) {
-    const { catalogOptionRelationId, amount } = upsertBasketInput;
+    const { productOptionRelationId, quantity } = upsertBasketInput;
 
     const basket = await this.basketService.basket({
       userId: user.id,
-      catalogOptionRelationId,
+      productOptionRelationId,
     });
 
     return basket
@@ -50,7 +50,7 @@ export class BasketResolver {
             id: basket.id,
           },
           data: {
-            amount,
+            quantity,
           },
         })
       : this.basketService.createBasket({
@@ -68,9 +68,9 @@ export class BasketResolver {
   }
 
   @ResolveField()
-  async catalogOptionRelation(@Parent() basket: Basket) {
-    return this.catalogOptionRelationService.catalogOptionRelation({
-      id: basket.catalogOptionRelationId,
+  async productOptionRelation(@Parent() basket: Basket) {
+    return this.productOptionRelationService.productOptionRelation({
+      id: basket.productOptionRelationId,
     });
   }
 }

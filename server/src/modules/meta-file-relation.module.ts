@@ -2,10 +2,9 @@ import { Module } from '@nestjs/common';
 import { MetaFileRelationResolver } from 'src/resolvers';
 import { MetaFileRelationService } from 'src/services';
 import { FileModule } from './file.module';
-import { PrismaModule } from './prisma.module';
 
 @Module({
-  imports: [PrismaModule, FileModule],
+  imports: [FileModule],
   providers: [MetaFileRelationService, MetaFileRelationResolver],
   exports: [MetaFileRelationService],
 })

@@ -1,6 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { map } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { RefundReceiveAccount } from 'src/types/toss';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class TossService {
     paymentKey: string;
     orderId: string;
     amount: number;
-  }) {
+  }): Observable<{ method: string }> {
     const { paymentKey, orderId, amount } = params;
     const url = 'https://api.tosspayments.com' + '/v1/payments/' + paymentKey;
 

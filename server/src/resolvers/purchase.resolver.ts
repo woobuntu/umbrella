@@ -1,28 +1,17 @@
-import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { CurrentUser } from 'src/decorators';
-import {
-  CreatePurchaseInput,
-  Purchase,
-  PurchaseResult,
-} from 'src/graphql/types/purchase';
-import { User } from 'src/graphql/types/user';
-import { PurchaseGuard } from 'src/guards';
-import { PurchaseService } from 'src/services';
+import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
+import { Purchase } from 'src/graphql/types/purchase';
+import { ProductOptionRelationService } from 'src/services';
 
 @Resolver((of) => Purchase)
 export class PurchaseResolver {
-  constructor(private purchaseService: PurchaseService) {}
+  constructor(
+    private productOptionRelationService: ProductOptionRelationService,
+  ) {}
 
-  @UseGuards(PurchaseGuard)
-  @Mutation((returns) => PurchaseResult)
-  async createPurchase(
-    @Args('createPurchaseInput') createPurchaseInput: CreatePurchaseInput,
-    @CurrentUser() user: User,
-  ) {
-    return this.purchaseService.createPurchase({
-      user,
-      data: createPurchaseInput,
+  @ResolveField()
+  async productOptionRelation(@Parent() purchase: Purchase) {
+    return this.productOptionRelationService.productOptionRelation({
+      id: purchase.productOptionRelationId,
     });
   }
 }

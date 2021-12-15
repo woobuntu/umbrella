@@ -1,2 +1,2 @@
 export { AuthGuard } from './auth.guard';
-export { PurchaseGuard } from './purchase.guard';
+export { TossPaymentsGuard } from './toss-payments.guard';

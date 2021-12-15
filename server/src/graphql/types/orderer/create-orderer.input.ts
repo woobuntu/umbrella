@@ -4,6 +4,6 @@ import { Orderer } from './orderer.model';
 @InputType()
 export class CreateOrdererInput extends OmitType(
   Orderer,
-  ['id'] as const,
+  ['paymentId'],
   InputType,
 ) {}
