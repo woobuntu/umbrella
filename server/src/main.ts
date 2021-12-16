@@ -7,7 +7,6 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
 import { EnvironmentConfig } from './types/config';
-import fastifyStatic from 'fastify-static';
 import fastifySecureSession from 'fastify-secure-session';
 import { join } from 'path';
 import * as fs from 'fs';
@@ -42,9 +41,6 @@ async function bootstrap() {
       secure: true,
       domain,
     },
-  });
-  app.register(fastifyStatic, {
-    root: join(__dirname, '..', '.well-known'),
   });
 
   await app.listen(port, '0.0.0.0');
