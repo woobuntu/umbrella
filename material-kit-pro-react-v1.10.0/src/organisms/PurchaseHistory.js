@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import PropTypes from "prop-types";
 import ProductTable from "./ProductTable";
 import getIsMobile from "utils/getIsMobile";
@@ -6,9 +6,29 @@ import MobileProductList from "./MobileProductList";
 import useMakeProductTableDataForPurchaseHistory from "hooks/useMakeProductTableDataForPurchaseHistory";
 import { Title } from "atoms/Title";
 import { convertTime } from "utils";
+import Button from "components/CustomButtons/Button";
+import FlexEnd from "atoms/Container/FlexEnd";
+import ReceiverInfoCard from "./ReceiverInfoCard";
+import PaymentResultCard from "./PaymentResultCard";
+import GridContainer from "components/Grid/GridContainer";
+import GridItem from "components/Grid/GridItem";
+import { makeStyles } from "@material-ui/styles";
+import { mlAuto, mrAuto } from "assets/jss/material-kit-pro-react.js";
 
-export default function PurchaseHistory({ payment }) {
-  const { purchases, paymentHistories } = payment;
+const useStyles = makeStyles({
+  mlAuto,
+  mrAuto,
+});
+export default function PurchaseHistory({ payment, setDetailPurchaseId }) {
+  const classes = useStyles();
+  const {
+    purchases,
+    paymentHistories,
+    delivery,
+    deliveryFee,
+    amount,
+    orderStatus,
+  } = payment;
 
   const [{ from }] = paymentHistories;
 
@@ -18,17 +38,58 @@ export default function PurchaseHistory({ payment }) {
 
   const tableData = useMakeProductTableDataForPurchaseHistory({ purchases });
 
+  const [isDetailButtonClicked, setIsDetailButtonClicked] = useState(false);
+
+  const onClickDetailButton = () => {
+    setDetailPurchaseId(payment.id);
+    setIsDetailButtonClicked(true);
+  };
+  const goBackToPurchaseHistories = () => {
+    setDetailPurchaseId(null);
+    setIsDetailButtonClicked(false);
+  };
+
+  // orderStatus
+  // 결제대기 : 가상계좌의 경우
+  // 결제완료 : 결제확인
+  // 상품준비중 : 작업 들어갔을 때
+  // 배송시작 : 배송조회?
+  // 배송중 : 배송조회
+  // 배송완료 :
+  // 영광인쇄
   return (
     <Fragment>
-      {/* ~월 ~일 주문 */}
       <Title size={3}>{convertTime(from)} 주문</Title>
       {isMobile ? (
         <MobileProductList products={purchases} />
       ) : (
         <ProductTable tableHead={tableHead} tableData={tableData} />
       )}
-      {/* 받는 사람 정보 + 결제정보 */}
-      {/* 주문 상세보기 */}
+      <FlexEnd>
+        <Button
+          color="info"
+          onClick={
+            isDetailButtonClicked
+              ? goBackToPurchaseHistories
+              : onClickDetailButton
+          }
+        >
+          {isDetailButtonClicked ? "주문내역으로 돌아가기" : "주문 상세 보기"}
+        </Button>
+      </FlexEnd>
+      {isDetailButtonClicked && (
+        <GridContainer>
+          <GridItem xs={12} sm={4} md={4} className={classes.mlAuto}>
+            <ReceiverInfoCard {...delivery} />
+          </GridItem>
+          <GridItem xs={12} sm={4} md={4} className={classes.mrAuto}>
+            <PaymentResultCard
+              basketTotalPrice={amount - deliveryFee}
+              deliveryFee={deliveryFee}
+            />
+          </GridItem>
+        </GridContainer>
+      )}
       {/* 주문 내역으로 돌아가기 */}
       {/* 주문취소 */}
       {/* 배송조회 */}
@@ -39,6 +100,7 @@ export default function PurchaseHistory({ payment }) {
 }
 
 PurchaseHistory.propTypes = {
+  setDetailPurchaseId: PropTypes.func,
   payment: PropTypes.shape({
     id: PropTypes.number,
     amount: PropTypes.number,
