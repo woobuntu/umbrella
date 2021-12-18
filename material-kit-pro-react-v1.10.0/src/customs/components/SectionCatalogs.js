@@ -44,13 +44,7 @@ export default function SectionCatalogs() {
                     <Card product plain>
                       <CardHeader image plain>
                         <Link to={`/mall/${id}`}>
-                          <img
-                            src={path}
-                            style={{
-                              maxWidth: "auto",
-                              height: "20rem",
-                            }}
-                          />
+                          <img src={path} />
                         </Link>
                         <div
                           className={classes.coloredShadow}

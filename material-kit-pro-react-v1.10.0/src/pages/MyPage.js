@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import Profile from "../templates/Profile";
 import { mypageStyle } from "customs/assets/styles";
 import { makeStyles } from "@material-ui/core/styles";
@@ -30,6 +30,12 @@ export default function MyPage() {
   //     }
   //   );
 
+  const [detailPurchaseId, setDetailPurchaseId] = useState(null);
+
+  const paymentsToBeShown = detailPurchaseId
+    ? payments.filter(({ id }) => id == detailPurchaseId)
+    : payments;
+
   return (
     <Profile>
       <UserBasicInfo />
@@ -54,11 +60,11 @@ export default function MyPage() {
             tabIcon: ListAlt,
             tabContent: (
               <Fragment>
-                {payments.map((payment) => (
+                {paymentsToBeShown.map((payment) => (
                   <PurchaseHistory
                     key={payment.id}
                     payment={payment}
-                    // purchases={payment.purchases}
+                    setDetailPurchaseId={setDetailPurchaseId}
                   />
                 ))}
               </Fragment>
