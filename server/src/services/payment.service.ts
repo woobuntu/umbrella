@@ -49,4 +49,16 @@ export class PaymentService {
 
     return payment;
   }
+
+  async updatePayment(params: {
+    where: Prisma.PaymentWhereUniqueInput;
+    data: Prisma.PaymentUpdateInput;
+  }) {
+    const { where, data } = params;
+
+    return this.prisma.payment.update({
+      where,
+      data,
+    });
+  }
 }

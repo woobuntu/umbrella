@@ -8,7 +8,6 @@ export { GnbModule } from './gnb.module';
 export { AuthModule } from './auth.module';
 export { ProductModule } from './product.module';
 export { BasketModule } from './basket.module';
-export { StaticModule } from './static.module';
 export { DayjsModule } from './dayjs.module';
 export { PrismaModule } from './prisma.module';
 export { UserModule } from './user.module';

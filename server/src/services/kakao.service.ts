@@ -133,7 +133,6 @@ export class KakaoService {
   }
 
   preparePayment(params: {
-    accessToken: string;
     userId: string;
     orderName: string;
     totalQuantity: number;
@@ -141,9 +140,8 @@ export class KakaoService {
   }): Observable<any> {
     const url = 'https://kapi.kakao.com/v1/payment/ready';
 
-    const { accessToken, userId, orderName, totalQuantity, totalAmount } =
-      params;
-    const { cid } = this.configService.get<KakaoConfig>('kakao');
+    const { userId, orderName, totalQuantity, totalAmount } = params;
+    const { cid, adminKey } = this.configService.get<KakaoConfig>('kakao');
     const { clientUrl } =
       this.configService.get<EnvironmentConfig>('environment');
     const partnerOrderId = v4();
@@ -164,24 +162,10 @@ export class KakaoService {
       .post(url, dataString, {
         headers: {
           'Content-type': 'application/x-www-form-urlencoded',
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `KakaoAK ${adminKey}`,
         },
       })
       .pipe(
-        catchError((error) => {
-          if (error.message === 'Request failed with status code 401') {
-            return this.reissueToken(userId).pipe(
-              concatMap(({ newAccessToken }) =>
-                this.httpService.post(url, dataString, {
-                  headers: {
-                    'Content-type': 'application/x-www-form-urlencoded',
-                    Authorization: `Bearer ${newAccessToken}`,
-                  },
-                }),
-              ),
-            );
-          }
-        }),
         map(({ data }) => data),
         map(({ tid, next_redirect_pc_url, next_redirect_mobile_url }) => ({
           tid,
@@ -193,17 +177,16 @@ export class KakaoService {
   }
 
   approvePayment(params: {
-    accessToken: string;
     tid: string;
     partnerOrderId: string;
     partnerUserId: string;
     pgToken: string;
   }): Observable<{ tid: string; paymentMethodType: '현금' | '카드' }> {
-    const { accessToken, tid, partnerOrderId, partnerUserId, pgToken } = params;
+    const { tid, partnerOrderId, partnerUserId, pgToken } = params;
 
     const url = 'https://kapi.kakao.com/v1/payment/approve';
 
-    const { cid } = this.configService.get<KakaoConfig>('kakao');
+    const { cid, adminKey } = this.configService.get<KakaoConfig>('kakao');
 
     const dataString =
       `cid=${cid}` +
@@ -216,7 +199,7 @@ export class KakaoService {
       .post(url, dataString, {
         headers: {
           'Content-type': 'application/x-www-form-urlencoded',
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `KakaoAK ${adminKey}`,
         },
       })
       .pipe(

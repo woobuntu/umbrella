@@ -7,7 +7,7 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import { concatMap, forkJoin, from, tap } from 'rxjs';
+import { concatMap, forkJoin, from } from 'rxjs';
 import {
   BasketsAndDeliveryFee,
   CurrentUser,
@@ -28,9 +28,11 @@ import {
   OrdererAndDelivery,
   Payment,
   TossPaymentsInput,
+  UpdatePaymentInput,
 } from 'src/graphql/types/payment';
 import { User } from 'src/graphql/types/user';
 import { AuthGuard, TossPaymentsGuard } from 'src/guards';
+import { AdminGuard } from 'src/guards/admin.guard';
 import {
   ClearSessionExceptUserInfo,
   StoreOrdererAndDelivery,
@@ -144,12 +146,12 @@ export class PaymentResolver {
   @UseInterceptors(StoreTidAndPartnerOrderIdInSession)
   @Mutation((returns) => KakaoPayPrepareResult)
   async prepareKakaoPayment(@CurrentUser() user: User) {
-    const { accessToken, id } = user;
-    const params = await this.basketService.getBasketInfoForKakaoPay(id);
+    const params = await this.basketService.getBasketInfoForKakaoPay(user.id);
 
+    // accessToken이 카카오 accessToken이기 때문에 카카오 계정으로 가입하지 않은 사람은
+    // 카카오 로그인 처리가 필요...?
     return this.kakaoService.preparePayment({
-      accessToken,
-      userId: id,
+      userId: user.id,
       ...params,
     });
   }
@@ -164,13 +166,11 @@ export class PaymentResolver {
     @DeliveryInSession() delivery: DeliveryWithOutPaymentId,
     @TidAndPartnerOrderId() { tid, partnerOrderId },
   ) {
-    const { id, accessToken } = user;
-
     return forkJoin([
       from(
         this.basketService.baskets({
           where: {
-            userId: id,
+            userId: user.id,
           },
           include: {
             productOptionRelation: {
@@ -183,10 +183,9 @@ export class PaymentResolver {
         }),
       ),
       this.kakaoService.approvePayment({
-        accessToken,
         tid,
         partnerOrderId,
-        partnerUserId: id,
+        partnerUserId: user.id,
         pgToken,
       }),
     ]).pipe(
@@ -219,7 +218,7 @@ export class PaymentResolver {
               },
               user: {
                 connect: {
-                  id,
+                  id: user.id,
                 },
               },
               purchases: {
@@ -235,7 +234,7 @@ export class PaymentResolver {
               paymentHistories: {
                 create: {
                   ...dataForPaymentAndHistory,
-                  userId: id,
+                  userId: user.id,
                 },
               },
             },
@@ -244,6 +243,29 @@ export class PaymentResolver {
         },
       ),
     );
+  }
+
+  @UseGuards(AdminGuard)
+  @Query((returns) => [Payment])
+  async payments() {
+    return this.paymentService.payments({});
+  }
+
+  @UseGuards(AdminGuard)
+  @Mutation((returns) => Payment)
+  async updateOrderStatus(
+    @Args('updatePaymentInput') updatePaymentInput: UpdatePaymentInput,
+  ) {
+    const { paymentId, orderStatus } = updatePaymentInput;
+
+    return this.paymentService.updatePayment({
+      where: {
+        id: paymentId,
+      },
+      data: {
+        orderStatus,
+      },
+    });
   }
 
   @ResolveField()

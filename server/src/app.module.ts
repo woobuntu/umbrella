@@ -14,7 +14,6 @@ import {
   AuthModule,
   ProductModule,
   BasketModule,
-  StaticModule,
   DayjsModule,
   PrismaModule,
   UserModule,
@@ -28,6 +27,7 @@ import {
   tossConfig,
   sendgridConfig,
 } from './config';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
@@ -43,6 +43,10 @@ import {
         sendgridConfig,
       ],
     }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'webroot'),
+      // certbot에 입력할 webroot디렉토리
+    }),
     MetaModule,
     MetaFileRelationModule,
     ContactModule,
@@ -54,7 +58,6 @@ import {
     AuthModule,
     ProductModule,
     BasketModule,
-    StaticModule,
     DayjsModule,
     PrismaModule,
     UserModule,

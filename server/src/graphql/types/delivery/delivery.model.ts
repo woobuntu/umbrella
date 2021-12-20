@@ -15,4 +15,6 @@ export class Delivery {
   detailAddress: string;
 
   memo?: string;
+
+  numberOfInvoice?: string;
 }
