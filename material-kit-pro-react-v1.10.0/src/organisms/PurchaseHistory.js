@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import ProductTable from "./ProductTable";
 import getIsMobile from "utils/getIsMobile";
@@ -14,20 +14,31 @@ import GridContainer from "components/Grid/GridContainer";
 import GridItem from "components/Grid/GridItem";
 import { makeStyles } from "@material-ui/styles";
 import { mlAuto, mrAuto } from "assets/jss/material-kit-pro-react.js";
+import OrderStatus from "molecules/OrderStatus";
+import DeliveryTracker from "./DeliveryTracker";
+import { useLocation } from "react-router-dom";
+import CustomInput from "components/CustomInput/CustomInput";
 
 const useStyles = makeStyles({
   mlAuto,
   mrAuto,
 });
-export default function PurchaseHistory({ payment, setDetailPurchaseId }) {
+export default function PurchaseHistory({
+  payment,
+  setDetailPurchaseId,
+  onChangeOrderStatus,
+}) {
   const classes = useStyles();
   const {
+    id: paymentId,
     purchases,
     paymentHistories,
     delivery,
     deliveryFee,
     amount,
     orderStatus,
+    type,
+    platform,
   } = payment;
 
   const [{ from }] = paymentHistories;
@@ -48,15 +59,11 @@ export default function PurchaseHistory({ payment, setDetailPurchaseId }) {
     setDetailPurchaseId(null);
     setIsDetailButtonClicked(false);
   };
+  const trackerButtonRef = useRef();
+  const onClickTrack = () => {
+    trackerButtonRef.current.click();
+  };
 
-  // orderStatus
-  // 결제대기 : 가상계좌의 경우
-  // 결제완료 : 결제확인
-  // 상품준비중 : 작업 들어갔을 때
-  // 배송시작 : 배송조회?
-  // 배송중 : 배송조회
-  // 배송완료 :
-  // 영광인쇄
   return (
     <Fragment>
       <Title size={3}>{convertTime(from)} 주문</Title>
@@ -65,7 +72,23 @@ export default function PurchaseHistory({ payment, setDetailPurchaseId }) {
       ) : (
         <ProductTable tableHead={tableHead} tableData={tableData} />
       )}
+      <OrderStatus
+        onChangeStatus={onChangeOrderStatus}
+        paymentId={paymentId}
+        orderStatus={orderStatus}
+      />
       <FlexEnd>
+        {orderStatus === "결제완료" && <Button>주문취소</Button>}
+
+        {(orderStatus === "배송시작" || orderStatus === "배송중") && (
+          <Fragment>
+            <Button onClick={onClickTrack}>배송조회</Button>
+            <DeliveryTracker
+              trackerButtonRef={trackerButtonRef}
+              numberOfInvoice={delivery.numberOfInvoice}
+            />
+          </Fragment>
+        )}
         <Button
           color="info"
           onClick={
@@ -77,6 +100,7 @@ export default function PurchaseHistory({ payment, setDetailPurchaseId }) {
           {isDetailButtonClicked ? "주문내역으로 돌아가기" : "주문 상세 보기"}
         </Button>
       </FlexEnd>
+
       {isDetailButtonClicked && (
         <GridContainer>
           <GridItem xs={12} sm={4} md={4} className={classes.mlAuto}>
@@ -86,13 +110,12 @@ export default function PurchaseHistory({ payment, setDetailPurchaseId }) {
             <PaymentResultCard
               basketTotalPrice={amount - deliveryFee}
               deliveryFee={deliveryFee}
+              type={type}
+              platform={platform}
             />
           </GridItem>
         </GridContainer>
       )}
-      {/* 주문 내역으로 돌아가기 */}
-      {/* 주문취소 */}
-      {/* 배송조회 */}
       {/* 배송지 변경 */}
       {/* 환불 문의 -> 채널톡 */}
     </Fragment>
@@ -100,6 +123,7 @@ export default function PurchaseHistory({ payment, setDetailPurchaseId }) {
 }
 
 PurchaseHistory.propTypes = {
+  onChangeOrderStatus: PropTypes.func,
   setDetailPurchaseId: PropTypes.func,
   payment: PropTypes.shape({
     id: PropTypes.number,
@@ -115,6 +139,7 @@ PurchaseHistory.propTypes = {
       address: PropTypes.string,
       detailAddress: PropTypes.string,
       memo: PropTypes.string,
+      numberOfInvoice: PropTypes.string,
     }),
     orderer: PropTypes.shape({
       name: PropTypes.string,

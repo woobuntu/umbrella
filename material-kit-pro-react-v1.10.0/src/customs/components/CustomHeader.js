@@ -24,7 +24,6 @@ export default function CustomHeader() {
 
   const isAuthLoading = useReactiveVar(isAuthLoadingVar);
 
-  if (loading) console.log("로딩중...");
   if (error) alert(error.message);
 
   const tempGnbs = data

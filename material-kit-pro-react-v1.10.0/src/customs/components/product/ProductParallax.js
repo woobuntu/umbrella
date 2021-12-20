@@ -13,7 +13,7 @@ const useStyles = makeStyles(productParallaxStyle);
 
 export default function ProductParallax({ basketAmount }) {
   const parallaxUrl =
-    "https://woobuntu-umbrella.s3.ap-northeast-2.amazonaws.com/%E1%84%89%E1%85%A1%E1%86%BC%E1%84%91%E1%85%AE%E1%86%B7parallax.jpeg";
+    "https://woobuntu-umbrella.s3.ap-northeast-2.amazonaws.com/%E1%84%91%E1%85%A9%E1%84%8C%E1%85%A1%E1%86%BC%E1%84%89%E1%85%A1%E1%86%BC%E1%84%8C%E1%85%A1+big.jpg";
 
   const classes = useStyles();
 

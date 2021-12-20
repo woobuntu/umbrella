@@ -17,11 +17,9 @@ const useStyles = makeStyles(sectionCatalogsStyle);
 export default function SectionCatalogs() {
   const classes = useStyles();
 
-  const { loading, data, error } = useQuery(PRODUCTS);
+  const { data, error } = useQuery(PRODUCTS);
 
   if (error) alert(error.message);
-
-  if (loading) console.log("로딩중...");
 
   return (
     <div className={classes.section}>

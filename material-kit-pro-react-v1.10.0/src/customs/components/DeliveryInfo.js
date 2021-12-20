@@ -26,7 +26,6 @@ export default function DeliveryInfo({
     memo: "",
   },
 }) {
-  console.log(delivery);
   const { name, phone, postCode, address, detailAddress, memo } = delivery;
   const classes = useStyles();
   return (

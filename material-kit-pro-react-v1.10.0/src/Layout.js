@@ -3,6 +3,7 @@ import { isMobile } from "customs/utils";
 import { IS_AUTHENTICATED } from "graphql/query";
 import { isAuthenticatedVar } from "graphql/state";
 import { useChannelTalk } from "hooks";
+import Admin from "pages/Admin";
 import MobileBasket from "pages/MobileBasket";
 import WebBasket from "pages/WebBasket";
 import React, { Fragment, useEffect } from "react";
@@ -28,7 +29,7 @@ import {
 
 export default function Layout() {
   useChannelTalk();
-  const { loading, error, data } = useQuery(IS_AUTHENTICATED);
+  const { error, data } = useQuery(IS_AUTHENTICATED);
 
   useEffect(() => {
     if (data) {
@@ -39,8 +40,7 @@ export default function Layout() {
     }
   }, [data]);
 
-  if (loading) console.log("로딩중...");
-  if (error) console.error(error);
+  if (error) alert(error.message);
 
   return (
     <Fragment>
@@ -80,6 +80,9 @@ export default function Layout() {
         </PrivateRoute>
         <PrivateRoute path="/fail">
           <Fail />
+        </PrivateRoute>
+        <PrivateRoute path="/admin">
+          <Admin />
         </PrivateRoute>
         <Route path="/">
           <Home />

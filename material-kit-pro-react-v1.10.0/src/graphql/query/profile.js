@@ -30,6 +30,7 @@ const PROFILE = gql`
           address
           detailAddress
           memo
+          numberOfInvoice
         }
         orderer {
           name

@@ -22,10 +22,10 @@ export default function Mall() {
   });
 
   const parallaxUrl =
-    "https://woobuntu-umbrella.s3.ap-northeast-2.amazonaws.com/%E1%84%89%E1%85%A1%E1%86%BC%E1%84%91%E1%85%AE%E1%86%B7parallax.jpeg";
+    "https://woobuntu-umbrella.s3.ap-northeast-2.amazonaws.com/%E1%84%91%E1%85%A9%E1%84%8C%E1%85%A1%E1%86%BC%E1%84%87%E1%85%A1%E1%86%A8%E1%84%89%E1%85%B3.jpg";
 
   const featureImageUrl =
-    "https://woobuntu-umbrella.s3.ap-northeast-2.amazonaws.com/%E1%84%8C%E1%85%A6%E1%84%91%E1%85%AE%E1%86%B7%E1%84%91%E1%85%A9%E1%84%8C%E1%85%A1%E1%86%BC%E1%84%8C%E1%85%A1%E1%86%A8%E1%84%8B%E1%85%A5%E1%86%B8.png";
+    "https://woobuntu-umbrella.s3.ap-northeast-2.amazonaws.com/%E1%84%8C%E1%85%A1%E1%86%A8%E1%84%8B%E1%85%A5%E1%86%B82.jpg";
   return (
     <div>
       <Parallax image={parallaxUrl} filter="dark" small>
@@ -54,9 +54,23 @@ export default function Mall() {
         <div className={classes.container}>
           <div className={classes.features}>
             <GridContainer>
-              <GridItem xs={12} sm={6} md={6}>
+              <GridItem
+                xs={12}
+                sm={6}
+                md={6}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
                 <div className={classes.phoneContainer}>
-                  <img src={featureImageUrl} alt="..." />
+                  <img
+                    src={featureImageUrl}
+                    alt="..."
+                    style={{
+                      borderRadius: "1rem",
+                    }}
+                  />
                 </div>
               </GridItem>
               <GridItem xs={12} sm={6} md={6}>
