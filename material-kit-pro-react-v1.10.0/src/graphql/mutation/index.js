@@ -8,3 +8,5 @@ export { default as PREPARE_KAKAOPAY } from "./prepare-kakaopay";
 export { default as STORE_ORDERER_AND_DELIVERY_IN_SESSION } from "./store-orderer-and-delivery-in-session";
 export { default as CREATE_PAYMENT_BY_TOSS } from "./create-payment-by-toss";
 export { default as CREATE_PAYMENT_BY_KAKAO } from "./create-payment-by-kakao";
+export { default as UPDATE_ORDER_STATUS } from "./update-order-status";
+export { default as UPDATE_ORDER_STATUS_AND_NUMBER_OF_INVOICE } from "./update-order-status-and-number-of-invoice";

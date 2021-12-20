@@ -7,3 +7,4 @@ export { default as EXECUTIVE } from "./executive";
 export { default as META_FILE_RELATIONS } from "./metaFileRelations";
 export { default as PROFILE } from "./profile";
 export { default as PURCHASES } from "./purchases";
+export { default as PAYMENTS } from "./payments";
