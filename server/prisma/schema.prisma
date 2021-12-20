@@ -23,7 +23,7 @@ model AccountHistory {
   accountId Int       @default(1)
   from      DateTime  @default(now()) @db.Timestamp(0)
   to        DateTime? @db.Timestamp(0)
-  account   Account   @relation(fields: [accountId], references: [id], onUpdate: Restrict, map: "AccountHistory_ibfk_1")
+  account   Account   @relation(fields: [accountId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounthistory_ibfk_1")
 
   @@index([accountId], map: "accountId")
 }
@@ -33,8 +33,8 @@ model Basket {
   userId                  String                @db.VarChar(255)
   productOptionRelationId Int
   quantity                Int
-  productOptionRelation   ProductOptionRelation @relation(fields: [productOptionRelationId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "Basket_ibfk_2")
-  user                    User                  @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "Basket_ibfk_1")
+  productOptionRelation   ProductOptionRelation @relation(fields: [productOptionRelationId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "basket_ibfk_2")
+  user                    User                  @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "basket_ibfk_1")
 
   @@index([productOptionRelationId], map: "productOptionRelationId")
   @@index([userId], map: "userId")
@@ -45,7 +45,7 @@ model Career {
   classification  String          @db.VarChar(10)
   record          String          @db.VarChar(30)
   executiveId     Int
-  executive       Executive       @relation(fields: [executiveId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "Career_ibfk_1")
+  executive       Executive       @relation(fields: [executiveId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "career_ibfk_1")
   careerHistories CareerHistory[]
 
   @@index([executiveId], map: "executiveId")
@@ -59,7 +59,7 @@ model CareerHistory {
   careerId       Int?
   from           DateTime  @default(now()) @db.Timestamp(0)
   to             DateTime? @db.Timestamp(0)
-  career         Career?   @relation(fields: [careerId], references: [id], onUpdate: Restrict, map: "CareerHistory_ibfk_1")
+  career         Career?   @relation(fields: [careerId], references: [id], onUpdate: NoAction, map: "careerhistory_ibfk_1")
 
   @@index([careerId], map: "careerId")
 }
@@ -80,7 +80,7 @@ model ContactHistory {
   contactId Int       @default(1)
   from      DateTime  @default(now()) @db.Timestamp(0)
   to        DateTime? @db.Timestamp(0)
-  contact   Contact   @relation(fields: [contactId], references: [id], onUpdate: Restrict, map: "ContactHistory_ibfk_1")
+  contact   Contact   @relation(fields: [contactId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "contacthistory_ibfk_1")
 
   @@index([contactId], map: "contactId")
 }
@@ -99,8 +99,8 @@ model ExecutiveFileRelation {
   id          Int       @id @default(autoincrement())
   executiveId Int
   fileId      Int
-  executive   Executive @relation(fields: [executiveId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "ExecutiveFileRelation_ibfk_1")
-  file        File      @relation(fields: [fileId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "ExecutiveFileRelation_ibfk_2")
+  executive   Executive @relation(fields: [executiveId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "executivefilerelation_ibfk_1")
+  file        File      @relation(fields: [fileId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "executivefilerelation_ibfk_2")
 
   @@index([executiveId], map: "executiveId")
   @@index([fileId], map: "fileId")
@@ -114,7 +114,7 @@ model ExecutiveHistory {
   executiveId Int?
   from        DateTime   @default(now()) @db.Timestamp(0)
   to          DateTime?  @db.Timestamp(0)
-  executive   Executive? @relation(fields: [executiveId], references: [id], onUpdate: Restrict, map: "ExecutiveHistory_ibfk_1")
+  executive   Executive? @relation(fields: [executiveId], references: [id], onUpdate: NoAction, map: "executivehistory_ibfk_1")
 
   @@index([executiveId], map: "executiveId")
 }
@@ -139,7 +139,7 @@ model FileHistory {
   fileId Int?
   from   DateTime  @default(now()) @db.Timestamp(0)
   to     DateTime? @db.Timestamp(0)
-  file   File?     @relation(fields: [fileId], references: [id], onUpdate: Restrict, map: "FileHistory_ibfk_1")
+  file   File?     @relation(fields: [fileId], references: [id], onUpdate: NoAction, map: "filehistory_ibfk_1")
 
   @@index([fileId], map: "fileId")
 }
@@ -157,7 +157,7 @@ model GnbHistory {
   gnbId Int?
   from  DateTime  @default(now()) @db.Timestamp(0)
   to    DateTime? @db.Timestamp(0)
-  gnb   Gnb?      @relation(fields: [gnbId], references: [id], onUpdate: Restrict, map: "GnbHistory_ibfk_1")
+  gnb   Gnb?      @relation(fields: [gnbId], references: [id], onUpdate: NoAction, map: "gnbhistory_ibfk_1")
 
   @@index([gnbId], map: "gnbId")
 }
@@ -176,7 +176,7 @@ model HistoryHistory {
   historyId Int?
   from      DateTime  @default(now()) @db.Timestamp(0)
   to        DateTime? @db.Timestamp(0)
-  history   History?  @relation(fields: [historyId], references: [id], onUpdate: Restrict, map: "HistoryHistory_ibfk_1")
+  history   History?  @relation(fields: [historyId], references: [id], onUpdate: NoAction, map: "historyhistory_ibfk_1")
 
   @@index([historyId], map: "historyId")
 }
@@ -186,7 +186,7 @@ model Lnb {
   name         String       @db.VarChar(10)
   path         String       @db.VarChar(50)
   gnbId        Int
-  gnb          Gnb          @relation(fields: [gnbId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "Lnb_ibfk_1")
+  gnb          Gnb          @relation(fields: [gnbId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "lnb_ibfk_1")
   lnbHistories LnbHistory[]
 
   @@index([gnbId], map: "gnbId")
@@ -199,7 +199,7 @@ model LnbHistory {
   lnbId Int?
   from  DateTime  @default(now()) @db.Timestamp(0)
   to    DateTime? @db.Timestamp(0)
-  lnb   Lnb?      @relation(fields: [lnbId], references: [id], onUpdate: Restrict, map: "LnbHistory_ibfk_1")
+  lnb   Lnb?      @relation(fields: [lnbId], references: [id], onUpdate: NoAction, map: "lnbhistory_ibfk_1")
 
   @@index([lnbId], map: "lnbId")
 }
@@ -217,8 +217,8 @@ model MetaFileRelation {
   metaId Int    @default(1)
   fileId Int
   type   String @db.VarChar(10)
-  file   File   @relation(fields: [fileId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "MetaFileRelation_ibfk_2")
-  meta   Meta   @relation(fields: [metaId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "MetaFileRelation_ibfk_1")
+  file   File   @relation(fields: [fileId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "metafilerelation_ibfk_2")
+  meta   Meta   @relation(fields: [metaId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "metafilerelation_ibfk_1")
 
   @@index([fileId], map: "fileId")
   @@index([metaId], map: "metaId")
@@ -231,7 +231,7 @@ model MetaHistory {
   metaId Int
   from   DateTime  @default(now()) @db.Timestamp(0)
   to     DateTime? @db.Timestamp(0)
-  meta   Meta      @relation(fields: [metaId], references: [id], onUpdate: Restrict, map: "MetaHistory_ibfk_1")
+  meta   Meta      @relation(fields: [metaId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "metahistory_ibfk_1")
 
   @@index([metaId], map: "metaId")
 }
@@ -252,7 +252,7 @@ model NotificationHistory {
   notificationId Int?
   from           DateTime      @default(now()) @db.Timestamp(0)
   to             DateTime?     @db.Timestamp(0)
-  notification   Notification? @relation(fields: [notificationId], references: [id], onUpdate: Restrict, map: "NotificationHistory_ibfk_1")
+  notification   Notification? @relation(fields: [notificationId], references: [id], onUpdate: NoAction, map: "notificationhistory_ibfk_1")
 
   @@index([notificationId], map: "notificationId")
 }
@@ -272,7 +272,7 @@ model OptionHistory {
   optionId Int?
   from     DateTime  @default(now()) @db.Timestamp(0)
   to       DateTime? @db.Timestamp(0)
-  option   Option?   @relation(fields: [optionId], references: [id], onUpdate: Restrict, map: "OptionHistory_ibfk_1")
+  option   Option?   @relation(fields: [optionId], references: [id], onUpdate: NoAction, map: "optionhistory_ibfk_1")
 
   @@index([optionId], map: "optionId")
 }
@@ -290,8 +290,8 @@ model PerformanceFileRelation {
   id            Int         @id @default(autoincrement())
   performanceId Int
   fileId        Int
-  file          File        @relation(fields: [fileId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "PerformanceFileRelation_ibfk_2")
-  performance   Performance @relation(fields: [performanceId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "PerformanceFileRelation_ibfk_1")
+  file          File        @relation(fields: [fileId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "performancefilerelation_ibfk_2")
+  performance   Performance @relation(fields: [performanceId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "performancefilerelation_ibfk_1")
 
   @@index([fileId], map: "fileId")
   @@index([performanceId], map: "performanceId")
@@ -301,11 +301,11 @@ model PerformanceHistory {
   id            Int          @id @default(autoincrement())
   title         String       @db.VarChar(50)
   content       String?      @db.Text
-  timestamp     DateTime     @default(now()) @db.Timestamp(0)
+  timestamp     DateTime     @db.Timestamp(0)
   performanceId Int?
   from          DateTime     @default(now()) @db.Timestamp(0)
   to            DateTime?    @db.Timestamp(0)
-  performance   Performance? @relation(fields: [performanceId], references: [id], onUpdate: Restrict, map: "PerformanceHistory_ibfk_1")
+  performance   Performance? @relation(fields: [performanceId], references: [id], onUpdate: NoAction, map: "performancehistory_ibfk_1")
 
   @@index([performanceId], map: "performanceId")
 }
@@ -333,7 +333,7 @@ model UserHistory {
   userId       String?   @db.VarChar(255)
   from         DateTime  @default(now()) @db.Timestamp(0)
   to           DateTime? @db.Timestamp(0)
-  user         User?     @relation(fields: [userId], references: [id], onUpdate: Restrict, map: "UserHistory_ibfk_1")
+  user         User?     @relation(fields: [userId], references: [id], onUpdate: NoAction, map: "userhistory_ibfk_1")
 
   @@index([userId], map: "userId")
 }
@@ -347,7 +347,7 @@ model DefaultDelivery {
   detailAddress            String                   @db.VarChar(255)
   memo                     String?                  @db.VarChar(255)
   userId                   String                   @unique(map: "userId") @db.VarChar(255)
-  user                     User                     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "DefaultDelivery_ibfk_1")
+  user                     User                     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "defaultdelivery_ibfk_1")
   defaultDeliveryHistories DefaultDeliveryHistory[]
 }
 
@@ -363,7 +363,7 @@ model DefaultDeliveryHistory {
   defaultDeliveryId Int?
   from              DateTime         @default(now()) @db.Timestamp(0)
   to                DateTime?        @db.Timestamp(0)
-  defaultDelivery   DefaultDelivery? @relation(fields: [defaultDeliveryId], references: [id], onUpdate: Restrict, map: "DefaultDeliveryHistory_ibfk_1")
+  defaultDelivery   DefaultDelivery? @relation(fields: [defaultDeliveryId], references: [id], onUpdate: NoAction, map: "defaultdeliveryhistory_ibfk_1")
 
   @@index([defaultDeliveryId], map: "defaultDeliveryId")
 }
@@ -379,7 +379,7 @@ model Payment {
   orderId          String?          @db.VarChar(255)
   paymentKey       String?          @db.VarChar(255)
   userId           String           @db.VarChar(255)
-  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "Payment_ibfk_1")
+  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "payment_ibfk_1")
   delivery         Delivery?
   orderer          Orderer?
   paymentHistories PaymentHistory[]
@@ -402,20 +402,21 @@ model PaymentHistory {
   paymentId   Int?
   from        DateTime  @default(now()) @db.Timestamp(0)
   to          DateTime? @db.Timestamp(0)
-  payment     Payment?  @relation(fields: [paymentId], references: [id], onUpdate: Restrict, map: "PaymentHistory_ibfk_1")
+  payment     Payment?  @relation(fields: [paymentId], references: [id], onUpdate: NoAction, map: "paymenthistory_ibfk_1")
 
   @@index([paymentId], map: "paymentId")
 }
 
 model Delivery {
-  paymentId     Int     @id
-  name          String  @db.VarChar(255)
-  phone         String  @default("010--") @db.VarChar(255)
-  postCode      String  @db.VarChar(255)
-  address       String  @db.VarChar(255)
-  detailAddress String  @db.VarChar(255)
-  memo          String? @db.VarChar(255)
-  payment       Payment @relation(fields: [paymentId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "Delivery_ibfk_1")
+  paymentId       Int     @id
+  name            String  @db.VarChar(255)
+  phone           String  @default("010--") @db.VarChar(255)
+  postCode        String  @db.VarChar(255)
+  address         String  @db.VarChar(255)
+  detailAddress   String  @db.VarChar(255)
+  memo            String? @db.VarChar(255)
+  numberOfInvoice String? @db.VarChar(255)
+  payment         Payment @relation(fields: [paymentId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "delivery_ibfk_1")
 }
 
 model Orderer {
@@ -423,7 +424,7 @@ model Orderer {
   name      String  @db.VarChar(255)
   phone     String  @db.VarChar(255)
   email     String  @db.VarChar(255)
-  payment   Payment @relation(fields: [paymentId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "Orderer_ibfk_1")
+  payment   Payment @relation(fields: [paymentId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "orderer_ibfk_1")
 }
 
 model Purchase {
@@ -431,8 +432,8 @@ model Purchase {
   productOptionRelationId Int?
   paymentId               Int
   quantity                Int
-  payment                 Payment                @relation(fields: [paymentId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "Purchase_ibfk_2")
-  productOptionRelation   ProductOptionRelation? @relation(fields: [productOptionRelationId], references: [id], onUpdate: Restrict, map: "Purchase_ibfk_1")
+  payment                 Payment                @relation(fields: [paymentId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "purchase_ibfk_2")
+  productOptionRelation   ProductOptionRelation? @relation(fields: [productOptionRelationId], references: [id], onUpdate: NoAction, map: "purchase_ibfk_1")
 
   @@index([paymentId], map: "paymentId")
   @@index([productOptionRelationId], map: "productOptionRelationId")
@@ -454,8 +455,8 @@ model ProductFileRelation {
   id        Int     @id @default(autoincrement())
   productId Int
   fileId    Int
-  File      File    @relation(fields: [fileId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "ProductFileRelation_ibfk_2")
-  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "ProductFileRelation_ibfk_1")
+  File      File    @relation(fields: [fileId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "productfilerelation_ibfk_2")
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "productfilerelation_ibfk_1")
 
   @@index([fileId], map: "fileId")
   @@index([productId], map: "productId")
@@ -471,7 +472,7 @@ model ProductHistory {
   productId      Int?
   from           DateTime  @default(now()) @db.Timestamp(0)
   to             DateTime? @db.Timestamp(0)
-  product        Product?  @relation(fields: [productId], references: [id], onUpdate: Restrict, map: "ProductHistory_ibfk_1")
+  product        Product?  @relation(fields: [productId], references: [id], onUpdate: NoAction, map: "producthistory_ibfk_1")
 
   @@index([productId], map: "productId")
 }
@@ -480,8 +481,8 @@ model ProductOptionRelation {
   id        Int        @id @default(autoincrement())
   productId Int
   optionId  Int
-  option    Option     @relation(fields: [optionId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "ProductOptionRelation_ibfk_2")
-  product   Product    @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "ProductOptionRelation_ibfk_1")
+  option    Option     @relation(fields: [optionId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "productoptionrelation_ibfk_2")
+  product   Product    @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "productoptionrelation_ibfk_1")
   baskets   Basket[]
   purchases Purchase[]
 

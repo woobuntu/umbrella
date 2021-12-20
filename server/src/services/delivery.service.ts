@@ -11,4 +11,11 @@ export class DeliveryService {
       where: deliveryWhereUniqueInput,
     });
   }
+
+  async updateDelivery(params: {
+    where: Prisma.DeliveryWhereUniqueInput;
+    data: Prisma.DeliveryUpdateInput;
+  }) {
+    return this.prisma.delivery.update(params);
+  }
 }

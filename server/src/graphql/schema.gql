@@ -46,6 +46,7 @@ input CreateDeliveryInput {
   detailAddress: String!
   memo: String
   name: String!
+  numberOfInvoice: String
   phone: String!
   postCode: String!
 }
@@ -78,6 +79,7 @@ type Delivery {
   detailAddress: String!
   memo: String
   name: String!
+  numberOfInvoice: String
   paymentId: Float!
   phone: String!
   postCode: String!
@@ -88,6 +90,7 @@ type DeliveryWithOutPaymentId {
   detailAddress: String!
   memo: String
   name: String!
+  numberOfInvoice: String
   phone: String!
   postCode: String!
 }
@@ -163,6 +166,7 @@ type Mutation {
   signOut: AuthState!
   storeOrdererAndDelivery(createDeliveryInput: CreateDeliveryInput!, createOrdererInput: CreateOrdererInput!): OrdererAndDelivery!
   updateDefaultDelivery(updateDefaultDeliveryInput: UpdateDefaultDeliveryInput!): DefaultDelivery!
+  updateNumberOfInvoice(updateNumberOfInvoiceInput: UpdateNumberOfInvoiceInput!): Delivery!
   updateOrderStatus(updatePaymentInput: UpdatePaymentInput!): Payment!
   updateProfile(updateUserInput: UpdateUserInput!): User!
   upsertBasket(upsertBasketInput: UpsertBasketInput!): Basket!
@@ -302,6 +306,11 @@ input UpdateDefaultDeliveryInput {
   name: String
   phone: String
   postCode: String
+}
+
+input UpdateNumberOfInvoiceInput {
+  numberOfInvoice: String!
+  paymentId: Float!
 }
 
 input UpdatePaymentInput {

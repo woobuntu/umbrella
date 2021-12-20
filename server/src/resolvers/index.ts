@@ -13,3 +13,4 @@ export { BasketResolver } from './basket.resolver';
 export { DefaultDeliveryResolver } from './default-delivery.resolver';
 export { PaymentResolver } from './payment.resolver';
 export { PurchaseResolver } from './purchase.resolver';
+export { DeliveryResolver } from './delivery.resolver';
