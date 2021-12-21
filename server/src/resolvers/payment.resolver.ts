@@ -1,13 +1,14 @@
 import { UseGuards, UseInterceptors } from '@nestjs/common';
 import {
   Args,
+  Int,
   Mutation,
   Parent,
   Query,
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import { concatMap, forkJoin, from } from 'rxjs';
+import { concatMap, forkJoin, from, of, tap } from 'rxjs';
 import {
   BasketsAndDeliveryFee,
   CurrentUser,
@@ -30,6 +31,7 @@ import {
   TossPaymentsInput,
   UpdatePaymentInput,
 } from 'src/graphql/types/payment';
+import { CancelOrderInput } from 'src/graphql/types/payment/cancel-order.input';
 import { User } from 'src/graphql/types/user';
 import { AuthGuard, TossPaymentsGuard } from 'src/guards';
 import { AdminGuard } from 'src/guards/admin.guard';
@@ -40,6 +42,7 @@ import {
 } from 'src/interceptors';
 import {
   BasketService,
+  DayjsService,
   DeliveryService,
   KakaoService,
   OrdererService,
@@ -58,6 +61,7 @@ export class PaymentResolver {
     private purchaseService: PurchaseService,
     private tossService: TossService,
     private kakaoService: KakaoService,
+    private dayjsService: DayjsService,
   ) {}
 
   @UseGuards(AuthGuard)
@@ -266,6 +270,72 @@ export class PaymentResolver {
         orderStatus,
       },
     });
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation((returns) => Payment)
+  cancelOrder(@Args('cancelOrderInput') cancelOrderInput: CancelOrderInput) {
+    const { cancelReason, paymentId } = cancelOrderInput;
+
+    return from(this.paymentService.payment({ id: paymentId })).pipe(
+      concatMap((paymentInfo) =>
+        forkJoin([
+          of(paymentInfo),
+          paymentInfo.platform === '카카오'
+            ? this.kakaoService.cancelPayment({
+                tid: paymentInfo.tid,
+                cancelAmount: paymentInfo.amount,
+              })
+            : this.tossService.cancelPayment({
+                cancelReason,
+                paymentKey: paymentInfo.paymentKey,
+              }),
+        ]),
+      ),
+      concatMap(() =>
+        from(
+          this.paymentService.paymentHistories({
+            where: {
+              paymentId,
+              to: null,
+            },
+          }),
+        ),
+      ),
+      concatMap(([lastPaymentHistory]) => {
+        const {
+          id: lastPaymentHistoryId,
+          paymentId,
+          ...dataForNewPaymentHistory
+        } = lastPaymentHistory;
+        const currentTime = this.dayjsService.getCurrentTime();
+        return from(
+          this.paymentService.updatePayment({
+            where: {
+              id: paymentId,
+            },
+            data: {
+              orderStatus: '주문취소',
+              paymentHistories: {
+                update: {
+                  where: {
+                    id: lastPaymentHistoryId,
+                  },
+                  data: {
+                    to: currentTime,
+                  },
+                },
+                create: {
+                  ...dataForNewPaymentHistory,
+                  orderStatus: '주문취소',
+                  from: currentTime,
+                },
+              },
+            },
+          }),
+        );
+      }),
+    );
   }
 
   @ResolveField()
