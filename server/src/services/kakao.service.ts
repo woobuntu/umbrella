@@ -209,4 +209,33 @@ export class KakaoService {
         })),
       );
   }
+
+  cancelPayment(params: {
+    tid: string;
+    cancelAmount: number;
+    cancelTaxFreeAmount?: number;
+  }) {
+    const { tid, cancelAmount, cancelTaxFreeAmount } = params;
+
+    const url = 'https://kapi.kakao.com/v1/payment/cancel';
+
+    const { cid, adminKey } = this.configService.get<KakaoConfig>('kakao');
+
+    const dataString =
+      `cid=${cid}` +
+      `&tid=${tid}` +
+      `&cancel_amount=${cancelAmount}` +
+      `&cancel_tax_free_amount=${
+        cancelTaxFreeAmount ? cancelTaxFreeAmount : 0
+      }`;
+
+    return this.httpService
+      .post(url, dataString, {
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded',
+          Authorization: `KakaoAK ${adminKey}`,
+        },
+      })
+      .pipe(map(({ data }) => data));
+  }
 }

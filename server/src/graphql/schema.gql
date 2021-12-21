@@ -28,6 +28,11 @@ input BasketInfo {
   quantity: Float!
 }
 
+input CancelOrderInput {
+  cancelReason: String!
+  paymentId: Float!
+}
+
 type Career {
   classification: String!
   executiveId: Float!
@@ -158,6 +163,7 @@ type MetaFileRelation {
 }
 
 type Mutation {
+  cancelOrder(cancelOrderInput: CancelOrderInput!): Payment!
   createPaymentByKakao(pgToken: String!): Payment!
   createPaymentByToss(tossPaymentsInput: TossPaymentsInput!): Payment!
   deleteBasket(id: Int!): Basket!
