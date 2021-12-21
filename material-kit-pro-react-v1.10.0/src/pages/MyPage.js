@@ -12,6 +12,10 @@ import { UserInfoFormCard } from "organisms";
 import { DefaultDeliveryFormCard } from "organisms";
 import useUserQuery from "hooks/useUserQuery";
 import PurchaseHistory from "organisms/PurchaseHistory";
+import CancelOrderModal from "organisms/CancelOrderModal";
+import { useMutation } from "@apollo/client";
+import { CANCEL_ORDER } from "graphql/mutation";
+import { PROFILE } from "graphql/query";
 
 const useStyles = makeStyles(mypageStyle);
 
@@ -19,16 +23,6 @@ export default function MyPage() {
   const classes = useStyles();
 
   const { userInfo, defaultDeliveryInfo, payments } = useUserQuery();
-  // const enrollCard = () =>
-  //   loadTossPayments(process.env.REACT_APP_TOSS_CLIENT_ID).then(
-  //     (tossPayments) => {
-  //       tossPayments.requestBillingAuth("카드", {
-  //         customerKey: v4(),
-  //         successUrl: `${window.location.origin}/success`,
-  //         failUrl: `${window.location.origin}/fail`,
-  //       });
-  //     }
-  //   );
 
   const [detailPurchaseId, setDetailPurchaseId] = useState(null);
 
@@ -36,6 +30,15 @@ export default function MyPage() {
     ? payments.filter(({ id }) => id == detailPurchaseId)
     : payments;
 
+  const [paymentIdToBeDeleted, setPaymentIdToBeDeleted] = useState();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = (paymentId) => {
+    setPaymentIdToBeDeleted(paymentId);
+    setIsModalOpen(true);
+  };
+  const closeModal = () => setIsModalOpen(false);
+  const [cancelReason, setCancelReason] = useState("");
+  const [cancelOrder] = useMutation(CANCEL_ORDER);
   return (
     <Profile>
       <UserBasicInfo />
@@ -65,8 +68,31 @@ export default function MyPage() {
                     key={payment.id}
                     payment={payment}
                     setDetailPurchaseId={setDetailPurchaseId}
+                    onClickOrderCancelButton={openModal}
                   />
                 ))}
+                <CancelOrderModal
+                  open={isModalOpen}
+                  onClose={closeModal}
+                  inputProps={{
+                    value: cancelReason,
+                    onChange: (e) => setCancelReason(e.target.value),
+                    error: cancelReason ? false : true,
+                  }}
+                  yesNoButtonsProps={{
+                    onClickYesButton: () =>
+                      cancelOrder({
+                        variables: {
+                          cancelOrderInput: {
+                            cancelReason,
+                            paymentId: paymentIdToBeDeleted,
+                          },
+                        },
+                        refetchQueries: [PROFILE],
+                      }).then(closeModal),
+                    onClickNoButton: closeModal,
+                  }}
+                />
               </Fragment>
             ),
           },

@@ -13,8 +13,6 @@ import { PAYMENTS } from "graphql/query";
 import { ArrowBack, ArrowForward, ArrowRight } from "@material-ui/icons";
 const useStyles = makeStyles({
   root: {
-    // display: "flex",
-    // justifyContent: "space-between",
     width: "100%",
   },
   node: {
@@ -30,28 +28,32 @@ export default function OrderStatus({
   orderStatus,
 }) {
   const classes = useStyles();
-  const steps = [
-    // "결제대기",
-    "결제완료",
-    "상품준비중",
-    "배송시작",
-    "배송중",
-    "배송완료",
-  ];
+
+  const isMobile = getIsMobile();
+  const { pathname } = useLocation();
+
+  let steps;
+
+  if (orderStatus === "주문취소") {
+    steps = ["주문취소"];
+  } else {
+    steps = [
+      // "결제대기",
+      "결제완료",
+      "상품준비중",
+      "배송시작",
+      "배송중",
+      "배송완료",
+    ];
+  }
 
   const activeStep = steps.indexOf(orderStatus);
 
-  const { pathname } = useLocation();
-
-  return getIsMobile() && pathname == "/my-page" ? (
-    <FlexEnd>
-      <Button color="instagram">{orderStatus}</Button>
-    </FlexEnd>
-  ) : (
+  return (
     <div className={classes.root}>
       <Stepper
         activeStep={activeStep}
-        orientation={getIsMobile() ? "vertical" : "horizontal"}
+        orientation={isMobile ? "vertical" : "horizontal"}
       >
         {steps.map((label) => (
           <Step
@@ -77,7 +79,7 @@ export default function OrderStatus({
 OrderStatus.propTypes = {
   onChangeStatus: PropTypes.func,
   paymentId: PropTypes.number,
-  orderStatus: PropTypes.arrayOf([
+  orderStatus: PropTypes.oneOf([
     "결제대기",
     "결제완료",
     "상품준비중",

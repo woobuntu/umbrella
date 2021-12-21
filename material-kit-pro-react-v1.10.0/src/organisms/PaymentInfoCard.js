@@ -46,7 +46,7 @@ export default function PaymentInfoCard({
       <CardFooter>
         <div className={classes.verticallyAligned}>
           <CreditCardButton onClick={onClickCreditCardButton} />
-          <VirtualAccountButton onClick={onClickVirtualAccountButton} />
+          {/* <VirtualAccountButton onClick={onClickVirtualAccountButton} /> */}
           <AccountTransferButton onClick={onClickAccountTransferButton} />
           <TossSimplePaymentButton onClick={onClickTossSimplePaymentButton} />
           <KakaoPayButton onClick={onClickKakaoPayButton} />
