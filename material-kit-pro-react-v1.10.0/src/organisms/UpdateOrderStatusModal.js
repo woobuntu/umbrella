@@ -17,8 +17,6 @@ export default function UpdateOrderStatusModal(props) {
       targetWord = `${targetStatus}으로`;
   }
 
-  const [numberOfInvoice, setNumberOfInvoice] = useState();
-
   const ref = useRef();
 
   useEffect(() => {

@@ -28,6 +28,7 @@ export default function Admin() {
   const [numberOfInvoice, setNumberOfInvoice] = useState();
 
   const onChangeOrderStatus = ({ orderStatus, paymentId }) => {
+    if (orderStatus === "주문취소") return;
     openModal();
     setTargetStatus(orderStatus);
     setTargetPaymentId(paymentId);

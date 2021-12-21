@@ -27,6 +27,7 @@ export default function PurchaseHistory({
   payment,
   setDetailPurchaseId,
   onChangeOrderStatus,
+  onClickOrderCancelButton,
 }) {
   const classes = useStyles();
   const {
@@ -64,6 +65,8 @@ export default function PurchaseHistory({
     trackerButtonRef.current.click();
   };
 
+  const { pathname } = useLocation();
+
   return (
     <Fragment>
       <Title size={3}>{convertTime(from)} 주문</Title>
@@ -78,7 +81,11 @@ export default function PurchaseHistory({
         orderStatus={orderStatus}
       />
       <FlexEnd>
-        {orderStatus === "결제완료" && <Button>주문취소</Button>}
+        {orderStatus === "결제완료" && pathname !== "/admin" && (
+          <Button onClick={() => onClickOrderCancelButton(paymentId)}>
+            주문취소
+          </Button>
+        )}
 
         {(orderStatus === "배송시작" || orderStatus === "배송중") && (
           <Fragment>
@@ -123,6 +130,7 @@ export default function PurchaseHistory({
 }
 
 PurchaseHistory.propTypes = {
+  onClickOrderCancelButton: PropTypes.func,
   onChangeOrderStatus: PropTypes.func,
   setDetailPurchaseId: PropTypes.func,
   payment: PropTypes.shape({
