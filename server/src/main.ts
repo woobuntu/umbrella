@@ -12,19 +12,19 @@ import { join } from 'path';
 import * as fs from 'fs';
 
 async function bootstrap() {
-  const httpsOptions =
-    process.env.NODE_ENV === 'development'
-      ? null
-      : {
-          key: fs.readFileSync(process.env.KEY),
-          cert: fs.readFileSync(process.env.CERT),
-        };
+  // const httpsOptions =
+  //   process.env.NODE_ENV === 'development'
+  //     ? null
+  //     : {
+  //         key: fs.readFileSync(process.env.KEY),
+  //         cert: fs.readFileSync(process.env.CERT),
+  //       };
 
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter({
       logger: false,
-      https: httpsOptions,
+      // https: httpsOptions,
     }),
   );
 
