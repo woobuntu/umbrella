@@ -28,8 +28,10 @@ import {
   sendgridConfig,
 } from './config';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { HealthController } from './controllers';
 
 @Module({
+  controllers: [HealthController],
   imports: [
     // https://docs.nestjs.com/techniques/configuration#use-module-globally
     ConfigModule.forRoot({
