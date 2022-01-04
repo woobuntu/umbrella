@@ -1,11 +1,16 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { map, Observable } from 'rxjs';
+import { ConfigService } from '@nestjs/config';
+import { map, Observable, tap } from 'rxjs';
+import { TossConfig } from 'src/types/config';
 import { RefundReceiveAccount } from 'src/types/toss';
 
 @Injectable()
 export class TossService {
-  constructor(private httpService: HttpService) {}
+  constructor(
+    private httpService: HttpService,
+    private configService: ConfigService,
+  ) {}
 
   approvePayment(params: {
     paymentKey: string;
@@ -48,10 +53,12 @@ export class TossService {
       requestBody.refundReceiveAccount = params.refundReceiveAccount;
     }
 
+    const { clientSecret } = this.configService.get<TossConfig>('toss');
+
     return this.httpService
       .post(url, requestBody, {
         headers: {
-          Authorization: `Basic dGVzdF9za19aMFJuWVgydzUzMm5nUXY2S1pNM05leXFBcFFFOg==`,
+          Authorization: `Basic ${clientSecret}`,
           'Content-Type': 'application/json',
         },
       })
