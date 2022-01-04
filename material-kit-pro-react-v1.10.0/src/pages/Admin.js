@@ -72,6 +72,7 @@ export default function Admin() {
                       paymentId: targetPaymentId,
                     },
                   },
+                  refetchQueries: [PAYMENTS],
                 }).then(closeModal)
               : updateOrderStatus({
                   variables: {

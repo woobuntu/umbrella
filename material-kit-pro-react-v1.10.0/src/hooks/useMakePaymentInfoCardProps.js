@@ -39,7 +39,7 @@ export default function useMakePaymentInfoCardProps({
   // 토스 결제창 열기 전에 우리 서버로 요청 먼저 보내서
   // db가 아닌 session에 order, delivery, payment 정보 저장해두면 되네용...?
   const paymentMethodsProps = {
-    onClickCreditCardButton: () =>
+    onClickCreditCardButton: (cardCompany) =>
       validateForm() &&
       storeOrdererAndDeliveryInSession().then(() =>
         requestTossPayments({
@@ -49,6 +49,7 @@ export default function useMakePaymentInfoCardProps({
             customerName,
             customerEmail,
             customerMobilePhone,
+            cardCompany,
           },
         })
       ),
@@ -78,17 +79,29 @@ export default function useMakePaymentInfoCardProps({
       ),
     onClickTossSimplePaymentButton: () =>
       validateForm() &&
-      storeOrdererAndDeliveryInSession().then(() =>
-        requestTossPayments({
-          method: "토스결제",
-          payload: {
-            ...tossCommonPayload,
-            customerName,
-            customerEmail,
-            customerMobilePhone,
-          },
+      storeOrdererAndDeliveryInSession()
+        .then(() => {
+          // console.log(123, {
+          //   method: "토스결제",
+          //   payload: {
+          //     ...tossCommonPayload,
+          //     customerName,
+          //     customerEmail,
+          //     customerMobilePhone,
+          //   },
+          // });
+          requestTossPayments({
+            method: "토스결제",
+            payload: {
+              ...tossCommonPayload,
+              customerName,
+              customerEmail,
+              customerMobilePhone,
+              cardCompany,
+            },
+          });
         })
-      ),
+        .catch((error) => alert(error)),
     onClickKakaoPayButton: () =>
       validateForm() &&
       storeOrdererAndDeliveryInSession().then(() =>
