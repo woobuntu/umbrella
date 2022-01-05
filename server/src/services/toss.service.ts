@@ -20,13 +20,17 @@ export class TossService {
     const { paymentKey, orderId, amount } = params;
     const url = 'https://api.tosspayments.com' + '/v1/payments/' + paymentKey;
 
+    const { clientSecret } = this.configService.get<TossConfig>('toss');
+
     return this.httpService
       .post(
         url,
         { orderId, amount },
         {
           headers: {
-            Authorization: `Basic dGVzdF9za19aMFJuWVgydzUzMm5nUXY2S1pNM05leXFBcFFFOg==`,
+            Authorization: `Basic ${Buffer.from(clientSecret + ':').toString(
+              'base64',
+            )}`,
             'Content-Type': 'application/json',
           },
         },
@@ -54,6 +58,7 @@ export class TossService {
     }
 
     const { clientSecret } = this.configService.get<TossConfig>('toss');
+    console.log(123, clientSecret);
 
     return this.httpService
       .post(url, requestBody, {
