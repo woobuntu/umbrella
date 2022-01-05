@@ -69,10 +69,14 @@ export default function PaymentInfoCard({
             name="국민"
             onClick={() => onClickCreditCardButton("KOOKMIN")}
           />
+          <CreditCardButton
+            name="하나"
+            onClick={() => onClickCreditCardButton("HANA")}
+          />
 
           {/* <VirtualAccountButton onClick={onClickVirtualAccountButton} /> */}
           <AccountTransferButton onClick={onClickAccountTransferButton} />
-          {/* <TossSimplePaymentButton onClick={onClickTossSimplePaymentButton} /> */}
+          <TossSimplePaymentButton onClick={onClickTossSimplePaymentButton} />
           {/* <KakaoPayButton onClick={onClickKakaoPayButton} /> */}
         </div>
       </CardFooter>
