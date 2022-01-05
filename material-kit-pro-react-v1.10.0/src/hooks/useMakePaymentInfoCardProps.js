@@ -81,15 +81,6 @@ export default function useMakePaymentInfoCardProps({
       validateForm() &&
       storeOrdererAndDeliveryInSession()
         .then(() => {
-          // console.log(123, {
-          //   method: "토스결제",
-          //   payload: {
-          //     ...tossCommonPayload,
-          //     customerName,
-          //     customerEmail,
-          //     customerMobilePhone,
-          //   },
-          // });
           requestTossPayments({
             method: "토스결제",
             payload: {
@@ -97,7 +88,6 @@ export default function useMakePaymentInfoCardProps({
               customerName,
               customerEmail,
               customerMobilePhone,
-              cardCompany,
             },
           });
         })
@@ -113,10 +103,13 @@ export default function useMakePaymentInfoCardProps({
               },
             }) => {
               const isMobile = getIsMobile();
+
               if (isMobile) {
                 window.location.href = mobileRedirectUrl;
+                // window.open(mobileRedirectUrl);
               } else {
                 window.location.href = webRedirectUrl;
+                // window.open(webRedirectUrl);
               }
             }
           )
