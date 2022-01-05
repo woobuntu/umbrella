@@ -58,12 +58,13 @@ export class TossService {
     }
 
     const { clientSecret } = this.configService.get<TossConfig>('toss');
-    console.log(123, clientSecret);
 
     return this.httpService
       .post(url, requestBody, {
         headers: {
-          Authorization: `Basic ${clientSecret}`,
+          Authorization: `Basic ${Buffer.from(clientSecret + ':').toString(
+            'base64',
+          )}`,
           'Content-Type': 'application/json',
         },
       })
