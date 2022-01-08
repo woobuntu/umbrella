@@ -45,6 +45,8 @@ export default function PaymentInfoCard({
       </CardBody>
       <CardFooter>
         <div className={classes.verticallyAligned}>
+          <TossSimplePaymentButton onClick={onClickTossSimplePaymentButton} />
+          <AccountTransferButton onClick={onClickAccountTransferButton} />
           <CreditCardButton
             name="신한"
             onClick={() => onClickCreditCardButton("SHINHAN")}
@@ -73,10 +75,12 @@ export default function PaymentInfoCard({
             name="하나"
             onClick={() => onClickCreditCardButton("HANA")}
           />
+          <CreditCardButton
+            name="비씨"
+            onClick={() => onClickCreditCardButton("BC")}
+          />
 
           {/* <VirtualAccountButton onClick={onClickVirtualAccountButton} /> */}
-          <AccountTransferButton onClick={onClickAccountTransferButton} />
-          <TossSimplePaymentButton onClick={onClickTossSimplePaymentButton} />
           {/* <KakaoPayButton onClick={onClickKakaoPayButton} /> */}
         </div>
       </CardFooter>
