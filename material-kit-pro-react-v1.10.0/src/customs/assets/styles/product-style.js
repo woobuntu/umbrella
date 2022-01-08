@@ -16,7 +16,6 @@ const productStyle = {
     },
     "& .image-gallery-slide img": {
       borderRadius: "3px",
-      maxWidth: "300px",
       height: "auto",
     },
     "& .image-gallery-swipe": {
