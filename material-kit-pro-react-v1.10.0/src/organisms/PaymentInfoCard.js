@@ -45,6 +45,7 @@ export default function PaymentInfoCard({
       </CardBody>
       <CardFooter>
         <div className={classes.verticallyAligned}>
+          <KakaoPayButton onClick={onClickKakaoPayButton} />
           <TossSimplePaymentButton onClick={onClickTossSimplePaymentButton} />
           <AccountTransferButton onClick={onClickAccountTransferButton} />
           <CreditCardButton
@@ -81,7 +82,6 @@ export default function PaymentInfoCard({
           />
 
           {/* <VirtualAccountButton onClick={onClickVirtualAccountButton} /> */}
-          {/* <KakaoPayButton onClick={onClickKakaoPayButton} /> */}
         </div>
       </CardFooter>
     </Card>
