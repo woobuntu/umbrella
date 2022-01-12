@@ -193,7 +193,7 @@ export default function Product() {
               <GridItem md={4} sm={4}>
                 <InfoArea
                   title="배송기한"
-                  description="모든 제품은 주문 접수 후 제작되므로, 배송까지는 4일 가량 소요됩니다."
+                  description="모든 제품은 주문 접수 후 제작되므로, 배송까지는 4일 가량 소요됩니다. (주말에 접수된 주문의 경우 차주 월요일에 제품 제작을 시작합니다)"
                   icon={LocalShipping}
                   vertical
                   iconColor="info"
