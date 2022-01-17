@@ -13,3 +13,5 @@ export { default as WebOrder } from "./WebOrder";
 export { default as MobileOrder } from "./MobileOrder";
 export { default as TossSuccess } from "./TossSuccess";
 export { default as KakaoSuccess } from "./KakaoSuccess";
+export { default as Blogs } from "./Blogs";
+export { default as Blog } from "./Blog";

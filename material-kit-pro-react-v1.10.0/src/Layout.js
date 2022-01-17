@@ -25,6 +25,8 @@ import {
   MobileOrder,
   TossSuccess,
   KakaoSuccess,
+  Blogs,
+  Blog,
 } from "./pages";
 
 export default function Layout() {
@@ -46,6 +48,7 @@ export default function Layout() {
     <Fragment>
       <CustomHeader />
       <Switch>
+        <Route path="/post" component={Blog} />
         <Route path="/executives/:id" component={Executive} />
         <Route path="/sign-in" component={SignIn} />
         <Route path="/mall/:id" component={Product} />
@@ -53,19 +56,14 @@ export default function Layout() {
         <Route path="/history" component={History} />
         {/* temp */}
         <Route path="/order" component={isMobile() ? MobileOrder : WebOrder} />
-        {/* <PrivateRoute path="/order">
-          {isMobile() ? <MobileOrder /> : <WebOrder />}
-        </PrivateRoute> */}
+
         <Route path="/introduction" component={Introduction} />
         <Route path="/document" component={Document} />
         <Route
           path="/basket"
           component={isMobile() ? MobileBasket : WebBasket}
         />
-        {/* <Route
-          path="/basket"
-          component={isMobile() ? MobileBasket : WebBasket}
-        /> */}
+        <Route path="/performances" component={Blogs} />
         <PrivateRoute path="/purchase/:id">
           <PurchaseDetail />
         </PrivateRoute>

@@ -25,7 +25,7 @@ export default function IntroductionShortCuts() {
       </GridItem>
       <GridItem xs={12} sm={4} md={4}>
         <InfoAreaLinked
-          path="#"
+          path="/performances"
           title="활동실적"
           icon={PhotoLibrary}
           iconColor="success"
