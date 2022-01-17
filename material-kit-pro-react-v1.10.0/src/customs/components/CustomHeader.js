@@ -37,6 +37,7 @@ export default function CustomHeader() {
               lnbs: lnbs.filter((lnb) => {
                 const { name } = lnb;
                 return !(
+                  name == "설립자 인사말" ||
                   name == "연혁" ||
                   name == "조직도" ||
                   name == "찾아오시는 길"
