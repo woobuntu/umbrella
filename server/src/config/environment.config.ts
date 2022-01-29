@@ -6,5 +6,4 @@ export default registerAs('environment', () => ({
   clientUrl: process.env.CLIENT_URL,
   domain: process.env.DOMAIN,
   expires: process.env.EXPIRES,
-  region: process.env.REGION,
 }));

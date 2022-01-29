@@ -26,6 +26,7 @@ import {
   naverConfig,
   tossConfig,
   sendgridConfig,
+  awsConfig,
 } from './config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { HealthController } from './controllers';
@@ -43,6 +44,7 @@ import { HealthController } from './controllers';
         kakaoConfig,
         tossConfig,
         sendgridConfig,
+        awsConfig,
       ],
     }),
     ServeStaticModule.forRoot({
