@@ -74,13 +74,16 @@ export class PerformanceResolver {
       });
 
     const currentTime = this.dayjsService.getCurrentTime();
+    const convertedTimeStamp = this.dayjsService.convertGMT(
+      timestamp.toUTCString(),
+    );
 
     const idOfCreatedFiles = createdFiles.map(({ id }) => ({ fileId: id }));
 
     // 3. 활동실적 및 이력 생성
     return this.performanceService.createPerformance({
       ...convertedCreatePerformanceInput,
-      timestamp,
+      timestamp: convertedTimeStamp,
       performanceFileRelations: {
         createMany: {
           data: idOfCreatedFiles,
@@ -89,7 +92,7 @@ export class PerformanceResolver {
       performanceHistories: {
         create: {
           ...convertedCreatePerformanceInput,
-          timestamp,
+          timestamp: convertedTimeStamp,
           from: currentTime,
         },
       },
@@ -102,8 +105,6 @@ export class PerformanceResolver {
     @Args('updatePerformanceInput')
     updatePerformanceInput: UpdatePerformanceInput,
   ) {
-    console.log(updatePerformanceInput);
-
     const { id, title, content, timestamp, files, deletedFiles } =
       updatePerformanceInput;
 
@@ -142,6 +143,9 @@ export class PerformanceResolver {
     });
 
     const currentTime = this.dayjsService.getCurrentTime();
+    const convertedTimeStamp = this.dayjsService.convertGMT(
+      timestamp.toUTCString(),
+    );
 
     const idOfCreatedFiles = createdFiles.map(({ id }) => ({ fileId: id }));
 
@@ -159,7 +163,7 @@ export class PerformanceResolver {
         },
         data: {
           ...convertedUpdatePerformanceInput,
-          timestamp,
+          timestamp: convertedTimeStamp,
           performanceFileRelations: {
             createMany: {
               data: idOfCreatedFiles,
@@ -177,7 +181,7 @@ export class PerformanceResolver {
             create: {
               ...dataForNewPerformanceHistory,
               ...convertedUpdatePerformanceInput,
-              timestamp,
+              timestamp: convertedTimeStamp,
               from: currentTime,
             },
           },
