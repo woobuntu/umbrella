@@ -52,19 +52,29 @@ export default function ArticlePreview({ id, title, content, timestamp }) {
       <CardHeader
         plain
         image
-        style={{ display: "flex", justifyContent: "center" }}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
       >
         <div
           style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
             height: "250px",
             width: "250px",
-            display: "table-cell",
-            verticalAlign: "middle",
-            textAlign: "center",
           }}
         >
           <Link to={`/${subject}/${id}`}>
-            <img src={imgUrl} />
+            <img
+              src={imgUrl}
+              style={{
+                maxWidth: "250px",
+                maxHeight: "250px",
+              }}
+            />
           </Link>
         </div>
       </CardHeader>
