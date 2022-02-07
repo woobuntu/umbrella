@@ -16,22 +16,23 @@ const useStyles = makeStyles(basketButtonStyle);
 export default function BasketButton({ onAddBasket, onModalOk }) {
   const classes = useStyles();
 
-  const isAuthenticated = useReactiveVar(isAuthenticatedVar);
+  const role = useReactiveVar(isAuthenticatedVar);
 
   const history = useHistory();
 
-  const content = isAuthenticated ? (
-    <Fragment>
-      {" "}
-      <p>장바구니에 담았습니다</p>
-      <p>장바구니로 이동하시겠습니까?</p>
-    </Fragment>
-  ) : (
-    <Fragment>
-      <p>로그인이 필요한 서비스입니다</p>
-      <p>로그인하시겠습니까?</p>
-    </Fragment>
-  );
+  const content =
+    role !== "non-user" ? (
+      <Fragment>
+        {" "}
+        <p>장바구니에 담았습니다</p>
+        <p>장바구니로 이동하시겠습니까?</p>
+      </Fragment>
+    ) : (
+      <Fragment>
+        <p>로그인이 필요한 서비스입니다</p>
+        <p>로그인하시겠습니까?</p>
+      </Fragment>
+    );
 
   return (
     <GridContainer className={classes.pullRight}>

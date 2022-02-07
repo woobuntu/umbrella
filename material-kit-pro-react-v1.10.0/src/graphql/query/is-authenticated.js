@@ -1,9 +1,10 @@
 import { gql } from "@apollo/client";
 
 const IS_AUTHENTICATED = gql`
-  query Query {
+  query IsAuthenticated {
     isAuthenticated {
-      isAuthenticated
+      role
+      redirectUrl
     }
   }
 `;

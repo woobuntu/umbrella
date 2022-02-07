@@ -53,7 +53,7 @@ export default function Product() {
     basketMutationError,
   } = useBasketMutation();
 
-  const isAuthenticated = useReactiveVar(isAuthenticatedVar);
+  const role = useReactiveVar(isAuthenticatedVar);
 
   const history = useHistory();
 
@@ -100,7 +100,8 @@ export default function Product() {
     }
   };
 
-  const onAddBasket = isAuthenticated ? upsertBasketThenOpenModal : openModal;
+  const onAddBasket =
+    role !== "non-user" ? upsertBasketThenOpenModal : openModal;
 
   const redirectToBasket = () => history.push("/basket");
 
@@ -115,9 +116,10 @@ export default function Product() {
     history.push("/sign-in");
   };
 
-  const onModalOk = isAuthenticated
-    ? redirectToBasket
-    : setSessionBasketThenRedirectToSignIn;
+  const onModalOk =
+    role !== "non-user"
+      ? redirectToBasket
+      : setSessionBasketThenRedirectToSignIn;
 
   const accordionCollapses = [];
   if (expirationDate) {

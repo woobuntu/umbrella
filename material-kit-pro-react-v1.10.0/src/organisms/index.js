@@ -6,3 +6,4 @@ export { default as UserInfoFormCard } from "./UserInfoFormCard";
 export { default as DefaultDeliveryFormCard } from "./DefaultDeliveryFormCard";
 export { default as OrdererInfoForm } from "./OrdererInfoForm";
 export { default as DeliveryInfoForm } from "./DeliveryInfoForm";
+export { default as DeletePostModal } from "./DeletePostModal";

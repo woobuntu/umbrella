@@ -5,3 +5,4 @@ export { default as NaverButton } from "./NaverButton";
 export { default as SectionCatalogs } from "./SectionCatalogs";
 export { default as PrivateRoute } from "./PrivateRoute";
 export { default as DeliveryInfo } from "./DeliveryInfo";
+export { default as AdminRoute } from "./AdminRoute";

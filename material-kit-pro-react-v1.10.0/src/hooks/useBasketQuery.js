@@ -3,9 +3,9 @@ import { BASKETS } from "graphql/query";
 import { isAuthenticatedVar } from "graphql/state";
 
 export default function useBasket() {
-  const isAuthenticated = useReactiveVar(isAuthenticatedVar);
+  const role = useReactiveVar(isAuthenticatedVar);
   const { error, data } = useQuery(BASKETS, {
-    skip: !isAuthenticated,
+    skip: role === "non-user",
   });
 
   // 에러 핸들링은 추후 보완
