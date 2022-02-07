@@ -80,11 +80,13 @@ export class PerformanceService {
           const [_, ContentType, base64String] = matched;
           const Body = Buffer.from(base64String, 'base64');
 
+          const rand = Math.random().toString(16).slice(2, 8);
+
           convertedContent.push({
             insert: {
               image: await this.s3Service.uploadFile({
                 Key: `performances/${title}/${encodeURIComponent(
-                  base64String.slice(0, 30),
+                  base64String.slice(0, 30) + rand,
                 )}`,
                 Body,
                 ContentType,
