@@ -1,0 +1,419 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Account {
+  bank: String!
+  consentGuidance: String
+  deductionGuidance: String
+  holder: String!
+  number: String!
+}
+
+type AuthState {
+  redirectUrl: String
+  role: String!
+}
+
+type Basket {
+  id: Float!
+  productOptionRelation: ProductOptionRelation!
+  productOptionRelationId: Float!
+  quantity: Float!
+  userId: String!
+}
+
+input BasketInfo {
+  productOptionRelationId: Float!
+  quantity: Float!
+}
+
+input CancelOrderInput {
+  cancelReason: String!
+  paymentId: Float!
+}
+
+type Career {
+  classification: String!
+  executiveId: Float!
+  id: Float!
+  record: String!
+}
+
+type Contact {
+  address: String!
+  mail: String!
+  phone: String!
+}
+
+input CreateDeliveryInput {
+  address: String!
+  detailAddress: String!
+  memo: String
+  name: String!
+  numberOfInvoice: String
+  phone: String!
+  postCode: String!
+}
+
+input CreateNotificationInput {
+  content: String!
+  files: [Upload!]
+  timestamp: DateTime!
+  title: String!
+}
+
+input CreateOrdererInput {
+  email: String!
+  name: String!
+  phone: String!
+}
+
+input CreatePerformanceInput {
+  content: String!
+  files: [Upload!]
+  timestamp: DateTime!
+  title: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type DefaultDelivery {
+  address: String!
+  detailAddress: String!
+  id: Float!
+  memo: String
+  name: String!
+  phone: String!
+  postCode: String!
+  user: User!
+  userId: String!
+}
+
+type Delivery {
+  address: String!
+  detailAddress: String!
+  memo: String
+  name: String!
+  numberOfInvoice: String
+  paymentId: Float!
+  phone: String!
+  postCode: String!
+}
+
+type DeliveryWithOutPaymentId {
+  address: String!
+  detailAddress: String!
+  memo: String
+  name: String!
+  numberOfInvoice: String
+  phone: String!
+  postCode: String!
+}
+
+type Executive {
+  careers: [Career!]!
+  executiveFileRelations: [ExecutiveFileRelation!]!
+  greeting: String
+  id: Float!
+  name: String!
+  position: String!
+}
+
+type ExecutiveFileRelation {
+  executiveId: Float!
+  file: File!
+  fileId: Float!
+  id: Float!
+}
+
+type File {
+  id: Float!
+  name: String!
+  path: String!
+  type: String!
+}
+
+input FilterProductsInput {
+  ids: [Float!]!
+}
+
+type Gnb {
+  id: Float!
+  lnbs: [Lnb!]!
+  name: String!
+}
+
+type History {
+  date: String!
+  event: String!
+}
+
+type KakaoPayPrepareResult {
+  mobileRedirectUrl: String!
+  webRedirectUrl: String!
+}
+
+type Lnb {
+  gnbId: Float!
+  id: Float!
+  name: String!
+  path: String!
+}
+
+type Meta {
+  metaFileRelations: [MetaFileRelation!]!
+  name: String!
+  type: String!
+}
+
+type MetaFileRelation {
+  file: File!
+  fileId: Float!
+  type: String!
+}
+
+type Mutation {
+  cancelOrder(cancelOrderInput: CancelOrderInput!): Payment!
+  createNotification(createNotificationInput: CreateNotificationInput!): Notification!
+  createPaymentByKakao(pgToken: String!): Payment!
+  createPaymentByToss(tossPaymentsInput: TossPaymentsInput!): Payment!
+  createPerformance(createPerformanceInput: CreatePerformanceInput!): Performance!
+  deleteBasket(id: Int!): Basket!
+  deleteNotification(id: Int!): Notification!
+  deletePerformance(id: Int!): Performance!
+  prepareKakaoPayment: KakaoPayPrepareResult!
+  signIn(signInInput: SignInInput!): AuthState!
+  signOut: AuthState!
+  storeOrdererAndDelivery(createDeliveryInput: CreateDeliveryInput!, createOrdererInput: CreateOrdererInput!): OrdererAndDelivery!
+  updateDefaultDelivery(updateDefaultDeliveryInput: UpdateDefaultDeliveryInput!): DefaultDelivery!
+  updateNotification(updateNotificationInput: UpdateNotificationInput!): Notification!
+  updateNumberOfInvoice(updateNumberOfInvoiceInput: UpdateNumberOfInvoiceInput!): Delivery!
+  updateOrderStatus(updatePaymentInput: UpdatePaymentInput!): Payment!
+  updatePerformance(updatePerformanceInput: UpdatePerformanceInput!): Performance!
+  updateProfile(updateUserInput: UpdateUserInput!): User!
+  upsertBasket(upsertBasketInput: UpsertBasketInput!): Basket!
+}
+
+type Notification {
+  content: String!
+  id: Float!
+  notificationFileRelations: [NotificationFileRelation!]!
+  timestamp: DateTime!
+  title: String!
+}
+
+type NotificationFileRelation {
+  file: File!
+  fileId: Float!
+  id: Float!
+  notificationId: Float!
+}
+
+type Option {
+  id: Float!
+  name: String!
+  price: Float!
+}
+
+type Orderer {
+  email: String!
+  name: String!
+  paymentId: Float!
+  phone: String!
+}
+
+type OrdererAndDelivery {
+  delivery: DeliveryWithOutPaymentId!
+  orderer: OrdererWithOutPaymentId!
+}
+
+type OrdererWithOutPaymentId {
+  email: String!
+  name: String!
+  phone: String!
+}
+
+type Payment {
+  amount: Float!
+  delivery: Delivery
+  deliveryFee: Float!
+  id: Float!
+  orderId: String
+  orderStatus: String
+  orderer: Orderer
+  paymentHistories: [PaymentHistory!]!
+  paymentKey: String
+  platform: String!
+  purchases: [Purchase!]!
+  tid: String
+  type: String!
+}
+
+type PaymentHistory {
+  amount: Float!
+  deliveryFee: Float!
+  from: DateTime!
+  id: Float!
+  orderId: String
+  orderStatus: String
+  paymentKey: String
+  platform: String!
+  tid: String
+  to: DateTime
+  type: String!
+  userId: String!
+}
+
+type Performance {
+  content: String!
+  id: Float!
+  performanceFileRelations: [PerformanceFileRelation!]!
+  timestamp: DateTime!
+  title: String!
+}
+
+type PerformanceFileRelation {
+  file: File!
+  fileId: Float!
+  id: Float!
+  performanceId: Float!
+}
+
+type Product {
+  expirationDate: String
+  id: Float!
+  ingredients: String
+  name: String!
+  price: Float!
+  productFileRelations: [ProductFileRelation!]!
+  productOptionRelations: [ProductOptionRelation!]!
+  storageMethod: String
+}
+
+type ProductFileRelation {
+  file: File!
+  fileId: Float!
+  id: Float!
+  productId: Float!
+}
+
+type ProductOptionRelation {
+  id: Float!
+  option: Option!
+  optionId: Float!
+  product: Product!
+  productId: Float!
+}
+
+type PublicUser {
+  defaultDelivery: DefaultDelivery!
+  email: String
+  id: String!
+  name: String
+  payments: [Payment!]!
+  phone: String
+}
+
+type Purchase {
+  id: Float!
+  paymentId: Float!
+  productOptionRelation: ProductOptionRelation
+  productOptionRelationId: Float
+  quantity: Float!
+}
+
+type Query {
+  account: Account!
+  baskets: [Basket!]!
+  contact: Contact!
+  executive(id: Int!): Executive!
+  gnbs: [Gnb!]!
+  histories: [History!]!
+  isAuthenticated: AuthState!
+  meta: Meta!
+  metaFileRelations(type: String!): [MetaFileRelation!]!
+  notification(id: Int!): Notification!
+  notifications: [Notification!]!
+  payments: [Payment!]!
+  performance(id: Int!): Performance!
+  performances: [Performance!]!
+  product(id: Int!): Product!
+  products(filterProductsInput: FilterProductsInput): [Product!]!
+  profile: PublicUser!
+}
+
+input SignInInput {
+  basketInfo: BasketInfo
+  code: String!
+  platform: String!
+  state: String!
+}
+
+input TossPaymentsInput {
+  amount: Float!
+  orderId: String!
+  paymentKey: String!
+}
+
+input UpdateDefaultDeliveryInput {
+  address: String
+  detailAddress: String
+  memo: String
+  name: String
+  phone: String
+  postCode: String
+}
+
+input UpdateNotificationInput {
+  content: String!
+  deletedFiles: [Float!]
+  files: [Upload!]
+  id: Float!
+  timestamp: DateTime!
+  title: String!
+}
+
+input UpdateNumberOfInvoiceInput {
+  numberOfInvoice: String!
+  paymentId: Float!
+}
+
+input UpdatePaymentInput {
+  orderStatus: String!
+  paymentId: Float!
+}
+
+input UpdatePerformanceInput {
+  content: String!
+  deletedFiles: [Float!]
+  files: [Upload!]
+  id: Float!
+  timestamp: DateTime!
+  title: String!
+}
+
+input UpdateUserInput {
+  email: String
+  name: String
+  phone: String
+}
+
+scalar Upload
+
+input UpsertBasketInput {
+  productOptionRelationId: Float!
+  quantity: Float!
+}
+
+type User {
+  accessToken: String
+  email: String
+  id: String!
+  name: String
+  phone: String
+  refreshToken: String
+}
