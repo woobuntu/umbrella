@@ -11,10 +11,10 @@ export default function PrivateRoute({ children, rest }) {
 
   if (loading) return <div>잠시만 기다려주십시오...</div>;
 
-  return data.isAuthenticated.role !== "non-user" ? (
+  return data.isAuthenticated.role === "admin" ? (
     <Route {...rest}>{children}</Route>
   ) : (
-    <Redirect to="/sign-in" />
+    <Redirect to="/" />
   );
 }
 

@@ -10,7 +10,7 @@ import { useHistory } from "react-router";
 export default function CustomHeader() {
   const { loading, error, data } = useQuery(HEADER);
 
-  const isAuthenticated = useReactiveVar(isAuthenticatedVar);
+  const role = useReactiveVar(isAuthenticatedVar);
 
   const [signOut, { client }] = useMutation(SIGN_OUT);
 
@@ -26,6 +26,28 @@ export default function CustomHeader() {
 
   if (error) alert(error.message);
 
+  const tempGnbs = !data
+    ? []
+    : data.gnbs.map((gnb) => {
+        const { id, lnbs } = gnb;
+        if (id == 1) {
+          return {
+            ...gnb,
+            lnbs: lnbs.filter(
+              ({ name }) =>
+                !(
+                  name == "설립자 인사말" ||
+                  name == "연혁" ||
+                  name == "조직도" ||
+                  name == "찾아오시는 길"
+                )
+            ),
+          };
+        } else {
+          return gnb;
+        }
+      });
+
   return (
     <Header
       color="transparent"
@@ -34,9 +56,9 @@ export default function CustomHeader() {
         data && (
           <HeaderLinks
             dropdownHoverColor="info"
-            gnbs={data ? data.gnbs : []}
+            gnbs={tempGnbs}
             isAuthLoading={isAuthLoading}
-            isAuthenticated={isAuthenticated}
+            role={role}
             onSignOut={onSignOut}
           />
         )

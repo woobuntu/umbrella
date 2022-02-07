@@ -14,4 +14,5 @@ export { default as MobileOrder } from "./MobileOrder";
 export { default as TossSuccess } from "./TossSuccess";
 export { default as KakaoSuccess } from "./KakaoSuccess";
 export { default as Blogs } from "./Blogs";
-export { default as Blog } from "./Blog";
+export { default as BlogRead } from "./BlogRead";
+export { default as BlogWrite } from "./BlogWrite";

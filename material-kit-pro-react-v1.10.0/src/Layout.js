@@ -3,12 +3,17 @@ import { isMobile } from "customs/utils";
 import { IS_AUTHENTICATED } from "graphql/query";
 import { isAuthenticatedVar } from "graphql/state";
 import { useChannelTalk } from "hooks";
+import React, { Fragment, useEffect } from "react";
+import { Switch, Route } from "react-router-dom";
+import {
+  CustomHeader,
+  CustomFooter,
+  PrivateRoute,
+  AdminRoute,
+} from "./customs/components";
 import Admin from "pages/Admin";
 import MobileBasket from "pages/MobileBasket";
 import WebBasket from "pages/WebBasket";
-import React, { Fragment, useEffect } from "react";
-import { Switch, Route } from "react-router-dom";
-import { CustomHeader, CustomFooter, PrivateRoute } from "./customs/components";
 import {
   Home,
   SignIn,
@@ -26,7 +31,8 @@ import {
   TossSuccess,
   KakaoSuccess,
   Blogs,
-  Blog,
+  BlogRead,
+  BlogWrite,
 } from "./pages";
 
 export default function Layout() {
@@ -36,9 +42,9 @@ export default function Layout() {
   useEffect(() => {
     if (data) {
       const {
-        isAuthenticated: { isAuthenticated },
+        isAuthenticated: { role },
       } = data;
-      isAuthenticatedVar(isAuthenticated);
+      isAuthenticatedVar(role);
     }
   }, [data]);
 
@@ -48,7 +54,6 @@ export default function Layout() {
     <Fragment>
       <CustomHeader />
       <Switch>
-        <Route path="/post" component={Blog} />
         <Route path="/executives/:id" component={Executive} />
         <Route path="/sign-in" component={SignIn} />
         <Route path="/mall/:id" component={Product} />
@@ -63,7 +68,22 @@ export default function Layout() {
           path="/basket"
           component={isMobile() ? MobileBasket : WebBasket}
         />
+        <AdminRoute path="/performances/new">
+          <BlogWrite />
+        </AdminRoute>
+        <AdminRoute path="/performances/edit/:id">
+          <BlogWrite />
+        </AdminRoute>
+        <Route path="/performances/:id" component={BlogRead} />
         <Route path="/performances" component={Blogs} />
+        <AdminRoute path="/notifications/new">
+          <BlogWrite />
+        </AdminRoute>
+        <AdminRoute path="/notifications/edit/:id">
+          <BlogWrite />
+        </AdminRoute>
+        <Route path="/notifications/:id" component={BlogRead} />
+        <Route path="/notifications" component={Blogs} />
         <PrivateRoute path="/purchase/:id">
           <PurchaseDetail />
         </PrivateRoute>
@@ -79,9 +99,9 @@ export default function Layout() {
         <PrivateRoute path="/fail">
           <Fail />
         </PrivateRoute>
-        <PrivateRoute path="/admin">
+        <AdminRoute path="/admin">
           <Admin />
-        </PrivateRoute>
+        </AdminRoute>
         <Route path="/">
           <Home />
         </Route>
