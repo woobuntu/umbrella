@@ -31,7 +31,7 @@ export default function AttachedFiles({ files, action }) {
 
   return (
     <GridContainer>
-      <GridItem xs={12} sm={12} md={6} lg={6}>
+      <GridItem xs={12} sm={12} md={8} lg={8}>
         <Card raised>
           <CardBody>
             <Title size={6}>첨부파일</Title>
