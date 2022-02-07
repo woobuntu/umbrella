@@ -68,7 +68,8 @@ export class NotificationService {
 
     const convertedContent = [];
 
-    for (const { insert } of parsedContent) {
+    for (const operation of parsedContent) {
+      const { insert } = operation;
       if (insert.hasOwnProperty('image')) {
         const regex = new RegExp(/^data:(image\/\w+);base64,(.+)/);
         const matched = insert.image.match(regex);
@@ -95,9 +96,7 @@ export class NotificationService {
           });
         }
       } else {
-        convertedContent.push({
-          insert,
-        });
+        convertedContent.push(operation);
       }
     }
 
