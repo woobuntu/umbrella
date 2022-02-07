@@ -121,9 +121,9 @@ model ExecutiveHistory {
 
 model File {
   id                        Int                        @id @default(autoincrement())
-  name                      String                     @db.VarChar(50)
+  name                      String                     @db.VarChar(255)
   path                      String                     @db.Text
-  type                      String                     @db.VarChar(50)
+  type                      String                     @db.VarChar(255)
   executiveFileRelations    ExecutiveFileRelation[]
   metaFileRelations         MetaFileRelation[]
   notificationFileRelations NotificationFileRelation[]
