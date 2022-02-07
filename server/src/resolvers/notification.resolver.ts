@@ -78,13 +78,16 @@ export class NotificationResolver {
       });
 
     const currentTime = this.dayjsService.getCurrentTime();
+    const convertedTimeStamp = this.dayjsService.convertGMT(
+      timestamp.toUTCString(),
+    );
 
     const idOfCreatedFiles = createdFiles.map(({ id }) => ({ fileId: id }));
 
     // 3. 활동실적 및 이력 생성
     return this.notificationService.createNotification({
       ...convertedCreateNotificationInput,
-      timestamp,
+      timestamp: convertedTimeStamp,
       notificationFileRelations: {
         createMany: {
           data: idOfCreatedFiles,
@@ -93,7 +96,7 @@ export class NotificationResolver {
       notificationHistories: {
         create: {
           ...convertedCreateNotificationInput,
-          timestamp,
+          timestamp: convertedTimeStamp,
           from: currentTime,
         },
       },
@@ -144,6 +147,9 @@ export class NotificationResolver {
     });
 
     const currentTime = this.dayjsService.getCurrentTime();
+    const convertedTimeStamp = this.dayjsService.convertGMT(
+      timestamp.toUTCString(),
+    );
 
     const idOfCreatedFiles = createdFiles.map(({ id }) => ({ fileId: id }));
 
@@ -161,7 +167,7 @@ export class NotificationResolver {
         },
         data: {
           ...convertedUpdateNotificationInput,
-          timestamp: currentTime,
+          timestamp: convertedTimeStamp,
           notificationFileRelations: {
             createMany: {
               data: idOfCreatedFiles,
@@ -179,7 +185,7 @@ export class NotificationResolver {
             create: {
               ...dataForNewNotificationHistory,
               ...convertedUpdateNotificationInput,
-              timestamp,
+              timestamp: convertedTimeStamp,
               from: currentTime,
             },
           },

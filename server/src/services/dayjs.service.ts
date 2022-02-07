@@ -14,4 +14,8 @@ export class DayjsService {
   getCurrentTime() {
     return dayjs().add(9, 'hour').toDate();
   }
+
+  convertGMT(date: Date | string) {
+    return dayjs(date).add(9, 'hour').toDate();
+  }
 }
