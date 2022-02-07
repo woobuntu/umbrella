@@ -8,63 +8,45 @@ datasource db {
 }
 
 model Account {
-  id                Int              @id @default(1)
-  bank              String           @db.VarChar(10)
-  number            String           @db.VarChar(30)
-  holder            String           @db.VarChar(20)
-  consentGuidance   String?          @db.Text
-  deductionGuidance String?          @db.Text
-  AccountHistory    AccountHistory[]
+  id               Int              @id @default(1)
+  bank             String           @db.VarChar(10)
+  number           String           @db.VarChar(30)
+  holder           String           @db.VarChar(20)
+  accountHistories AccountHistory[]
 }
 
 model AccountHistory {
-  id                Int       @id @default(autoincrement())
-  bank              String    @db.VarChar(10)
-  number            String    @db.VarChar(30)
-  holder            String    @db.VarChar(20)
-  consentGuidance   String?   @db.Text
-  deductionGuidance String?   @db.Text
-  accountId         Int       @default(1)
-  from              DateTime  @default(now()) @db.Timestamp(0)
-  to                DateTime? @db.Timestamp(0)
-  Account           Account   @relation(fields: [accountId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounthistory_ibfk_1")
+  id        Int       @id @default(autoincrement())
+  bank      String    @db.VarChar(10)
+  number    String    @db.VarChar(30)
+  holder    String    @db.VarChar(20)
+  accountId Int       @default(1)
+  from      DateTime  @default(now()) @db.Timestamp(0)
+  to        DateTime? @db.Timestamp(0)
+  account   Account   @relation(fields: [accountId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounthistory_ibfk_1")
 
   @@index([accountId], map: "accountId")
 }
 
 model Basket {
-  id            Int             @id @default(autoincrement())
-  memberId      Int
-  catalogId     Int
-  amount        Int
-  Catalog       Catalog         @relation(fields: [catalogId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "basket_ibfk_2")
-  Member        Member          @relation(fields: [memberId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "basket_ibfk_1")
-  BasketHistory BasketHistory[]
+  id                      Int                   @id @default(autoincrement())
+  userId                  String                @db.VarChar(255)
+  productOptionRelationId Int
+  quantity                Int
+  productOptionRelation   ProductOptionRelation @relation(fields: [productOptionRelationId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "basket_ibfk_2")
+  user                    User                  @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "basket_ibfk_1")
 
-  @@index([catalogId], map: "catalogId")
-  @@index([memberId], map: "memberId")
-}
-
-model BasketHistory {
-  id        Int       @id @default(autoincrement())
-  memberId  Int
-  catalogId Int
-  amount    Int
-  basketId  Int?
-  from      DateTime  @default(now()) @db.Timestamp(0)
-  to        DateTime? @db.Timestamp(0)
-  Basket    Basket?   @relation(fields: [basketId], references: [id], onUpdate: NoAction, map: "baskethistory_ibfk_1")
-
-  @@index([basketId], map: "basketId")
+  @@index([productOptionRelationId], map: "productOptionRelationId")
+  @@index([userId], map: "userId")
 }
 
 model Career {
-  id             Int             @id @default(autoincrement())
-  classification String          @db.VarChar(10)
-  record         String          @db.VarChar(30)
-  executiveId    Int
-  Executive      Executive       @relation(fields: [executiveId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "career_ibfk_1")
-  CareerHistory  CareerHistory[]
+  id              Int             @id @default(autoincrement())
+  classification  String          @db.VarChar(10)
+  record          String          @db.VarChar(30)
+  executiveId     Int
+  executive       Executive       @relation(fields: [executiveId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "career_ibfk_1")
+  careerHistories CareerHistory[]
 
   @@index([executiveId], map: "executiveId")
 }
@@ -77,88 +59,17 @@ model CareerHistory {
   careerId       Int?
   from           DateTime  @default(now()) @db.Timestamp(0)
   to             DateTime? @db.Timestamp(0)
-  Career         Career?   @relation(fields: [careerId], references: [id], onUpdate: NoAction, map: "careerhistory_ibfk_1")
+  career         Career?   @relation(fields: [careerId], references: [id], onUpdate: NoAction, map: "careerhistory_ibfk_1")
 
   @@index([careerId], map: "careerId")
 }
 
-model Catalog {
-  id                    Int                     @id @default(autoincrement())
-  name                  String                  @db.VarChar(30)
-  price                 Int
-  Basket                Basket[]
-  CatalogFileRelation   CatalogFileRelation[]
-  CatalogHistory        CatalogHistory[]
-  CatalogOptionRelation CatalogOptionRelation[]
-  Purchase              Purchase[]
-}
-
-model CatalogFileRelation {
-  id                         Int                          @id @default(autoincrement())
-  catalogId                  Int
-  fileId                     Int
-  Catalog                    Catalog                      @relation(fields: [catalogId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "catalogfilerelation_ibfk_1")
-  File                       File                         @relation(fields: [fileId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "catalogfilerelation_ibfk_2")
-  CatalogFileRelationHistory CatalogFileRelationHistory[]
-
-  @@index([catalogId], map: "catalogId")
-  @@index([fileId], map: "fileId")
-}
-
-model CatalogFileRelationHistory {
-  id                    Int                  @id @default(autoincrement())
-  catalogId             Int
-  fileId                Int
-  catalogFileRelationId Int?
-  from                  DateTime             @default(now()) @db.Timestamp(0)
-  to                    DateTime?            @db.Timestamp(0)
-  CatalogFileRelation   CatalogFileRelation? @relation(fields: [catalogFileRelationId], references: [id], onUpdate: NoAction, map: "catalogfilerelationhistory_ibfk_1")
-
-  @@index([catalogFileRelationId], map: "catalogFileRelationId")
-}
-
-model CatalogHistory {
-  id        Int       @id @default(autoincrement())
-  name      String    @db.VarChar(30)
-  price     Int
-  catalogId Int?
-  from      DateTime  @default(now()) @db.Timestamp(0)
-  to        DateTime? @db.Timestamp(0)
-  Catalog   Catalog?  @relation(fields: [catalogId], references: [id], onUpdate: NoAction, map: "cataloghistory_ibfk_1")
-
-  @@index([catalogId], map: "catalogId")
-}
-
-model CatalogOptionRelation {
-  id                           Int                            @id @default(autoincrement())
-  catalogId                    Int
-  optionId                     Int
-  Catalog                      Catalog                        @relation(fields: [catalogId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "catalogoptionrelation_ibfk_1")
-  Option                       Option                         @relation(fields: [optionId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "catalogoptionrelation_ibfk_2")
-  CatalogOptionRelationHistory CatalogOptionRelationHistory[]
-
-  @@index([catalogId], map: "catalogId")
-  @@index([optionId], map: "optionId")
-}
-
-model CatalogOptionRelationHistory {
-  id                      Int                    @id @default(autoincrement())
-  catalogId               Int
-  optionId                Int
-  catalogOptionRelationId Int?
-  from                    DateTime               @default(now()) @db.Timestamp(0)
-  to                      DateTime?              @db.Timestamp(0)
-  CatalogOptionRelation   CatalogOptionRelation? @relation(fields: [catalogOptionRelationId], references: [id], onUpdate: NoAction, map: "catalogoptionrelationhistory_ibfk_1")
-
-  @@index([catalogOptionRelationId], map: "catalogOptionRelationId")
-}
-
 model Contact {
-  id             Int              @id @default(1)
-  address        String           @db.VarChar(50)
-  mail           String           @db.VarChar(30)
-  phone          String           @db.VarChar(20)
-  ContactHistory ContactHistory[]
+  id               Int              @id @default(1)
+  address          String           @db.VarChar(50)
+  mail             String           @db.VarChar(30)
+  phone            String           @db.VarChar(20)
+  contactHistories ContactHistory[]
 }
 
 model ContactHistory {
@@ -169,43 +80,30 @@ model ContactHistory {
   contactId Int       @default(1)
   from      DateTime  @default(now()) @db.Timestamp(0)
   to        DateTime? @db.Timestamp(0)
-  Contact   Contact   @relation(fields: [contactId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "contacthistory_ibfk_1")
+  contact   Contact   @relation(fields: [contactId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "contacthistory_ibfk_1")
 
   @@index([contactId], map: "contactId")
 }
 
 model Executive {
-  id                    Int                     @id @default(autoincrement())
-  name                  String                  @db.VarChar(5)
-  position              String                  @db.VarChar(30)
-  greeting              String?                 @db.Text
-  Career                Career[]
-  ExecutiveFileRelation ExecutiveFileRelation[]
-  ExecutiveHistory      ExecutiveHistory[]
+  id                     Int                     @id @default(autoincrement())
+  name                   String                  @db.VarChar(5)
+  position               String                  @db.VarChar(30)
+  greeting               String?                 @db.Text
+  careers                Career[]
+  executiveFileRelations ExecutiveFileRelation[]
+  executiveHistories     ExecutiveHistory[]
 }
 
 model ExecutiveFileRelation {
-  id                           Int                            @id @default(autoincrement())
-  executiveId                  Int
-  fileId                       Int
-  Executive                    Executive                      @relation(fields: [executiveId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "executivefilerelation_ibfk_1")
-  File                         File                           @relation(fields: [fileId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "executivefilerelation_ibfk_2")
-  ExecutiveFileRelationHistory ExecutiveFileRelationHistory[]
+  id          Int       @id @default(autoincrement())
+  executiveId Int
+  fileId      Int
+  executive   Executive @relation(fields: [executiveId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "executivefilerelation_ibfk_1")
+  file        File      @relation(fields: [fileId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "executivefilerelation_ibfk_2")
 
   @@index([executiveId], map: "executiveId")
   @@index([fileId], map: "fileId")
-}
-
-model ExecutiveFileRelationHistory {
-  id                      Int                    @id @default(autoincrement())
-  executiveId             Int
-  fileId                  Int
-  executiveFileRelationId Int?
-  from                    DateTime               @default(now()) @db.Timestamp(0)
-  to                      DateTime?              @db.Timestamp(0)
-  ExecutiveFileRelation   ExecutiveFileRelation? @relation(fields: [executiveFileRelationId], references: [id], onUpdate: NoAction, map: "executivefilerelationhistory_ibfk_1")
-
-  @@index([executiveFileRelationId], map: "executiveFileRelationId")
 }
 
 model ExecutiveHistory {
@@ -216,41 +114,28 @@ model ExecutiveHistory {
   executiveId Int?
   from        DateTime   @default(now()) @db.Timestamp(0)
   to          DateTime?  @db.Timestamp(0)
-  Executive   Executive? @relation(fields: [executiveId], references: [id], onUpdate: NoAction, map: "executivehistory_ibfk_1")
+  executive   Executive? @relation(fields: [executiveId], references: [id], onUpdate: NoAction, map: "executivehistory_ibfk_1")
 
   @@index([executiveId], map: "executiveId")
 }
 
 model File {
-  id                      Int                       @id @default(autoincrement())
-  name                    String                    @db.VarChar(50)
-  path                    String                    @db.VarChar(255)
-  type                    String                    @db.VarChar(20)
-  CatalogFileRelation     CatalogFileRelation[]
-  ExecutiveFileRelation   ExecutiveFileRelation[]
-  FileHistory             FileHistory[]
-  MetaFileRelation        MetaFileRelation[]
-  PerformanceFileRelation PerformanceFileRelation[]
-}
-
-model FileHistory {
-  id     Int       @id @default(autoincrement())
-  name   String    @db.VarChar(50)
-  path   String    @db.VarChar(255)
-  type   String    @db.VarChar(20)
-  fileId Int?
-  from   DateTime  @default(now()) @db.Timestamp(0)
-  to     DateTime? @db.Timestamp(0)
-  File   File?     @relation(fields: [fileId], references: [id], onUpdate: NoAction, map: "filehistory_ibfk_1")
-
-  @@index([fileId], map: "fileId")
+  id                        Int                        @id @default(autoincrement())
+  name                      String                     @db.VarChar(50)
+  path                      String                     @db.Text
+  type                      String                     @db.VarChar(50)
+  executiveFileRelations    ExecutiveFileRelation[]
+  metaFileRelations         MetaFileRelation[]
+  notificationFileRelations NotificationFileRelation[]
+  performanceFileRelations  PerformanceFileRelation[]
+  productFileRelations      ProductFileRelation[]
 }
 
 model Gnb {
-  id         Int          @id @default(autoincrement())
-  name       String       @db.VarChar(10)
-  GnbHistory GnbHistory[]
-  Lnb        Lnb[]
+  id           Int          @id @default(autoincrement())
+  name         String       @db.VarChar(10)
+  gnbHistories GnbHistory[]
+  lnbs         Lnb[]
 }
 
 model GnbHistory {
@@ -259,16 +144,16 @@ model GnbHistory {
   gnbId Int?
   from  DateTime  @default(now()) @db.Timestamp(0)
   to    DateTime? @db.Timestamp(0)
-  Gnb   Gnb?      @relation(fields: [gnbId], references: [id], onUpdate: NoAction, map: "gnbhistory_ibfk_1")
+  gnb   Gnb?      @relation(fields: [gnbId], references: [id], onUpdate: NoAction, map: "gnbhistory_ibfk_1")
 
   @@index([gnbId], map: "gnbId")
 }
 
 model History {
-  id             Int              @id @default(autoincrement())
-  date           String           @db.VarChar(30)
-  event          String           @db.VarChar(50)
-  HistoryHistory HistoryHistory[]
+  id               Int              @id @default(autoincrement())
+  date             String           @db.VarChar(30)
+  event            String           @db.VarChar(50)
+  historyHistories HistoryHistory[]
 }
 
 model HistoryHistory {
@@ -278,18 +163,18 @@ model HistoryHistory {
   historyId Int?
   from      DateTime  @default(now()) @db.Timestamp(0)
   to        DateTime? @db.Timestamp(0)
-  History   History?  @relation(fields: [historyId], references: [id], onUpdate: NoAction, map: "historyhistory_ibfk_1")
+  history   History?  @relation(fields: [historyId], references: [id], onUpdate: NoAction, map: "historyhistory_ibfk_1")
 
   @@index([historyId], map: "historyId")
 }
 
 model Lnb {
-  id         Int          @id @default(autoincrement())
-  name       String       @db.VarChar(10)
-  path       String       @db.VarChar(50)
-  gnbId      Int
-  Gnb        Gnb          @relation(fields: [gnbId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "lnb_ibfk_1")
-  LnbHistory LnbHistory[]
+  id           Int          @id @default(autoincrement())
+  name         String       @db.VarChar(10)
+  path         String       @db.VarChar(50)
+  gnbId        Int
+  gnb          Gnb          @relation(fields: [gnbId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "lnb_ibfk_1")
+  lnbHistories LnbHistory[]
 
   @@index([gnbId], map: "gnbId")
 }
@@ -301,70 +186,29 @@ model LnbHistory {
   lnbId Int?
   from  DateTime  @default(now()) @db.Timestamp(0)
   to    DateTime? @db.Timestamp(0)
-  Lnb   Lnb?      @relation(fields: [lnbId], references: [id], onUpdate: NoAction, map: "lnbhistory_ibfk_1")
+  lnb   Lnb?      @relation(fields: [lnbId], references: [id], onUpdate: NoAction, map: "lnbhistory_ibfk_1")
 
   @@index([lnbId], map: "lnbId")
 }
 
-model Member {
-  id            Int             @id @default(autoincrement())
-  email         String          @unique(map: "email") @db.VarChar(255)
-  password      String?         @db.VarChar(255)
-  name          String?         @db.VarChar(10)
-  address       String?         @db.VarChar(255)
-  accessToken   String?         @unique(map: "accessToken") @db.VarChar(255)
-  refreshToken  String?         @db.VarChar(255)
-  Basket        Basket[]
-  MemberHistory MemberHistory[]
-  Purchase      Purchase[]
-}
-
-model MemberHistory {
-  id           Int       @id @default(autoincrement())
-  email        String    @db.VarChar(255)
-  password     String?   @db.VarChar(255)
-  name         String?   @db.VarChar(10)
-  address      String?   @db.VarChar(255)
-  accessToken  String?   @db.VarChar(255)
-  refreshToken String?   @db.VarChar(255)
-  memberId     Int?
-  from         DateTime  @default(now()) @db.Timestamp(0)
-  to           DateTime? @db.Timestamp(0)
-  Member       Member?   @relation(fields: [memberId], references: [id], onUpdate: NoAction, map: "memberhistory_ibfk_1")
-
-  @@index([memberId], map: "memberId")
-}
-
 model Meta {
-  id               Int                @id @default(1)
-  name             String             @db.VarChar(10)
-  type             String             @db.VarChar(10)
-  MetaFileRelation MetaFileRelation[]
-  MetaHistory      MetaHistory[]
+  id                Int                @id @default(1)
+  name              String             @db.VarChar(10)
+  type              String             @db.VarChar(10)
+  metaFileRelations MetaFileRelation[]
+  metaHistories     MetaHistory[]
 }
 
 model MetaFileRelation {
-  id                      Int                       @id @default(autoincrement())
-  metaId                  Int                       @default(1)
-  fileId                  Int
-  File                    File                      @relation(fields: [fileId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "metafilerelation_ibfk_2")
-  Meta                    Meta                      @relation(fields: [metaId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "metafilerelation_ibfk_1")
-  MetaFileRelationHistory MetaFileRelationHistory[]
+  id     Int    @id @default(autoincrement())
+  metaId Int    @default(1)
+  fileId Int
+  type   String @db.VarChar(10)
+  file   File   @relation(fields: [fileId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "metafilerelation_ibfk_2")
+  meta   Meta   @relation(fields: [metaId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "metafilerelation_ibfk_1")
 
   @@index([fileId], map: "fileId")
   @@index([metaId], map: "metaId")
-}
-
-model MetaFileRelationHistory {
-  id                 Int               @id @default(autoincrement())
-  metaId             Int
-  fileId             Int
-  metaFileRelationId Int?
-  from               DateTime          @default(now()) @db.Timestamp(0)
-  to                 DateTime?         @db.Timestamp(0)
-  MetaFileRelation   MetaFileRelation? @relation(fields: [metaFileRelationId], references: [id], onUpdate: NoAction, map: "metafilerelationhistory_ibfk_1")
-
-  @@index([metaFileRelationId], map: "metaFileRelationId")
 }
 
 model MetaHistory {
@@ -374,106 +218,71 @@ model MetaHistory {
   metaId Int
   from   DateTime  @default(now()) @db.Timestamp(0)
   to     DateTime? @db.Timestamp(0)
-  Meta   Meta      @relation(fields: [metaId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "metahistory_ibfk_1")
+  meta   Meta      @relation(fields: [metaId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "metahistory_ibfk_1")
 
   @@index([metaId], map: "metaId")
 }
 
 model Notification {
-  id                  Int                   @id @default(autoincrement())
-  title               String                @db.VarChar(50)
-  content             String                @db.Text
-  timestamp           DateTime              @default(now()) @db.Timestamp(0)
-  NotificationHistory NotificationHistory[]
+  id                        Int                        @id @default(autoincrement())
+  title                     String                     @db.VarChar(50)
+  content                   String                     @db.Text
+  timestamp                 DateTime                   @default(now()) @db.Timestamp(0)
+  notificationFileRelations NotificationFileRelation[]
+  notificationHistories     NotificationHistory[]
 }
 
 model NotificationHistory {
   id             Int           @id @default(autoincrement())
   title          String        @db.VarChar(50)
   content        String        @db.Text
-  timestamp      String        @db.VarChar(50)
+  timestamp      DateTime      @db.Timestamp(0)
   notificationId Int?
   from           DateTime      @default(now()) @db.Timestamp(0)
   to             DateTime?     @db.Timestamp(0)
-  Notification   Notification? @relation(fields: [notificationId], references: [id], onUpdate: NoAction, map: "notificationhistory_ibfk_1")
+  notification   Notification? @relation(fields: [notificationId], references: [id], onUpdate: NoAction, map: "notificationhistory_ibfk_1")
 
   @@index([notificationId], map: "notificationId")
 }
 
 model Option {
-  id                    Int                     @id @default(autoincrement())
-  name                  String                  @db.VarChar(30)
-  CatalogOptionRelation CatalogOptionRelation[]
-  OptionHistory         OptionHistory[]
+  id                     Int                     @id @default(autoincrement())
+  name                   String                  @db.VarChar(30)
+  price                  Int                     @default(0)
+  optionHistories        OptionHistory[]
+  productOptionRelations ProductOptionRelation[]
 }
 
 model OptionHistory {
   id       Int       @id @default(autoincrement())
   name     String    @db.VarChar(30)
+  price    Int       @default(0)
   optionId Int?
   from     DateTime  @default(now()) @db.Timestamp(0)
   to       DateTime? @db.Timestamp(0)
-  Option   Option?   @relation(fields: [optionId], references: [id], onUpdate: NoAction, map: "optionhistory_ibfk_1")
+  option   Option?   @relation(fields: [optionId], references: [id], onUpdate: NoAction, map: "optionhistory_ibfk_1")
 
   @@index([optionId], map: "optionId")
 }
 
-model Organization {
-  id                  Int                   @id @default(autoincrement())
-  name                String                @db.VarChar(20)
-  type                String                @db.VarChar(10)
-  parentId            Int?
-  Organization        Organization?         @relation("OrganizationToOrganization_parentId", fields: [parentId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "organization_ibfk_1")
-  other_Organization  Organization[]        @relation("OrganizationToOrganization_parentId")
-  OrganizationHistory OrganizationHistory[]
-
-  @@index([parentId], map: "parentId")
-}
-
-model OrganizationHistory {
-  id             Int           @id @default(autoincrement())
-  organizationId Int?
-  name           String        @db.VarChar(20)
-  type           String        @db.VarChar(10)
-  parentId       Int?
-  from           DateTime      @default(now()) @db.Timestamp(0)
-  to             DateTime?     @db.Timestamp(0)
-  Organization   Organization? @relation(fields: [organizationId], references: [id], onUpdate: NoAction, map: "organizationhistory_ibfk_1")
-
-  @@index([organizationId], map: "organizationId")
-}
-
 model Performance {
-  id                      Int                       @id @default(autoincrement())
-  title                   String                    @db.VarChar(50)
-  content                 String?                   @db.Text
-  timestamp               DateTime                  @default(now()) @db.Timestamp(0)
-  PerformanceFileRelation PerformanceFileRelation[]
-  PerformanceHistory      PerformanceHistory[]
+  id                       Int                       @id @default(autoincrement())
+  title                    String                    @db.VarChar(50)
+  content                  String?                   @db.Text
+  timestamp                DateTime                  @default(now()) @db.Timestamp(0)
+  performanceFileRelations PerformanceFileRelation[]
+  performanceHistories     PerformanceHistory[]
 }
 
 model PerformanceFileRelation {
-  id                             Int                              @id @default(autoincrement())
-  performanceId                  Int
-  fileId                         Int
-  File                           File                             @relation(fields: [fileId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "performancefilerelation_ibfk_2")
-  Performance                    Performance                      @relation(fields: [performanceId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "performancefilerelation_ibfk_1")
-  PerformanceFileRelationHistory PerformanceFileRelationHistory[]
+  id            Int         @id @default(autoincrement())
+  performanceId Int
+  fileId        Int
+  file          File        @relation(fields: [fileId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "performancefilerelation_ibfk_2")
+  performance   Performance @relation(fields: [performanceId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "performancefilerelation_ibfk_1")
 
   @@index([fileId], map: "fileId")
   @@index([performanceId], map: "performanceId")
-}
-
-model PerformanceFileRelationHistory {
-  id                        Int                      @id @default(autoincrement())
-  performanceId             Int
-  fileId                    Int
-  performanceFileRelationId Int?
-  from                      DateTime                 @default(now()) @db.Timestamp(0)
-  to                        DateTime?                @db.Timestamp(0)
-  PerformanceFileRelation   PerformanceFileRelation? @relation(fields: [performanceFileRelationId], references: [id], onUpdate: NoAction, map: "performancefilerelationhistory_ibfk_1")
-
-  @@index([performanceFileRelationId], map: "performanceFileRelationId")
 }
 
 model PerformanceHistory {
@@ -484,39 +293,198 @@ model PerformanceHistory {
   performanceId Int?
   from          DateTime     @default(now()) @db.Timestamp(0)
   to            DateTime?    @db.Timestamp(0)
-  Performance   Performance? @relation(fields: [performanceId], references: [id], onUpdate: NoAction, map: "performancehistory_ibfk_1")
+  performance   Performance? @relation(fields: [performanceId], references: [id], onUpdate: NoAction, map: "performancehistory_ibfk_1")
 
   @@index([performanceId], map: "performanceId")
 }
 
-model Purchase {
-  id              Int               @id @default(autoincrement())
-  memberId        Int
-  catalogId       Int
-  amount          Int
-  totalPrice      Int
-  timestamp       DateTime          @db.Timestamp(0)
-  address         String            @db.VarChar(255)
-  Catalog         Catalog           @relation(fields: [catalogId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "purchase_ibfk_2")
-  Member          Member            @relation(fields: [memberId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "purchase_ibfk_1")
-  PurchaseHistory PurchaseHistory[]
-
-  @@index([catalogId], map: "catalogId")
-  @@index([memberId], map: "memberId")
+model User {
+  id                String           @id @db.VarChar(255)
+  email             String?          @db.VarChar(255)
+  name              String?          @db.VarChar(10)
+  phone             String?          @default("010--") @db.VarChar(255)
+  accessToken       String?          @db.VarChar(255)
+  refreshToken      String?          @db.VarChar(255)
+  baskets           Basket[]
+  defaultDeliveries DefaultDelivery?
+  payments          Payment[]
+  userHistories     UserHistory[]
 }
 
-model PurchaseHistory {
-  id         Int       @id @default(autoincrement())
-  memberId   Int
-  catalogId  Int
-  amount     Int
-  totalPrice Int
-  timestamp  DateTime  @db.Timestamp(0)
-  address    String    @db.VarChar(255)
-  purchaseId Int?
-  from       DateTime  @default(now()) @db.Timestamp(0)
-  to         DateTime? @db.Timestamp(0)
-  Purchase   Purchase? @relation(fields: [purchaseId], references: [id], onUpdate: NoAction, map: "purchasehistory_ibfk_1")
+model UserHistory {
+  id           Int       @id @default(autoincrement())
+  email        String?   @db.VarChar(255)
+  name         String?   @db.VarChar(10)
+  phone        String?   @db.VarChar(255)
+  accessToken  String?   @db.VarChar(255)
+  refreshToken String?   @db.VarChar(255)
+  userId       String?   @db.VarChar(255)
+  from         DateTime  @default(now()) @db.Timestamp(0)
+  to           DateTime? @db.Timestamp(0)
+  user         User?     @relation(fields: [userId], references: [id], onUpdate: NoAction, map: "userhistory_ibfk_1")
 
-  @@index([purchaseId], map: "purchaseId")
+  @@index([userId], map: "userId")
+}
+
+model DefaultDelivery {
+  id                       Int                      @id @default(autoincrement())
+  name                     String                   @db.VarChar(255)
+  phone                    String                   @default("010--") @db.VarChar(255)
+  postCode                 String                   @db.VarChar(255)
+  address                  String                   @db.VarChar(255)
+  detailAddress            String                   @db.VarChar(255)
+  memo                     String?                  @db.VarChar(255)
+  userId                   String                   @unique(map: "userId") @db.VarChar(255)
+  user                     User                     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "defaultdelivery_ibfk_1")
+  defaultDeliveryHistories DefaultDeliveryHistory[]
+}
+
+model DefaultDeliveryHistory {
+  id                Int              @id @default(autoincrement())
+  name              String           @db.VarChar(255)
+  phone             String           @default("010--") @db.VarChar(255)
+  postCode          String           @db.VarChar(255)
+  address           String           @db.VarChar(255)
+  detailAddress     String           @db.VarChar(255)
+  memo              String?          @db.VarChar(255)
+  userId            String           @db.VarChar(255)
+  defaultDeliveryId Int?
+  from              DateTime         @default(now()) @db.Timestamp(0)
+  to                DateTime?        @db.Timestamp(0)
+  defaultDelivery   DefaultDelivery? @relation(fields: [defaultDeliveryId], references: [id], onUpdate: NoAction, map: "defaultdeliveryhistory_ibfk_1")
+
+  @@index([defaultDeliveryId], map: "defaultDeliveryId")
+}
+
+model Payment {
+  id               Int              @id @default(autoincrement())
+  platform         String           @db.VarChar(20)
+  type             String           @db.VarChar(30)
+  amount           Int
+  deliveryFee      Int              @default(0)
+  orderStatus      String           @default("결제완료") @db.VarChar(30)
+  tid              String?          @db.VarChar(255)
+  orderId          String?          @db.VarChar(255)
+  paymentKey       String?          @db.VarChar(255)
+  userId           String           @db.VarChar(255)
+  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "payment_ibfk_1")
+  delivery         Delivery?
+  orderer          Orderer?
+  paymentHistories PaymentHistory[]
+  purchases        Purchase[]
+
+  @@index([userId], map: "userId")
+}
+
+model PaymentHistory {
+  id          Int       @id @default(autoincrement())
+  platform    String    @db.VarChar(20)
+  type        String    @db.VarChar(30)
+  amount      Int
+  deliveryFee Int
+  orderStatus String?   @db.VarChar(30)
+  tid         String?   @db.VarChar(255)
+  orderId     String?   @db.VarChar(255)
+  paymentKey  String?   @db.VarChar(255)
+  userId      String    @db.VarChar(255)
+  paymentId   Int?
+  from        DateTime  @default(now()) @db.Timestamp(0)
+  to          DateTime? @db.Timestamp(0)
+  payment     Payment?  @relation(fields: [paymentId], references: [id], onUpdate: NoAction, map: "paymenthistory_ibfk_1")
+
+  @@index([paymentId], map: "paymentId")
+}
+
+model Delivery {
+  paymentId       Int     @id
+  name            String  @db.VarChar(255)
+  phone           String  @default("010--") @db.VarChar(255)
+  postCode        String  @db.VarChar(255)
+  address         String  @db.VarChar(255)
+  detailAddress   String  @db.VarChar(255)
+  memo            String? @db.VarChar(255)
+  numberOfInvoice String? @db.VarChar(255)
+  payment         Payment @relation(fields: [paymentId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "delivery_ibfk_1")
+}
+
+model Orderer {
+  paymentId Int     @id
+  name      String  @db.VarChar(255)
+  phone     String  @db.VarChar(255)
+  email     String  @db.VarChar(255)
+  payment   Payment @relation(fields: [paymentId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "orderer_ibfk_1")
+}
+
+model Purchase {
+  id                      Int                    @id @default(autoincrement())
+  productOptionRelationId Int?
+  paymentId               Int
+  quantity                Int
+  payment                 Payment                @relation(fields: [paymentId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "purchase_ibfk_2")
+  productOptionRelation   ProductOptionRelation? @relation(fields: [productOptionRelationId], references: [id], onUpdate: NoAction, map: "purchase_ibfk_1")
+
+  @@index([paymentId], map: "paymentId")
+  @@index([productOptionRelationId], map: "productOptionRelationId")
+}
+
+model Product {
+  id                     Int                     @id @default(autoincrement())
+  name                   String                  @db.VarChar(30)
+  price                  Int
+  expirationDate         String?                 @db.VarChar(255)
+  storageMethod          String?                 @db.VarChar(255)
+  ingredients            String?                 @db.VarChar(255)
+  productFileRelations   ProductFileRelation[]
+  productHistories       ProductHistory[]
+  productOptionRelations ProductOptionRelation[]
+}
+
+model ProductFileRelation {
+  id        Int     @id @default(autoincrement())
+  productId Int
+  fileId    Int
+  file      File    @relation(fields: [fileId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "productfilerelation_ibfk_2")
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "productfilerelation_ibfk_1")
+
+  @@index([fileId], map: "fileId")
+  @@index([productId], map: "productId")
+}
+
+model ProductHistory {
+  id             Int       @id @default(autoincrement())
+  name           String    @db.VarChar(30)
+  price          Int
+  expirationDate String?   @db.VarChar(255)
+  storageMethod  String?   @db.VarChar(255)
+  ingredients    String?   @db.VarChar(255)
+  productId      Int?
+  from           DateTime  @default(now()) @db.Timestamp(0)
+  to             DateTime? @db.Timestamp(0)
+  product        Product?  @relation(fields: [productId], references: [id], onUpdate: NoAction, map: "producthistory_ibfk_1")
+
+  @@index([productId], map: "productId")
+}
+
+model ProductOptionRelation {
+  id        Int        @id @default(autoincrement())
+  productId Int
+  optionId  Int
+  option    Option     @relation(fields: [optionId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "productoptionrelation_ibfk_2")
+  product   Product    @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "productoptionrelation_ibfk_1")
+  baskets   Basket[]
+  purchases Purchase[]
+
+  @@index([optionId], map: "optionId")
+  @@index([productId], map: "productId")
+}
+
+model NotificationFileRelation {
+  id             Int          @id @default(autoincrement())
+  notificationId Int
+  fileId         Int
+  file           File         @relation(fields: [fileId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "notificationfilerelation_ibfk_2")
+  notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "notificationfilerelation_ibfk_1")
+
+  @@index([fileId], map: "fileId")
+  @@index([notificationId], map: "notificationId")
 }
