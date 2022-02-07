@@ -21,7 +21,7 @@ import ContainerWithZindex1 from "atoms/Container/ContainerWithZindex1";
 import { BlogParallax } from "atoms/Parallax";
 import { useBlogQuery, useUpsertBlog } from "hooks";
 import CustomFileInput from "components/CustomFileInput/CustomFileInput";
-import { AttachFile, Layers } from "@material-ui/icons";
+import { AttachFile, ContactSupportOutlined, Layers } from "@material-ui/icons";
 import AttachedFiles from "organisms/AttachedFiles";
 import { FormControl, InputLabel } from "@material-ui/core";
 
@@ -134,10 +134,12 @@ export default function Blog() {
             <InputLabel style={{ fontSize: "0.5rem" }}>일시</InputLabel>
             <FormControl>
               <Datetime
-                dateFormat="YYYY년 MM월 DD일"
+                dateFormat="YYYY-MM-DD"
                 timeFormat={false}
                 value={timestamp}
-                onChange={setTimestamp}
+                onChange={(e) => {
+                  setTimestamp(e._d.toDateString());
+                }}
               />
             </FormControl>
             <CustomInput

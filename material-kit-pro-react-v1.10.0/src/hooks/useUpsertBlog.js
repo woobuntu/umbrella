@@ -14,17 +14,14 @@ export default function useUpsertBlog() {
   return ({ id, files, title, content, timestamp, deletedFiles }) => {
     const formData = new FormData();
 
-    const convertedTimestamp =
-      typeof timestamp == "object" ? timestamp.toJSON() : timestamp;
-
     const countOfFiles = new Array(files.length).fill("null").join(", ");
     const createOperations = `{ "query": "mutation Create${Target}($create${Target}Input: Create${Target}Input!) {  create${Target}(create${Target}Input: $create${Target}Input){ id  title  content  timestamp  }  }",  "variables": {  "create${Target}Input": {  "title": "${title}",  "content": ${JSON.stringify(
       content
-    )}, "timestamp": "${convertedTimestamp}", "files": [${countOfFiles}] } } }`;
+    )}, "timestamp": "${timestamp}", "files": [${countOfFiles}] } } }`;
 
     const updateOperations = `{ "query": "mutation Update${Target}($update${Target}Input: Update${Target}Input!) {  update${Target}(update${Target}Input: $update${Target}Input){ id title content timestamp }}", "variables":{"update${Target}Input":{"id":${id},"title": "${title}","content": ${JSON.stringify(
       content
-    )}, "timestamp": "${convertedTimestamp}", "files": [${countOfFiles}],"deletedFiles":[${deletedFiles.join(
+    )}, "timestamp": "${timestamp}", "files": [${countOfFiles}],"deletedFiles":[${deletedFiles.join(
       ", "
     )}]}}}`;
     const operations =
