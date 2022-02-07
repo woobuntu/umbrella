@@ -14,3 +14,7 @@ export { DefaultDeliveryResolver } from './default-delivery.resolver';
 export { PaymentResolver } from './payment.resolver';
 export { PurchaseResolver } from './purchase.resolver';
 export { DeliveryResolver } from './delivery.resolver';
+export { PerformanceResolver } from './performance.resolver';
+export { NotificationResolver } from './notification.resolver';
+export { PerformanceFileRelationResolver } from './performance-file-relation.resolver';
+export { NotificationFileRelationResolver } from './notification-file-relation.resolver';

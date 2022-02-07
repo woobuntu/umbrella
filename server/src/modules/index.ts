@@ -12,3 +12,5 @@ export { DayjsModule } from './dayjs.module';
 export { PrismaModule } from './prisma.module';
 export { UserModule } from './user.module';
 export { PaymentModule } from './payment.module';
+export { PerformanceModule } from './performance.module';
+export { NotificationModule } from './notification.module';

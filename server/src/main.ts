@@ -10,6 +10,11 @@ import { EnvironmentConfig } from './types/config';
 import fastifySecureSession from 'fastify-secure-session';
 import { join } from 'path';
 import * as fs from 'fs';
+import { FastifyInstance, FastifyRequest } from 'fastify';
+import { processRequest } from 'graphql-upload';
+interface FastifyRequestWithMultipart extends FastifyRequest {
+  isMultipart: boolean;
+}
 
 async function bootstrap() {
   // const httpsOptions =
@@ -20,12 +25,38 @@ async function bootstrap() {
   //         cert: fs.readFileSync(process.env.CERT),
   //       };
 
+  const fastify = new FastifyAdapter({
+    logger: false,
+    // https: httpsOptions,
+  });
+
+  const fastifyInstance: FastifyInstance = fastify.getInstance();
+
+  fastifyInstance.addContentTypeParser(
+    'multipart',
+    (request: FastifyRequestWithMultipart, payload, done) => {
+      request.isMultipart = true;
+
+      done(null);
+    },
+  );
+
+  fastifyInstance.addHook(
+    'preValidation',
+    async function (request: FastifyRequestWithMultipart, reply) {
+      if (!request.isMultipart) {
+        return;
+      }
+
+      request.body = await processRequest(request.raw, reply.raw, {
+        maxFieldSize: 10485760,
+      });
+    },
+  );
+
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter({
-      logger: false,
-      // https: httpsOptions,
-    }),
+    fastify,
   );
 
   const configService = app.get(ConfigService);

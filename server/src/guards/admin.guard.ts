@@ -1,10 +1,15 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { UserService } from 'src/services';
+import { EnvironmentConfig } from 'src/types/config';
 
 @Injectable()
 export class AdminGuard implements CanActivate {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private configService: ConfigService,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const ctx = GqlExecutionContext.create(context);
@@ -16,8 +21,10 @@ export class AdminGuard implements CanActivate {
 
     if (!sessionUser) return false;
 
-    if (sessionUser.id !== 'NAVER DyIlPmzPTyO227rejF1E0DqcboX9gW6ALq0lwSr3G5Y')
-      return false;
+    const { adminId } =
+      this.configService.get<EnvironmentConfig>('environment');
+
+    if (sessionUser.id !== adminId) return false;
 
     const dbUser = await this.userService.user({
       id: sessionUser.id,
