@@ -78,10 +78,7 @@ export class AuthService {
     );
   }
 
-  naverSignOut(
-    id: string,
-    accessToken: string,
-  ): Observable<{ isAuthenticated: false }> {
+  naverSignOut(id: string, accessToken: string): Observable<{ role: string }> {
     return this.naverService.deleteTokens(accessToken).pipe(
       concatMap(() =>
         from(
@@ -97,7 +94,7 @@ export class AuthService {
         ),
       ),
       catchError(() => of(EMPTY)),
-      map(() => ({ isAuthenticated: false })),
+      map(() => ({ role: 'non-user' })),
     );
   }
 
@@ -150,7 +147,7 @@ export class AuthService {
     );
   }
 
-  kakaoSignOut(accessToken: string): Observable<{ isAuthenticated: false }> {
+  kakaoSignOut(accessToken: string): Observable<{ role: 'non-user' }> {
     return this.kakaoService.signOut(accessToken).pipe(
       concatMap(({ id }) =>
         // 카카오 서버의 토큰을 만료시켰으니 db의 토큰도 삭제
@@ -167,7 +164,7 @@ export class AuthService {
         ),
       ),
       catchError(() => of(EMPTY)),
-      map(() => ({ isAuthenticated: false })),
+      map(() => ({ role: 'non-user' })),
     );
   }
 

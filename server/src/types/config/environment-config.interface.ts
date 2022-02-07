@@ -6,4 +6,5 @@ export interface EnvironmentConfig {
   clientUrl: string;
   domain: string;
   expires: number;
+  adminId: string;
 }

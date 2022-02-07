@@ -120,28 +120,15 @@ model ExecutiveHistory {
 }
 
 model File {
-  id                       Int                       @id @default(autoincrement())
-  name                     String                    @db.VarChar(50)
-  path                     String                    @db.Text
-  type                     String                    @db.VarChar(20)
-  executiveFileRelations   ExecutiveFileRelation[]
-  fileHistories            FileHistory[]
-  metaFileRelations        MetaFileRelation[]
-  performanceFileRelations PerformanceFileRelation[]
-  productFileRelations     ProductFileRelation[]
-}
-
-model FileHistory {
-  id     Int       @id @default(autoincrement())
-  name   String    @db.VarChar(50)
-  path   String    @db.Text
-  type   String    @db.VarChar(20)
-  fileId Int?
-  from   DateTime  @default(now()) @db.Timestamp(0)
-  to     DateTime? @db.Timestamp(0)
-  file   File?     @relation(fields: [fileId], references: [id], onUpdate: NoAction, map: "filehistory_ibfk_1")
-
-  @@index([fileId], map: "fileId")
+  id                        Int                        @id @default(autoincrement())
+  name                      String                     @db.VarChar(50)
+  path                      String                     @db.Text
+  type                      String                     @db.VarChar(50)
+  executiveFileRelations    ExecutiveFileRelation[]
+  metaFileRelations         MetaFileRelation[]
+  notificationFileRelations NotificationFileRelation[]
+  performanceFileRelations  PerformanceFileRelation[]
+  productFileRelations      ProductFileRelation[]
 }
 
 model Gnb {
@@ -237,18 +224,19 @@ model MetaHistory {
 }
 
 model Notification {
-  id                    Int                   @id @default(autoincrement())
-  title                 String                @db.VarChar(50)
-  content               String                @db.Text
-  timestamp             DateTime              @default(now()) @db.Timestamp(0)
-  notificationHistories NotificationHistory[]
+  id                        Int                        @id @default(autoincrement())
+  title                     String                     @db.VarChar(50)
+  content                   String                     @db.Text
+  timestamp                 DateTime                   @default(now()) @db.Timestamp(0)
+  notificationFileRelations NotificationFileRelation[]
+  notificationHistories     NotificationHistory[]
 }
 
 model NotificationHistory {
   id             Int           @id @default(autoincrement())
   title          String        @db.VarChar(50)
   content        String        @db.Text
-  timestamp      String        @db.VarChar(50)
+  timestamp      DateTime      @db.Timestamp(0)
   notificationId Int?
   from           DateTime      @default(now()) @db.Timestamp(0)
   to             DateTime?     @db.Timestamp(0)
@@ -455,7 +443,7 @@ model ProductFileRelation {
   id        Int     @id @default(autoincrement())
   productId Int
   fileId    Int
-  File      File    @relation(fields: [fileId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "productfilerelation_ibfk_2")
+  file      File    @relation(fields: [fileId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "productfilerelation_ibfk_2")
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "productfilerelation_ibfk_1")
 
   @@index([fileId], map: "fileId")
@@ -488,4 +476,15 @@ model ProductOptionRelation {
 
   @@index([optionId], map: "optionId")
   @@index([productId], map: "productId")
+}
+
+model NotificationFileRelation {
+  id             Int          @id @default(autoincrement())
+  notificationId Int
+  fileId         Int
+  file           File         @relation(fields: [fileId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "notificationfilerelation_ibfk_2")
+  notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "notificationfilerelation_ibfk_1")
+
+  @@index([fileId], map: "fileId")
+  @@index([notificationId], map: "notificationId")
 }

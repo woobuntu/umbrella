@@ -1,4 +1,5 @@
 import { UseGuards, UseInterceptors } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import {
   Args,
   Mutation,
@@ -26,6 +27,7 @@ import {
   PaymentService,
   UserService,
 } from 'src/services';
+import { EnvironmentConfig } from 'src/types/config';
 
 interface ContextWithSession {
   request: {
@@ -43,6 +45,7 @@ export class AuthResolver {
     private basketService: BasketService,
     private defaultDeliveryService: DefaultDeliveryService,
     private paymentService: PaymentService,
+    private configService: ConfigService,
   ) {}
 
   @UseInterceptors(SetCookieInterceptor)
@@ -105,7 +108,7 @@ export class AuthResolver {
   @UseInterceptors(SignOutInterceptor)
   @Mutation((returns) => AuthState)
   signOut(@CurrentUser() user: User) {
-    if (!user) return { isAuthenticated: false };
+    if (!user) return { role: 'non-user' };
 
     const { id, accessToken } = user;
 
@@ -117,7 +120,7 @@ export class AuthResolver {
       case 'KAKAO':
         return this.authService.kakaoSignOut(accessToken);
       case 'GOOGLE':
-        return { isAuthenticated: false };
+        return { role: 'non-user' };
     }
   }
 
@@ -130,9 +133,16 @@ export class AuthResolver {
       request: { session },
     } = context;
 
-    return session.get('user')
-      ? { isAuthenticated: true }
-      : { isAuthenticated: false };
+    const user = session.get('user');
+
+    const { adminId } =
+      this.configService.get<EnvironmentConfig>('environment');
+
+    if (!user) return { role: 'non-user' };
+
+    if (user.id === adminId) return { role: 'admin' };
+
+    if (user.id !== adminId) return { role: 'user' };
   }
 
   @UseGuards(AuthGuard)

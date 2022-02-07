@@ -11,8 +11,8 @@ type Account {
 }
 
 type AuthState {
-  isAuthenticated: Boolean!
   redirectUrl: String
+  role: String!
 }
 
 type Basket {
@@ -56,10 +56,24 @@ input CreateDeliveryInput {
   postCode: String!
 }
 
+input CreateNotificationInput {
+  content: String!
+  files: [Upload!]
+  timestamp: DateTime!
+  title: String!
+}
+
 input CreateOrdererInput {
   email: String!
   name: String!
   phone: String!
+}
+
+input CreatePerformanceInput {
+  content: String!
+  files: [Upload!]
+  timestamp: DateTime!
+  title: String!
 }
 
 """
@@ -164,18 +178,39 @@ type MetaFileRelation {
 
 type Mutation {
   cancelOrder(cancelOrderInput: CancelOrderInput!): Payment!
+  createNotification(createNotificationInput: CreateNotificationInput!): Notification!
   createPaymentByKakao(pgToken: String!): Payment!
   createPaymentByToss(tossPaymentsInput: TossPaymentsInput!): Payment!
+  createPerformance(createPerformanceInput: CreatePerformanceInput!): Performance!
   deleteBasket(id: Int!): Basket!
+  deleteNotification(id: Int!): Notification!
+  deletePerformance(id: Int!): Performance!
   prepareKakaoPayment: KakaoPayPrepareResult!
   signIn(signInInput: SignInInput!): AuthState!
   signOut: AuthState!
   storeOrdererAndDelivery(createDeliveryInput: CreateDeliveryInput!, createOrdererInput: CreateOrdererInput!): OrdererAndDelivery!
   updateDefaultDelivery(updateDefaultDeliveryInput: UpdateDefaultDeliveryInput!): DefaultDelivery!
+  updateNotification(updateNotificationInput: UpdateNotificationInput!): Notification!
   updateNumberOfInvoice(updateNumberOfInvoiceInput: UpdateNumberOfInvoiceInput!): Delivery!
   updateOrderStatus(updatePaymentInput: UpdatePaymentInput!): Payment!
+  updatePerformance(updatePerformanceInput: UpdatePerformanceInput!): Performance!
   updateProfile(updateUserInput: UpdateUserInput!): User!
   upsertBasket(upsertBasketInput: UpsertBasketInput!): Basket!
+}
+
+type Notification {
+  content: String!
+  id: Float!
+  notificationFileRelations: [NotificationFileRelation!]!
+  timestamp: DateTime!
+  title: String!
+}
+
+type NotificationFileRelation {
+  file: File!
+  fileId: Float!
+  id: Float!
+  notificationId: Float!
 }
 
 type Option {
@@ -233,6 +268,21 @@ type PaymentHistory {
   userId: String!
 }
 
+type Performance {
+  content: String!
+  id: Float!
+  performanceFileRelations: [PerformanceFileRelation!]!
+  timestamp: DateTime!
+  title: String!
+}
+
+type PerformanceFileRelation {
+  file: File!
+  fileId: Float!
+  id: Float!
+  performanceId: Float!
+}
+
 type Product {
   expirationDate: String
   id: Float!
@@ -286,7 +336,11 @@ type Query {
   isAuthenticated: AuthState!
   meta: Meta!
   metaFileRelations(type: String!): [MetaFileRelation!]!
+  notification(id: Int!): Notification!
+  notifications: [Notification!]!
   payments: [Payment!]!
+  performance(id: Int!): Performance!
+  performances: [Performance!]!
   product(id: Int!): Product!
   products(filterProductsInput: FilterProductsInput): [Product!]!
   profile: PublicUser!
@@ -314,6 +368,15 @@ input UpdateDefaultDeliveryInput {
   postCode: String
 }
 
+input UpdateNotificationInput {
+  content: String!
+  deletedFiles: [Float!]
+  files: [Upload!]
+  id: Float!
+  timestamp: DateTime!
+  title: String!
+}
+
 input UpdateNumberOfInvoiceInput {
   numberOfInvoice: String!
   paymentId: Float!
@@ -324,11 +387,22 @@ input UpdatePaymentInput {
   paymentId: Float!
 }
 
+input UpdatePerformanceInput {
+  content: String!
+  deletedFiles: [Float!]
+  files: [Upload!]
+  id: Float!
+  timestamp: DateTime!
+  title: String!
+}
+
 input UpdateUserInput {
   email: String
   name: String
   phone: String
 }
+
+scalar Upload
 
 input UpsertBasketInput {
   productOptionRelationId: Float!

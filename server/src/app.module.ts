@@ -18,6 +18,8 @@ import {
   PrismaModule,
   UserModule,
   PaymentModule,
+  PerformanceModule,
+  NotificationModule,
 } from './modules';
 import { ExecutiveModule } from './modules/executive.module';
 import {
@@ -30,6 +32,7 @@ import {
 } from './config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { HealthController } from './controllers';
+import { Upload } from './graphql/types/file';
 
 @Module({
   controllers: [HealthController],
@@ -66,6 +69,8 @@ import { HealthController } from './controllers';
     PrismaModule,
     UserModule,
     PaymentModule,
+    PerformanceModule,
+    NotificationModule,
     GraphQLModule.forRootAsync({
       useFactory: async (configService: ConfigService) => ({
         // code first approach를 통해 schema 파일 생성
@@ -89,5 +94,6 @@ import { HealthController } from './controllers';
       inject: [ConfigService],
     }),
   ],
+  providers: [Upload],
 })
 export class AppModule {}

@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { GqlExecutionContext } from '@nestjs/graphql';
+import { userInfo } from 'os';
 import { catchError, map, Observable, of, tap } from 'rxjs';
 import { EnvironmentConfig } from 'src/types/config';
 
@@ -18,7 +19,7 @@ export class SetCookieInterceptor implements NestInterceptor {
     context: ExecutionContext,
     next: CallHandler,
   ): Observable<{
-    isAuthenticated: boolean;
+    role: string;
   }> {
     return next.handle().pipe(
       tap(({ user }) => {
@@ -45,8 +46,13 @@ export class SetCookieInterceptor implements NestInterceptor {
           expires: calculatedExpires,
         });
       }),
-      map(({ redirectUrl }) => ({ isAuthenticated: true, redirectUrl })),
-      catchError(() => of({ isAuthenticated: false, redirectUrl: '/' })),
+      map(({ user, redirectUrl }) => {
+        const { adminId } =
+          this.configService.get<EnvironmentConfig>('environment');
+
+        return { role: user.id === adminId ? 'admin' : 'user', redirectUrl };
+      }),
+      catchError(() => of({ role: 'non-user', redirectUrl: '/' })),
       // 에러 페이지를 달리 만들지는 고민 중
     );
   }

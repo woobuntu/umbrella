@@ -28,3 +28,8 @@ export { PaymentService } from './payment.service';
 export { OrdererService } from './orderer.service';
 export { DeliveryService } from './delivery.service';
 export { PurchaseService } from './purchase.service';
+export { PerformanceService } from './performance.service';
+export { S3Service } from './s3.service';
+export { NotificationService } from './notification.service';
+export { NotificationFileRelationService } from './notification-file-relation.service';
+export { PerformanceFileRelationService } from './performance-file-relation.service';

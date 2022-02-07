@@ -2,7 +2,7 @@ import { ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class AuthState {
-  isAuthenticated: boolean;
+  role: string;
 
   redirectUrl?: string;
 }
