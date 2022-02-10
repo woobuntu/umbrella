@@ -7,6 +7,10 @@ export class HistoryService {
   constructor(private prisma: PrismaService) {}
 
   async histories(): Promise<History[]> {
-    return this.prisma.history.findMany();
+    return this.prisma.history.findMany({
+      orderBy: {
+        id: 'desc',
+      },
+    });
   }
 }
