@@ -1,5 +1,6 @@
 import { useHistory, useLocation } from "react-router-dom";
 import axios from "axios";
+import { isLoadingVar } from "graphql/state";
 
 export default function useUpsertBlog() {
   const { pathname } = useLocation();
@@ -54,6 +55,8 @@ export default function useUpsertBlog() {
       }
     }
 
+    isLoadingVar(true);
+
     axios({
       url: process.env.REACT_APP_API_URL,
       method: "POST",
@@ -64,8 +67,12 @@ export default function useUpsertBlog() {
       withCredentials: true,
     })
       .then((data) => {
+        isLoadingVar(false);
         history.push(`/${target}s`);
       })
-      .catch((error) => alert(error));
+      .catch((error) => {
+        isLoadingVar(false);
+        alert(error);
+      });
   };
 }

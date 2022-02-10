@@ -34,6 +34,9 @@ import {
   BlogRead,
   BlogWrite,
 } from "./pages";
+import Organization from "pages/Organization";
+import Loading from "atoms/Loading";
+import ContactUs from "pages/ContactUs";
 
 export default function Layout() {
   useChannelTalk();
@@ -52,6 +55,7 @@ export default function Layout() {
 
   return (
     <Fragment>
+      <Loading />
       <CustomHeader />
       <Switch>
         <Route path="/executives/:id" component={Executive} />
@@ -59,10 +63,12 @@ export default function Layout() {
         <Route path="/mall/:id" component={Product} />
         <Route path="/mall" component={Mall} />
         <Route path="/history" component={History} />
+        <Route path="/contact" component={ContactUs} />
         {/* temp */}
         <Route path="/order" component={isMobile() ? MobileOrder : WebOrder} />
 
         <Route path="/introduction" component={Introduction} />
+        <Route path="/organization-chart" component={Organization} />
         <Route path="/document" component={Document} />
         <Route
           path="/basket"

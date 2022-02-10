@@ -5,7 +5,7 @@ import HeaderLinks from "components/Header/HeaderLinks";
 import { SIGN_OUT } from "../../graphql/mutation";
 import { HEADER } from "../../graphql/query";
 import { isAuthenticatedVar, isAuthLoadingVar } from "graphql/state";
-import { useHistory } from "react-router";
+import { useHistory, useLocation } from "react-router";
 
 export default function CustomHeader() {
   const { loading, error, data } = useQuery(HEADER);
@@ -33,24 +33,18 @@ export default function CustomHeader() {
         if (id == 1) {
           return {
             ...gnb,
-            lnbs: lnbs.filter(
-              ({ name }) =>
-                !(
-                  name == "설립자 인사말" ||
-                  name == "연혁" ||
-                  name == "조직도" ||
-                  name == "찾아오시는 길"
-                )
-            ),
+            lnbs: lnbs.filter(({ name }) => !(name == "설립자 인사말")),
           };
         } else {
           return gnb;
         }
       });
 
+  const { pathname } = useLocation();
+
   return (
     <Header
-      color="transparent"
+      color={pathname.includes("contact") ? "dark" : "transparent"}
       brand={data && data.meta.name}
       links={
         data && (

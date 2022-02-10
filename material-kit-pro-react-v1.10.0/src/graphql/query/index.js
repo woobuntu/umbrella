@@ -12,3 +12,4 @@ export { default as NOTIFICATION } from "./notification";
 export { default as PERFORMANCE } from "./performance";
 export { default as NOTIFICATIONS } from "./notifications";
 export { default as PERFORMANCES } from "./performances";
+export { default as HISTORIES } from "./histories";
