@@ -1,6 +1,7 @@
 import { useMutation } from "@apollo/client";
 import { DELETE_PERFORMANCE, DELETE_NOTIFICATION } from "graphql/mutation";
 import { useLocation, useHistory } from "react-router-dom";
+import { isLoadingVar } from "graphql/state";
 
 export default function useBlogMutations() {
   const { pathname } = useLocation();
@@ -23,12 +24,18 @@ export default function useBlogMutations() {
       target === "performances" ? "deletePerformanceId" : "deleteNotificationId"
     ] = id;
 
+    isLoadingVar(true);
+
     deleteBlog({
       variables,
     })
       .then(({ data }) => {
+        isLoadingVar(false);
         history.push(`/${target}`);
       })
-      .catch((error) => console.error(Error));
+      .catch((error) => {
+        isLoadingVar(false);
+        console.error(error);
+      });
   };
 }
