@@ -5,6 +5,8 @@ import { makeStyles } from "@material-ui/styles";
 import GridContainer from "components/Grid/GridContainer";
 import GridItem from "components/Grid/GridItem";
 import { Link } from "react-router-dom";
+import CustomDropdown from "components/CustomDropdown/CustomDropdown";
+import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles(customFooterStyle);
 
@@ -80,6 +82,70 @@ export default function CustomFooter() {
               </h6>
             </li>
           </ul>
+        </GridItem>
+        <GridItem xs={12} sm={4} md={4}>
+          <CustomDropdown
+            buttonText="패밀리 사이트"
+            buttonProps={{
+              round: true,
+              block: true,
+              color: "info",
+            }}
+            dropPlacement="bottom"
+            dropdownList={[
+              "의왕시",
+              "경기도",
+              "보건복지부",
+              "한국장애인개발원",
+              "장애인고용공단",
+              "장애인복지관협회",
+              "장애인복지시설협회",
+              "직업재활시설협회",
+              "장애인재활상담협회",
+              "국세청",
+              "국민권익위원회",
+            ]}
+            onClick={(name) => {
+              let url;
+              switch (name) {
+                case "의왕시":
+                  url =
+                    "https://www.uiwang.go.kr/humanframe/theme/uiwang/html/temp/index4.html";
+                  break;
+                case "경기도":
+                  url = "https://www.gg.go.kr/";
+                  break;
+                case "보건복지부":
+                  url = "http://www.mohw.go.kr/react/index.jsp";
+                  break;
+                case "한국장애인개발원":
+                  url = "https://www.koddi.or.kr/";
+                  break;
+                case "장애인고용공단":
+                  url = "https://www.kead.or.kr/";
+                  break;
+                case "장애인복지관협회":
+                  url = "http://www.ggwelfare.or.kr/";
+                  break;
+                case "장애인복지시설협회":
+                  url = "http://www.gaid.or.kr/";
+                  break;
+                case "장애인재활시설협회":
+                  url = "http://www.gavrd.kr/";
+                  break;
+                case "장애인재활상담협회":
+                  url = "http://www.karc.kr/";
+                  break;
+                case "국세청":
+                  url = "https://www.nts.go.kr/nts/main.do";
+                  break;
+                case "국민권익위원회":
+                  url = "https://www.acrc.go.kr/";
+                  break;
+              }
+              window.open(url);
+            }}
+          />
         </GridItem>
       </GridContainer>
     </Footer>

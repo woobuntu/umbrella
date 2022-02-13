@@ -26,20 +26,6 @@ export default function CustomHeader() {
 
   if (error) alert(error.message);
 
-  const tempGnbs = !data
-    ? []
-    : data.gnbs.map((gnb) => {
-        const { id, lnbs } = gnb;
-        if (id == 1) {
-          return {
-            ...gnb,
-            lnbs: lnbs.filter(({ name }) => !(name == "설립자 인사말")),
-          };
-        } else {
-          return gnb;
-        }
-      });
-
   const { pathname } = useLocation();
 
   return (
@@ -50,7 +36,7 @@ export default function CustomHeader() {
         data && (
           <HeaderLinks
             dropdownHoverColor="info"
-            gnbs={tempGnbs}
+            gnbs={!data ? [] : data.gnbs}
             isAuthLoading={isAuthLoading}
             role={role}
             onSignOut={onSignOut}
