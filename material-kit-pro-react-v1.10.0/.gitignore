@@ -25,3 +25,6 @@ yarn-error.log*
 src/assets/
 src/components/
 src/views/
+
+/dist
+/dist.old
