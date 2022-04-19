@@ -204,7 +204,7 @@ export default function Product() {
               <GridItem md={4} sm={4}>
                 <InfoArea
                   title="배송비"
-                  description="3,000원(구매금액 30,000원 이상 무료배송)"
+                  description="3,000원(구매금액 50,000원 이상 무료배송)"
                   icon={LocalShipping}
                   vertical
                   iconColor="warning"
