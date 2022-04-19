@@ -50,7 +50,7 @@ export class TossPaymentsGuard extends AuthGuard implements CanActivate {
       0,
     );
 
-    const deliveryFee = basketTotalPrice > 30000 ? 0 : 3000;
+    const deliveryFee = basketTotalPrice >= 50000 ? 0 : 3000;
 
     if (amount !== basketTotalPrice + deliveryFee) return false;
 
