@@ -16,7 +16,7 @@ export default function useMakePaymentInfoCardProps({
     (sum, { productTotalPrice }) => sum + productTotalPrice,
     0
   );
-  const deliveryFee = basketTotalPrice > 30000 ? 0 : 3000;
+  const deliveryFee = basketTotalPrice >= 50000 ? 0 : 3000;
   const tossCommonPayload = {
     amount: basketTotalPrice + deliveryFee,
     orderId: v4(),
