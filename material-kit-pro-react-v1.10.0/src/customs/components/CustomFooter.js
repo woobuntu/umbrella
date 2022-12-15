@@ -81,6 +81,15 @@ export default function CustomFooter() {
                 개인정보관리책임자 : 이인우(boutime2017@gmail.com)
               </h6>
             </li>
+            <li>
+              <h6
+                style={{
+                  textTransform: "none",
+                }}
+              >
+                호스팅제공자 : AWS(Amazon Web Service)
+              </h6>
+            </li>
           </ul>
         </GridItem>
         <GridItem xs={12} sm={4} md={4}>
