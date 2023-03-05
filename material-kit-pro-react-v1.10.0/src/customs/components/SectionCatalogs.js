@@ -27,47 +27,51 @@ export default function SectionCatalogs() {
         <h2>상품 목록</h2>
         <GridContainer>
           {data &&
-            data.products.map(
-              ({
-                id,
-                name,
-                price,
-                productFileRelations: [productFileRelation],
-              }) => {
-                const {
-                  file: { path },
-                } = productFileRelation;
-                return (
-                  <GridItem md={4} sm={4} key={id}>
-                    <Card product plain>
-                      <CardHeader image plain>
-                        <Link to={`/mall/${id}`}>
-                          <img src={path} />
-                        </Link>
-                        <div
-                          className={classes.coloredShadow}
-                          style={{
-                            backgroundImage: `url(${path})`,
-                            opacity: 1,
-                          }}
-                        />
-                      </CardHeader>
-                      <CardBody className={classes.textCenter} plain>
-                        <h4 className={classes.cardTitle}>{name}</h4>
-                        {/* <p className={classes.cardDescription}>상품설명</p> */}
-                      </CardBody>
-                      <CardFooter plain>
-                        <div className={classes.priceContainer}>
-                          <span className={classes.price}>
-                            ₩{convertPrice(price)}
-                          </span>
-                        </div>
-                      </CardFooter>
-                    </Card>
-                  </GridItem>
-                );
-              }
-            )}
+            data.products
+              .filter(
+                ({ name }) => name.includes("원두") || name.includes("콜드브루")
+              )
+              .map(
+                ({
+                  id,
+                  name,
+                  price,
+                  productFileRelations: [productFileRelation],
+                }) => {
+                  const {
+                    file: { path },
+                  } = productFileRelation;
+                  return (
+                    <GridItem md={4} sm={4} key={id}>
+                      <Card product plain>
+                        <CardHeader image plain>
+                          <Link to={`/mall/${id}`}>
+                            <img src={path} />
+                          </Link>
+                          <div
+                            className={classes.coloredShadow}
+                            style={{
+                              backgroundImage: `url(${path})`,
+                              opacity: 1,
+                            }}
+                          />
+                        </CardHeader>
+                        <CardBody className={classes.textCenter} plain>
+                          <h4 className={classes.cardTitle}>{name}</h4>
+                          {/* <p className={classes.cardDescription}>상품설명</p> */}
+                        </CardBody>
+                        <CardFooter plain>
+                          <div className={classes.priceContainer}>
+                            <span className={classes.price}>
+                              ₩{convertPrice(price)}
+                            </span>
+                          </div>
+                        </CardFooter>
+                      </Card>
+                    </GridItem>
+                  );
+                }
+              )}
         </GridContainer>
       </div>
     </div>
