@@ -18,7 +18,7 @@ export default function UserNameAndPosition({ name, position }) {
   return (
     <div className={classes.name}>
       <UserName>{name}</UserName>
-      <Title size={6}>{position}</Title>
+      <Title size={6}>{position === "설립자" ? "이사장" : position}</Title>
     </div>
   );
 }
