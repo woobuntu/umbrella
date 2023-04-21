@@ -36,7 +36,9 @@ export default function CustomHeader() {
         data && (
           <HeaderLinks
             dropdownHoverColor="info"
-            gnbs={!data ? [] : data.gnbs}
+            gnbs={
+              !data ? [] : data.gnbs.filter(({ name }) => name !== "쇼핑몰")
+            }
             isAuthLoading={isAuthLoading}
             role={role}
             onSignOut={onSignOut}
