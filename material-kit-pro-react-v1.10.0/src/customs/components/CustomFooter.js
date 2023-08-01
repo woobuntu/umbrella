@@ -32,7 +32,7 @@ export default function CustomFooter() {
               <h6>사업자등록번호 : 636-82-00353</h6>
             </li>
             <li>
-              <h6>대표자 : 장윤경</h6>
+              <h6>대표자 : 이노국</h6>
             </li>
             <li>
               <h6>
